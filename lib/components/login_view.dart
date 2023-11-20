@@ -62,6 +62,8 @@ class _LoginViewState extends State<LoginView> {
           height: 50,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   backgroundColor: theme.loginButtonBgColor),
               onPressed: () {
                 navigateToDashBoard();

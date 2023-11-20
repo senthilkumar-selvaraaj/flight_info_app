@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Montserrat'),
-        title: 'Flutter Demo',
+        title: 'Airport Authority of India',
         home: const HomeScreen());
   }
 }

@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Align(
                       alignment: Alignment.center,
                       child: Padding(
-                        padding: EdgeInsets.only(top: 125, right: 100),
+                        padding: EdgeInsets.only(top: 125, right: 150),
                         child: Image(
                           image: AssetImage('assets/images/logo-cia.png'),
                           fit: BoxFit.contain,
