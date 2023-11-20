@@ -1,5 +1,6 @@
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
+import 'package:flight_info_app/screens/flight_boarding_screen.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                         child: Row(
                       children: [
                         Expanded(
-                            flex: 8,
+                            flex: 10,
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +77,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                               ),
                             )),
                         Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: Container(
                               padding: const EdgeInsets.only(top: 100),
                               // color: AppColors.secondaryGrey,
@@ -114,6 +115,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor:
                                                     theme.backgroundColor,
+                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                                                 side: const BorderSide(
                                                   width: 2.0,
                                                   color: AppColors.primaryBlue,
@@ -126,7 +128,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             child: Text(
                                               "Back",
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 15,
                                                   color: theme.loginButtonBgColor),
                                             )),
                                       ),
@@ -134,17 +136,21 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                         width: 15,
                                       ),
                                       SizedBox(
-                                        width: 130,
+                                        width: 140,
                                         height: 45,
                                         child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
+                                              side: BorderSide(width: 1.0, color: theme.loginButtonBgColor),
+                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
                                                 backgroundColor:
                                                     theme.loginButtonBgColor),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const FlightBoardingScreen()));
+                                            },
                                             child: const Text(
                                               "Open Flight",
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 15,
                                                   color: AppColors.white),
                                             )),
                                       )

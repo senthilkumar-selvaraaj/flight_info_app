@@ -11,11 +11,10 @@ void main() async{
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1024, 768),
-    // center: true,
-    // backgroundColor: Colors.transparent,
-    // skipTaskbar: false,
-    // titleBarStyle: TitleBarStyle.hidden,
+    minimumSize: Size(1250, 768),
+    size: Size(1250, 768),
+    center: true,
+    title: 'Airport Authority of India'
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
