@@ -47,13 +47,13 @@ class _AppTextFieldState extends State<AppTextField> {
         keyboardType: widget.inputType,
         obscureText: widget.isSecured,
         obscuringCharacter: 'x',
-        style: TextStyle(fontSize: 14, color: theme.textFiledTextColor),
+        style: TextStyle(fontSize: 14, color: theme.textFiledTextColor, fontWeight:FontWeight.w600),
         decoration: InputDecoration(
             suffixIcon: widget.suffix,
             hintText: widget.hintText,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             labelText: widget.label,
-            labelStyle: TextStyle(color:theme.placeholderColor, fontSize: 14 ),
+            labelStyle: TextStyle(color:theme.placeholderColor, fontSize: 14, fontWeight: FontWeight.w500),
             contentPadding: const EdgeInsets.only(left: 25, right: 25),
             border: InputBorder.none
            ),

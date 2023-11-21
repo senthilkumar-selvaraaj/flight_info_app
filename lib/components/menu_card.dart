@@ -48,7 +48,9 @@ class _MenuCardState extends State<MenuCard> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: isActive ? AppColors.white : theme.menuTitleColor,
-                fontSize: 18.0,),
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400
+                ),
           )
         ],
       ),

@@ -21,7 +21,7 @@ class _LoginViewState extends State<LoginView> {
         Text(
           "Login",
           textAlign: TextAlign.left,
-          style: TextStyle(color: theme.loginHeaderColor, fontSize: 30),
+          style: TextStyle(color: theme.loginHeaderColor, fontSize: 30, fontWeight: FontWeight.w500),
         ),
         const SizedBox(
           height: 15,
@@ -58,7 +58,7 @@ class _LoginViewState extends State<LoginView> {
           height: 50,
         ),
         SizedBox(
-          width: 200,
+          width: 180,
           height: 50,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -70,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
               },
               child: const Text(
                 "Login",
-                style: TextStyle(fontSize: 18, color: AppColors.white),
+                style: TextStyle(fontSize: 20, color: AppColors.white, fontWeight: FontWeight.w500),
               )),
         )
       ],

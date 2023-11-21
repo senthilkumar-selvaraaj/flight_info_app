@@ -22,6 +22,7 @@ abstract class AppTheme {
   Color get flightInfoCardBgColor;
   Color get flightInfoCardTextColor;
   Color get flightBRDTextColor;
+  Color get flightStatusBgColor;
   Color get flightInfoHintBannerBg;
   // Color get flightInfoCardActiveBorder;
 }
@@ -76,7 +77,7 @@ class LightTheme extends AppTheme{
   Color get flightInfoCardBgColor => AppColors.white;
   
   @override
-  Color get poweredByColor => AppColors.black;
+  Color get poweredByColor => AppColors.primaryGrey;
   
   @override
   Color get flightInfoCardTextColor => AppColors.black;
@@ -92,6 +93,9 @@ class LightTheme extends AppTheme{
   
   @override
   Color get flightInfoHintBannerBg => AppColors.flightInfoBannerBg;
+  
+  @override
+  Color get flightStatusBgColor => AppColors.flightStatusOnTimeBg.withAlpha(127);
 }
 
 class DarkTheme extends AppTheme{
@@ -159,8 +163,10 @@ class DarkTheme extends AppTheme{
   Color get flightListHeaderColor => AppColors.white;
   
   @override
-  // TODO: implement flightInfoHintBannerBg
   Color get flightInfoHintBannerBg => AppColors.darkBlueGrey;
+  
+  @override
+  Color get flightStatusBgColor => AppColors.flightStatusOnTime.withAlpha(25);
 }
 
 

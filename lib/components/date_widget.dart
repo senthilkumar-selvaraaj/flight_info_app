@@ -53,12 +53,12 @@ class _DateTimeHolderState extends State<DateTimeHolder> {
           children: [
             Text(
               DateFormat('hh:mm a').format(DateTime.now()),
-              style: TextStyle(fontSize: 18, color: theme.dateTimeColor),
+              style: TextStyle(fontSize: 18, color: theme.dateTimeColor, fontWeight: FontWeight.w500),
             ),
             // SizedBox(height: 5,),
             Text(
               DateFormat('EEEEE, dd MMMM yyyy').format(DateTime.now()),
-              style: TextStyle(fontSize: 12, color: theme.dateTimeColor),
+              style: TextStyle(fontSize: 12, color: theme.dateTimeColor, fontWeight: FontWeight.w400),
               textAlign: TextAlign.right,
             ),
           ],

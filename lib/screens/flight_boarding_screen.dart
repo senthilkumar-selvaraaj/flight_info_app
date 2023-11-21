@@ -43,6 +43,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                   Text(
                                     "FLIGHT MANIFEST",
                                     style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w300,
                                         color: theme.flightListHeaderColor),
                                   ),
                                   const SizedBox(
@@ -102,7 +104,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
         header,
         textAlign: TextAlign.left,
         style:
-            TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14),
+            TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14, fontWeight: FontWeight.w500),
       );
 
   ListView getFlightList(AppTheme theme) {
@@ -178,7 +180,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   Widget getTextValue(String title, AppTheme theme) {
     return Text(
       title,
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16),
+      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 14, fontWeight: FontWeight.w500),
     );
   }
 

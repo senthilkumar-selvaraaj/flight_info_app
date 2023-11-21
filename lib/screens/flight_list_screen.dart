@@ -44,6 +44,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                   Text(
                                     "FLIGHT LIST",
                                     style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
                                         color: theme.flightListHeaderColor),
                                   ),
                                   const SizedBox(
@@ -128,7 +130,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             child: Text(
                                               "Back",
                                               style: TextStyle(
-                                                  fontSize: 15,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
                                                   color: theme.loginButtonBgColor),
                                             )),
                                       ),
@@ -150,7 +153,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             child: const Text(
                                               "Open Flight",
                                               style: TextStyle(
-                                                  fontSize: 15,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
                                                   color: AppColors.white),
                                             )),
                                       )
@@ -181,7 +185,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
         header,
         textAlign: TextAlign.left,
         style:
-            TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14),
+            TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14, fontWeight: FontWeight.w500),
       ));
 
   ListView getFlightList(AppTheme theme) {
@@ -256,7 +260,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
   Widget getFlightNo(AppTheme theme) {
     return Text(
       "SG198",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16),
+      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16, fontWeight: FontWeight.w500),
     );
   }
 
@@ -267,7 +271,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
         height: 46,
         width: 100,
         decoration: ShapeDecoration(
-          color: AppColors.flightStatusOnTimeBg,
+          color: theme.flightStatusBgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -276,7 +280,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
           child: Text(
             "ONTIME",
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.flightStatusOnTime, fontSize: 16),
+            style: TextStyle(color: AppColors.flightStatusOnTime, fontSize: 14,  fontWeight: FontWeight.w500),
           ),
         ),
       ),
@@ -286,21 +290,21 @@ class _FlightListScreenState extends State<FlightListScreen> {
   Widget getBRD(int index, AppTheme theme) {
     return Text(
       "1350",
-      style: TextStyle(color: (Provider.of<ThemeNotifier>(context).isDark  && selectedFlightIndex == index) ? AppColors.white : theme.flightBRDTextColor, fontSize: 16),
+      style: TextStyle(color: (Provider.of<ThemeNotifier>(context).isDark  && selectedFlightIndex == index) ? AppColors.white : theme.flightBRDTextColor, fontSize: 18,  fontWeight: FontWeight.w600),
     );
   }
 
   Widget getDEP(AppTheme theme) {
     return Text(
       "BLR 1400",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16),
+      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16,  fontWeight: FontWeight.w500),
     );
   }
 
   Widget getARR(AppTheme theme) {
     return Text(
       "MMA 2020",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16),
+      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16,  fontWeight: FontWeight.w500),
     );
   }
 }
