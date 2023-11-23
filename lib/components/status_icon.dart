@@ -1,5 +1,6 @@
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
 class StatusIcon extends StatefulWidget {
@@ -21,7 +22,7 @@ class _StatusIconState extends State<StatusIcon> {
             Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
         }
       },
-      child: Stack(
+      child: MouseRegion(child: Stack(
         children: [
           Container(
               margin:
@@ -56,6 +57,29 @@ class _StatusIconState extends State<StatusIcon> {
                 ),
               )))
         ],
+      ),
+      onEnter: (p){
+        if (widget.icon == Icons.contrast){
+          //   showPopover(
+          //   context: context,
+          //   backgroundColor: theme.popOverBackgroundColor,
+          //   bodyBuilder: (context) => Center(child: Text("Switch to ${Provider.of<ThemeNotifier>(context).isDark ? 'Light' : 'Dark'} Mode", textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: AppColors.white),)),
+          //   onPop: () => print('Popover was popped!'),
+          //   direction: PopoverDirection.bottom,
+          //   barrierColor: Colors.transparent,
+          //   width: 160,
+          //   height: 42,
+          //   arrowHeight: 10,
+          //   arrowWidth: 20,
+          //   transition: PopoverTransition.other,
+          //   transitionDuration: const Duration(milliseconds: 50)
+          // );
+        }
+          
+      },
+      onExit: (p){
+        
+      },
       ),
     );
   }

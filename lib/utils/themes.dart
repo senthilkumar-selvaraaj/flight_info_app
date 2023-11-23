@@ -24,7 +24,12 @@ abstract class AppTheme {
   Color get flightBRDTextColor;
   Color get flightStatusBgColor;
   Color get flightInfoHintBannerBg;
-  // Color get flightInfoCardActiveBorder;
+  Color get popOverBackgroundColor;
+  Color get laneTitleColor;
+  Color get laneBoardingTitleColor;
+  Color get laneBoardingValueColor;
+  Color get boardingInfoContainerColor;
+  Color get dialogBackgroundColor;
 }
 
 class LightTheme extends AppTheme{
@@ -96,6 +101,24 @@ class LightTheme extends AppTheme{
   
   @override
   Color get flightStatusBgColor => AppColors.flightStatusOnTimeBg.withAlpha(127);
+  
+  @override
+  Color get popOverBackgroundColor => AppColors.popOverBGColor;
+  
+  @override
+  Color get laneBoardingTitleColor => AppColors.primaryBlue;
+  
+  @override
+  Color get laneBoardingValueColor => AppColors.black;
+  
+  @override
+  Color get laneTitleColor => AppColors.primaryGrey;
+  
+  @override
+  Color get boardingInfoContainerColor => AppColors.secondaryBlack;
+  
+  @override
+  Color get dialogBackgroundColor => AppColors.white;
 }
 
 class DarkTheme extends AppTheme{
@@ -167,6 +190,24 @@ class DarkTheme extends AppTheme{
   
   @override
   Color get flightStatusBgColor => AppColors.flightStatusOnTime.withAlpha(25);
+  
+  @override
+  Color get popOverBackgroundColor => AppColors.popOverBGColorDark;
+  
+  @override
+  Color get laneBoardingTitleColor => AppColors.secondaryBlue;
+  
+  @override
+  Color get laneBoardingValueColor => AppColors.white;
+  
+  @override
+  Color get laneTitleColor => AppColors.secondaryGrey;
+  
+  @override
+  Color get boardingInfoContainerColor => AppColors.darkBlueGrey;
+  
+  @override
+  Color get dialogBackgroundColor => AppColors.secondaryBlue;
 }
 
 
@@ -197,6 +238,9 @@ class AppColors{
   static const flightInfoBannerBg = Color(0xFF0ea600);
   static const flightBRDTextColor = Color(0xFFe8ecf2);
   static const flightInfoCardActiveBorder = Color(0xFFe8ecf2);
+  static const popOverBGColor = Color(0xFF2a2732);
+  static const popOverBGColorDark = Color(0xFF2d3866);
+  static const secondaryBlack = Color(0xFF2a2732);
 }
 
 
