@@ -22,6 +22,7 @@ class Dialogs {
               Image(image: AssetImage(type.getImageName()), color: theme.menuIconColor,),
               const SizedBox(height: 25,),
               Text(type.getTitle(), textAlign: TextAlign.center, style: TextStyle(fontSize: 18, color: theme.flightInfoCardTextColor , fontWeight: FontWeight.w500) ,),
+              const SizedBox(height: 10,),
               Text(type.getSubTitle(), textAlign: TextAlign.center, style: TextStyle(fontSize: 14,  color: theme.flightInfoCardTextColor)),
               const SizedBox(height: 10,),
             ],

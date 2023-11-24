@@ -16,38 +16,38 @@ class MenuList extends StatefulWidget {
 class _MenuListState extends State<MenuList> {
   @override
   Widget build(BuildContext context) {
-        AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
 
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: Menu.values.map((e) => Padding(padding: const EdgeInsets.symmetric(horizontal: 15), child: MenuCard(menu: e, didSelected: (m){
-        if(m == Menu.flightList){
-          navigateToFlightListScreen();
-        }else if(m == Menu.logOut){
-          Dialogs.showAlertDialog(
-                          context,
-                          DialogType.logout,
-                          theme, (){
-                             
-                          }, (){
-                            Navigator.of(context).pop();
-                          });
-        }else if(m == Menu.exit){
-          Dialogs.showAlertDialog(
-                          context,
-                          DialogType.exit,
-                          theme, (){
-                             
-                          }, (){
-                            Navigator.of(context).pop();
-                          });
-        }
-      }),)).toList()
-    ,);
+      children: Menu.values
+          .map((e) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: MenuCard(
+                    menu: e,
+                    didSelected: (m) {
+                      if (m == Menu.flightList) {
+                        navigateToFlightListScreen();
+                      } else if (m == Menu.logOut) {
+                        Dialogs.showAlertDialog(
+                            context, DialogType.logout, theme, () {}, () {
+                          Navigator.of(context).pop();
+                        });
+                      } else if (m == Menu.exit) {
+                        Dialogs.showAlertDialog(
+                            context, DialogType.exit, theme, () {}, () {
+                          Navigator.of(context).pop();
+                        });
+                      }
+                    }),
+              ))
+          .toList(),
+    );
   }
 
-  navigateToFlightListScreen(){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FlightListScreen(),));
+  navigateToFlightListScreen() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const FlightListScreen(),
+    ));
   }
-
 }

@@ -19,7 +19,20 @@ class _StatusIconState extends State<StatusIcon> {
     return GestureDetector(
       onTap: () {
         if (widget.icon == Icons.contrast){
-            Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+           showPopover(
+                                                  context: context,
+                                                  bodyBuilder: (context) =>
+                                                      Text("Wclome TO my City"),
+                                                  onPop: () => print(
+                                                      'Popover was popped!'),
+                                                  direction:
+                                                      PopoverDirection.bottom,
+                                                  width: 200,
+                                                  height: 400,
+                                                  arrowHeight: 15,
+                                                  arrowWidth: 30,
+                                                );
+           //Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
         }
       },
       child: MouseRegion(child: Stack(
@@ -60,20 +73,7 @@ class _StatusIconState extends State<StatusIcon> {
       ),
       onEnter: (p){
         if (widget.icon == Icons.contrast){
-          //   showPopover(
-          //   context: context,
-          //   backgroundColor: theme.popOverBackgroundColor,
-          //   bodyBuilder: (context) => Center(child: Text("Switch to ${Provider.of<ThemeNotifier>(context).isDark ? 'Light' : 'Dark'} Mode", textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: AppColors.white),)),
-          //   onPop: () => print('Popover was popped!'),
-          //   direction: PopoverDirection.bottom,
-          //   barrierColor: Colors.transparent,
-          //   width: 160,
-          //   height: 42,
-          //   arrowHeight: 10,
-          //   arrowWidth: 20,
-          //   transition: PopoverTransition.other,
-          //   transitionDuration: const Duration(milliseconds: 50)
-          // );
+            
         }
           
       },

@@ -221,7 +221,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
               flex: 1,
               child: getFlightNo(theme),
             ),
-            Expanded(flex: 1, child: getFlightStatus(theme)),
+            Expanded(flex: 1, child: getFlightStatus(theme, index)),
             Expanded(flex: 1, child: getBRD(index, theme)),
             Expanded(flex: 1, child: getDEP(theme)),
             Expanded(flex: 1, child: getARR(theme)),
@@ -264,7 +264,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
-  Widget getFlightStatus(AppTheme theme) {
+  Widget getFlightStatus(AppTheme theme, int index) {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: Container(
@@ -276,11 +276,11 @@ class _FlightListScreenState extends State<FlightListScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: const Center(
+        child:  Center(
           child: Text(
             "ONTIME",
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.flightStatusOnTime, fontSize: 14,  fontWeight: FontWeight.w500),
+            style: TextStyle(color: (Provider.of<ThemeNotifier>(context).isDark && selectedFlightIndex == index) ? AppColors.white : AppColors.flightStatusOnTime, fontSize: 14,  fontWeight: FontWeight.w500),
           ),
         ),
       ),

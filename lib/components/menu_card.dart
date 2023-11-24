@@ -35,6 +35,7 @@ class _MenuCardState extends State<MenuCard> {
         color: isActive ? AppColors.primaryBlue : theme.menuCardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
+          side: Provider.of<ThemeNotifier>(context).isDark ? BorderSide.none : BorderSide(color: isActive ? AppColors.primaryBlue : AppColors.lightGrey, width: 2)
         ),
         shadows: const [],
       ),

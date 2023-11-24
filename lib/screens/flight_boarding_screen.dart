@@ -1,9 +1,11 @@
 import 'package:flight_info_app/components/app_buttons.dart';
+import 'package:flight_info_app/components/app_text_field.dart';
 import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
 class FlightBoardingScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   int selectedFlightIndex = -1;
   @override
   Widget build(BuildContext context) {
+    print("Welcomne");
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -42,12 +45,73 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                   const SizedBox(
                                     height: 30,
                                   ),
-                                  Text(
-                                    "FLIGHT MANIFEST",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w300,
-                                        color: theme.flightListHeaderColor),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "FLIGHT MANIFEST",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w300,
+                                            color: theme.flightListHeaderColor),
+                                      ),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                showPopover(
+                                                  context: context,
+                                                  bodyBuilder: (context) =>
+                                                      Text(""),
+                                                  onPop: () => print(
+                                                      'Popover was popped!'),
+                                                  direction:
+                                                      PopoverDirection.bottom,
+                                                  width: 250,
+                                                  height: 200,
+                                                  arrowHeight: 15,
+                                                  arrowWidth: 30,
+                                                );
+                                              },
+                                              icon: const Image(
+                                                image: AssetImage(
+                                                    'assets/icons/info.png'),
+                                              )),
+                                          const SizedBox(
+                                            width: 25,
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            height: 40,
+                                            decoration: ShapeDecoration(
+                                                color: theme
+                                                    .dateTimeBackgroundColor,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20))),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                    child: SizedBox(
+                                                        height: 40,
+                                                        child: SearchFromField(
+                                                          hintText: "Search",
+                                                          onChanged: (s) {},
+                                                        ))),
+                                                const Image(
+                                                    image: AssetImage(
+                                                        'assets/icons/search.png')),
+                                                const SizedBox(
+                                                  width: 15,
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -118,37 +182,86 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 15),
-                                                  child: FilledActionButton(
-                                                      title: 'Board PAX',
-                                                      height: 42,
-                                                      width: 150,
-                                                      didTapped: () {}),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 15),
-                                                  child: BorderedActionButton(
-                                                      title: 'Print Manifest',
-                                                      height: 42,
-                                                      width: 150,
-                                                      didTapped: () {}),
-                                                ),
-                                                BorderedActionButton(
-                                                    title: 'Print ATB',
-                                                    height: 42,
-                                                    width: 150,
-                                                    didTapped: () {})
-                                              ],
-                                            ),
+                                            child: selectedFlightIndex > -1
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 15),
+                                                        child:
+                                                            FilledActionButton(
+                                                                title:
+                                                                    'Board PAX',
+                                                                height: 42,
+                                                                width: 150,
+                                                                didTapped:
+                                                                    () {}),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 15),
+                                                        child:
+                                                            BorderedActionButton(
+                                                                title:
+                                                                    'Print Manifest',
+                                                                height: 42,
+                                                                width: 150,
+                                                                didTapped:
+                                                                    () async {
+                                                                  await showPopover(
+                                                                    context:
+                                                                        context,
+                                                                    backgroundColor:
+                                                                        AppColors
+                                                                            .black,
+                                                                    // barrierDismissible: false,
+                                                                    bodyBuilder:
+                                                                        (context) =>
+                                                                            Center(
+                                                                                child: Text(
+                                                                      "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? 'Light' : 'Dark'} Mode",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              AppColors.white),
+                                                                    )),
+                                                                    onPop: () =>
+                                                                        print(
+                                                                            'Popover was popped!'),
+                                                                    direction:
+                                                                        PopoverDirection
+                                                                            .bottom,
+
+                                                                    width: 160,
+                                                                    height: 42,
+                                                                    arrowHeight:
+                                                                        10,
+                                                                    arrowWidth:
+                                                                        20,
+                                                                    transition:
+                                                                        PopoverTransition
+                                                                            .scale,
+                                                                  );
+                                                                }),
+                                                      ),
+                                                      BorderedActionButton(
+                                                          title: 'Print ATB',
+                                                          height: 42,
+                                                          width: 150,
+                                                          didTapped: () {})
+                                                    ],
+                                                  )
+                                                : const SizedBox(),
                                           ),
                                           Container(
                                             height: 40,
@@ -213,29 +326,39 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                  height: 50,
-                  decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(1),
-                          side: BorderSide(
-                              style: BorderStyle.solid,
-                              color: theme.loginContainerBorderColor))),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              SizedBox(
+                  height: 47,
+                  child: Stack(
                     children: [
-                      Expanded(
-                          child: Text(
-                        "SG6544",
-                        textAlign: TextAlign.center,
+                      Image(
+                          image: AssetImage(
+                              'assets/images/bg-shape-${Provider.of<ThemeNotifier>(context).isDark ? 'dark' : 'light'}.png')),
+                      Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                              child: Text("SG6544",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.flightListHeaderColor))),
+                          const Expanded(
+                              child: Text(
+                            "BLR\n0140",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.white),
+                          )),
+                          const Expanded(
+                              child: Text("DELHJS\n0435",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.white))),
+                        ],
                       )),
-                      Expanded(
-                          child:
-                              Text("BLR\n0140", textAlign: TextAlign.center)),
-                      Expanded(
-                          child:
-                              Text("DEL\n0435", textAlign: TextAlign.center)),
                     ],
                   )),
               const SizedBox(
@@ -248,15 +371,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                   FilledActionButton(
                     title: 'End Boarding',
                     didTapped: () {
-                      // print("jkhkhkh");
                       Dialogs.showAlertDialog(
-                          context,
-                          DialogType.endBoarding,
-                          theme, (){
-                             
-                          }, (){
-                            Navigator.of(context).pop();
-                          });
+                          context, DialogType.endBoarding, theme, () {}, () {
+                        Navigator.of(context).pop();
+                      });
                     },
                   )
                 ],

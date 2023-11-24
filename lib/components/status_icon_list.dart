@@ -1,5 +1,7 @@
 import 'package:flight_info_app/components/status_icon.dart';
+import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatusList extends StatefulWidget {
   const StatusList({super.key});
@@ -11,11 +13,13 @@ class StatusList extends StatefulWidget {
 class _StatusListState extends State<StatusList> {
   @override
   Widget build(BuildContext context) {
-    return  const Row(children: [
-       StatusIcon(icon: Icons.contrast, showBadge: false,),
-       StatusIcon(icon: Icons.flight,),
-       StatusIcon(icon: Icons.settings,),
-       StatusIcon(icon: Icons.monitor,)
+        AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
+
+    return Row(children:  [
+       Tooltip(decoration: BoxDecoration(color: theme.popOverBackgroundColor, borderRadius: BorderRadius.circular(5)), preferBelow: false, message: "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? "Light" : "Dark"} Mode", child: StatusIcon(icon: Icons.contrast, showBadge: false,)),
+       const StatusIcon(icon: Icons.flight,),
+       const StatusIcon(icon: Icons.settings,),
+       const StatusIcon(icon: Icons.monitor,)
     ],);
   }
 }

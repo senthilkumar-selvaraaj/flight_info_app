@@ -80,8 +80,6 @@ class ConfirmActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
-
     return SizedBox(
       width: width,
       height: height,
@@ -118,8 +116,6 @@ class CancelActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
-
     return SizedBox(
       width: width,
       height: height,

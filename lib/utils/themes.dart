@@ -241,6 +241,7 @@ class AppColors{
   static const popOverBGColor = Color(0xFF2a2732);
   static const popOverBGColorDark = Color(0xFF2d3866);
   static const secondaryBlack = Color(0xFF2a2732);
+  static const lightGrey = Color(0xFFdedddd);
 }
 
 
