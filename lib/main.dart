@@ -11,8 +11,8 @@ void main() async{
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    minimumSize: Size(1250, 768),
-    size: Size(1250, 768),
+    minimumSize: Size(1260, 768),
+    size: Size(1260, 768),
     center: true,
     title: 'Airport Authority of India'
   );

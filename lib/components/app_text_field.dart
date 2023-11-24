@@ -51,7 +51,7 @@ class _AppTextFieldState extends State<AppTextField> {
         decoration: InputDecoration(
             suffixIcon: widget.suffix,
             hintText: widget.hintText,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
             labelText: widget.label,
             labelStyle: TextStyle(color:theme.placeholderColor, fontSize: 14, fontWeight: FontWeight.w500),
             contentPadding: const EdgeInsets.only(left: 25, right: 25),
@@ -116,7 +116,7 @@ class _SearchFromFieldState extends State<SearchFromField> {
             suffixIcon: widget.suffix,
             hintText: widget.hintText,
             hintStyle: TextStyle(color:theme.placeholderColor, fontSize: 14, fontWeight: FontWeight.w500),
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            floatingLabelBehavior: FloatingLabelBehavior.never,
             labelText: widget.label,
             labelStyle: TextStyle(color:theme.placeholderColor, fontSize: 14, fontWeight: FontWeight.w500),
             contentPadding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),

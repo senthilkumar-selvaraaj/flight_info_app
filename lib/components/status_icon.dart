@@ -19,20 +19,7 @@ class _StatusIconState extends State<StatusIcon> {
     return GestureDetector(
       onTap: () {
         if (widget.icon == Icons.contrast){
-           showPopover(
-                                                  context: context,
-                                                  bodyBuilder: (context) =>
-                                                      Text("Wclome TO my City"),
-                                                  onPop: () => print(
-                                                      'Popover was popped!'),
-                                                  direction:
-                                                      PopoverDirection.bottom,
-                                                  width: 200,
-                                                  height: 400,
-                                                  arrowHeight: 15,
-                                                  arrowWidth: 30,
-                                                );
-           //Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+           Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
         }
       },
       child: MouseRegion(child: Stack(
