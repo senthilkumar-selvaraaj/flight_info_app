@@ -3,6 +3,7 @@ import 'package:flight_info_app/components/menu_card.dart';
 import 'package:flight_info_app/screens/flight_list_screen.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,7 @@ class _MenuListState extends State<MenuList> {
                       } else if (m == Menu.exit) {
                         Dialogs.showAlertDialog(
                             context, DialogType.exit, theme, () {}, () {
-                          Navigator.of(context).pop();
+                         SystemNavigator.pop();
                         });
                       }
                     }),

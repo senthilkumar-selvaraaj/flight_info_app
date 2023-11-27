@@ -1,3 +1,4 @@
+
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,24 +14,27 @@ class FilledActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
 
-    return SizedBox(
+    return GestureDetector(onTap: didTapped, child: SizedBox(
       width: width,
       height: height,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              side: BorderSide(width: 1.0, color: theme.loginButtonBgColor),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              backgroundColor: theme.loginButtonBgColor),
-          onPressed: didTapped,
-          child:  Text(
-           title,
-            style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColors.white),
-          )),
-    );
+      child:
+      Container(decoration: ShapeDecoration(
+        color: theme.loginButtonBgColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side:    BorderSide(width: 1.0, color: theme.loginButtonBgColor)
+        ),
+      ), child: Center(
+        child: Text(
+              title,
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.white),
+            ),
+      ),)
+      
+    ));
   }
 }
 
@@ -45,28 +49,32 @@ class BorderedActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
 
-    return SizedBox(
+    return GestureDetector(onTap: didTapped, child: SizedBox(
       width: width,
       height: height,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              side: const BorderSide(
+      child:
+
+      Container(decoration: ShapeDecoration(
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side:  const BorderSide(
                 width: 2.0,
                 color: AppColors.primaryBlue,
-              ),
-              shadowColor: Colors.transparent),
-          onPressed: didTapped,
-          child: Text(
-            title,
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: theme.loginButtonBgColor),
-          )),
-    );
+              )
+        ),
+        shadows: const [],
+      ), child: Center(
+        child: Text(
+              title,
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: theme.loginButtonBgColor),
+            ),
+      ),)
+      
+    ));
   }
 }
 
@@ -84,6 +92,8 @@ class ConfirmActionButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
+        focusNode: null,
+        autofocus: false,
           style: ElevatedButton.styleFrom(
               backgroundColor: Provider.of<ThemeNotifier>(context).isDark ? AppColors.white : AppColors.secondaryBlue,
               shape: const RoundedRectangleBorder(
@@ -119,7 +129,10 @@ class CancelActionButton extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
+
       child: ElevatedButton(
+        autofocus: false,
+        focusNode: null,
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               shape: const RoundedRectangleBorder(

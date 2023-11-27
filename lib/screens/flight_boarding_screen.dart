@@ -5,6 +5,7 @@ import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +18,15 @@ class FlightBoardingScreen extends StatefulWidget {
 
 class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   int selectedFlightIndex = -1;
+  final ScrollController _controller = ScrollController();
+  final _focusNode = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+    
+  }
   @override
   Widget build(BuildContext context) {
-    print("Welcomne");
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -58,26 +65,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                showPopover(
-                                                  context: context,
-                                                  bodyBuilder: (context) =>
-                                                      Text(""),
-                                                  onPop: () => print(
-                                                      'Popover was popped!'),
-                                                  direction:
-                                                      PopoverDirection.bottom,
-                                                  width: 250,
-                                                  height: 200,
-                                                  arrowHeight: 15,
-                                                  arrowWidth: 30,
-                                                );
-                                              },
-                                              icon: const Image(
-                                                image: AssetImage(
-                                                    'assets/icons/info.png'),
-                                              )),
+                                         Focus(
+                                          descendantsAreFocusable: false,
+                                          canRequestFocus: false,
+                                          child:  InfoIcon()),
                                           const SizedBox(
                                             width: 25,
                                           ),
@@ -444,22 +435,58 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
             fontWeight: FontWeight.w500),
       );
 
-  ListView getFlightList(AppTheme theme) {
-    return ListView.builder(
+  Widget getFlightList(AppTheme theme) {
+    return RawKeyboardListener(focusNode: _focusNode,
+    autofocus: true,
+      onKey: (RawKeyEvent event) {
+        if (event is RawKeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            _scrollDown();
+          } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _scrollUp();
+          }
+        }
+      },
+     child: ListView.builder(
+      // primary: true,
+      scrollDirection: Axis.vertical,
+      controller: _controller,
         itemCount: 20,
         itemBuilder: ((context, index) {
           return Padding(
             padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
             child: flightCard(index, theme, context, () {
               if (mounted) {
+                _focusNode.requestFocus();
                 setState(() {
                   selectedFlightIndex = index;
                 });
               }
+              
             }),
           );
-        }));
+        })));
   }
+
+
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.offset + 50.0, // Adjust the scroll distance as needed
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
+    );
+    _focusNode.requestFocus();
+  }
+
+  void _scrollUp() {
+    _controller.animateTo(
+      _controller.offset - 50.0, // Adjust the scroll distance as needed
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
+    );
+    _focusNode.requestFocus();
+  }
+
 
   Widget flightCard(
       int index, AppTheme theme, BuildContext context, Function() didSelected) {
@@ -532,6 +559,52 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
           color: theme.flightInfoCardTextColor,
           fontSize: 14,
           fontWeight: FontWeight.w500),
+    );
+  }
+}
+
+class InfoIcon extends StatelessWidget {
+  const InfoIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    return Container(
+      child: IconButton(
+        
+          onPressed: () {
+            showPopover(
+              backgroundColor: theme.popOverBackgroundColor,
+              context: context,
+              barrierColor: Colors.transparent,
+              bodyBuilder: (context) =>
+                 const Padding(
+                   padding:  EdgeInsets.all(10.0),
+                   child: Column(children: [
+                   Row(children: [SizedBox(width: 30, child: Text("*", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),)), Text("SSR PAX", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500))],),
+                   SizedBox(height: 10,),
+                   Row(children: [SizedBox(width: 30, child: Text("**", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700))),Text("PAX WITH INFANT", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500))],),
+                   SizedBox(height: 10,),
+                   Row(children: [SizedBox(width: 30, child: Text("+", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700))), Text("WHEELCHAIR PAX", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500))],)
+                   ],),
+                 ),
+              onPop: () => print(
+                  'Popover was popped!'),
+              direction:
+                  PopoverDirection.bottom,
+                  transition: PopoverTransition.other,
+              width: 200,
+              height: 100,
+              arrowHeight: 15,
+              arrowWidth: 30,
+            );
+          },
+          icon: const Image(
+            image: AssetImage(
+                'assets/icons/info.png'),
+          )),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
 class StatusIcon extends StatefulWidget {

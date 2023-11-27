@@ -14,7 +14,7 @@ void main() async{
     minimumSize: Size(1260, 768),
     size: Size(1260, 768),
     center: true,
-    title: 'Airport Authority of India'
+    title: 'Chennai International Airport'
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();

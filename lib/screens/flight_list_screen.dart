@@ -3,6 +3,7 @@ import 'package:flight_info_app/components/header.dart';
 import 'package:flight_info_app/screens/flight_boarding_screen.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class FlightListScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class FlightListScreen extends StatefulWidget {
 
 class _FlightListScreenState extends State<FlightListScreen> {
   int selectedFlightIndex = -1;
+  FlightBoaringStatus boardingStatus = FlightBoaringStatus.none;
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
@@ -98,13 +101,27 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           )),
-                                      child: const Text(
-                                        "Select a flight from the list then choose 'Open Flight' when ready",
+                                      child:  Column(children: [
+                                        Visibility(visible: boardingStatus != FlightBoaringStatus.none, child:  Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          child: Text(
+                                          boardingStatus.getInfoTitle(),
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: AppColors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700
+                                              ),
+                                                                                ),
+                                        )),
+                                        Text(
+                                        boardingStatus.getInfoDescription(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: AppColors.white,
                                             fontSize: 16),
-                                      ),
+                                      )
+                                      ],),
                                     ),
                                   ),
                                   Row(
@@ -125,10 +142,22 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                 shadowColor:
                                                     Colors.transparent),
                                             onPressed: () {
-                                              Navigator.of(context).pop();
+                                              
+                                              switch (boardingStatus) {
+                                                case FlightBoaringStatus.none:
+                                                  Navigator.of(context).pop();
+                                                case FlightBoaringStatus.confirm:
+                                                   setState(() {
+                                                    boardingStatus = FlightBoaringStatus.none;
+                                                  });
+                                                case FlightBoaringStatus.boarding:
+                                                 setState(() {
+                                                   boardingStatus = FlightBoaringStatus.confirm;
+                                                 });
+                                              }
                                             },
                                             child: Text(
-                                              "Back",
+                                              boardingStatus.getBackButtonTitle(),
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
@@ -148,11 +177,25 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                 backgroundColor:
                                                     theme.loginButtonBgColor),
                                             onPressed: () {
-                                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const FlightBoardingScreen()));
+                                              if(selectedFlightIndex > -1){
+                                                switch (boardingStatus) {
+                                                case FlightBoaringStatus.none:
+                                                  setState(() {
+                                                    boardingStatus = FlightBoaringStatus.confirm;
+                                                  });
+                                                case FlightBoaringStatus.confirm:
+                                                   setState(() {
+                                                    boardingStatus = FlightBoaringStatus.boarding;
+                                                  });
+                                                case FlightBoaringStatus.boarding:
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const FlightBoardingScreen()));
+                                              }
+                                              }
+                                              
                                             },
-                                            child: const Text(
-                                              "Open Flight",
-                                              style: TextStyle(
+                                            child:  Text(
+                                              boardingStatus.getConfirmButtonTitle(),
+                                              style: const TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
                                                   color: AppColors.white),
@@ -188,8 +231,19 @@ class _FlightListScreenState extends State<FlightListScreen> {
             TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14, fontWeight: FontWeight.w500),
       ));
 
-  ListView getFlightList(AppTheme theme) {
-    return ListView.builder(
+  Widget getFlightList(AppTheme theme) {
+    return RawKeyboardListener(focusNode: FocusNode(),
+      onKey: (RawKeyEvent event) {
+        if (event is RawKeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            _scrollDown();
+          } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _scrollUp();
+          }
+        }
+      },
+     child: ListView.builder(
+      controller: _controller,
         itemCount: 20,
         itemBuilder: ((context, index) {
           return Padding(
@@ -202,7 +256,23 @@ class _FlightListScreenState extends State<FlightListScreen> {
               }
             }),
           );
-        }));
+        })));
+  }
+
+  void _scrollDown() {
+    _controller.animateTo(
+      _controller.offset + 50.0, // Adjust the scroll distance as needed
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  void _scrollUp() {
+    _controller.animateTo(
+      _controller.offset - 50.0, // Adjust the scroll distance as needed
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
+    );
   }
 
   Widget flightCard(int index, AppTheme theme, BuildContext context, Function() didSelected) {
@@ -310,3 +380,53 @@ class _FlightListScreenState extends State<FlightListScreen> {
 }
 
 enum FlightStatus { ontime, delayed }
+
+enum FlightBoaringStatus{ 
+  
+  none, confirm, boarding;
+
+  String getConfirmButtonTitle(){
+    switch (this) {
+      case FlightBoaringStatus.none:
+          return "Open Flight";
+      case FlightBoaringStatus.confirm:
+          return "Confirm";
+      case FlightBoaringStatus.boarding:
+          return "Start Boarding"; 
+    }
+  }
+
+  String getBackButtonTitle(){
+    switch (this) {
+      case FlightBoaringStatus.none:
+          return "Back";
+      case FlightBoaringStatus.confirm:
+          return "Cancel";
+      case FlightBoaringStatus.boarding:
+          return "Cancel"; 
+    }
+  }
+
+   String getInfoTitle(){
+    switch (this) {
+      case FlightBoaringStatus.none:
+          return "";
+      case FlightBoaringStatus.confirm:
+          return "Confirm Flight";
+      case FlightBoaringStatus.boarding:
+          return "Ready to Board"; 
+    }
+  }
+
+  String getInfoDescription(){
+    switch (this) {
+      case FlightBoaringStatus.none:
+          return "Select a flight from the list then choose 'Open Flight' when ready";
+      case FlightBoaringStatus.confirm:
+          return "The gate will close automatically after confirmation. Please ensure the gate area is clear of any objects of persons before proceeding";
+      case FlightBoaringStatus.boarding:
+          return "E-Gate is now ready to board flight SG198. Select 'Start Boarding' to begin boarding"; 
+    }
+  }
+  
+  }
