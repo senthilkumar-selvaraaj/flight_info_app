@@ -204,45 +204,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                 height: 42,
                                                                 width: 150,
                                                                 didTapped:
-                                                                    () async {
-                                                                  await showPopover(
-                                                                    context:
-                                                                        context,
-                                                                    backgroundColor:
-                                                                        AppColors
-                                                                            .black,
-                                                                    // barrierDismissible: false,
-                                                                    bodyBuilder:
-                                                                        (context) =>
-                                                                            Center(
-                                                                                child: Text(
-                                                                      "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? 'Light' : 'Dark'} Mode",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              AppColors.white),
-                                                                    )),
-                                                                    onPop: () =>
-                                                                        print(
-                                                                            'Popover was popped!'),
-                                                                    direction:
-                                                                        PopoverDirection
-                                                                            .bottom,
-
-                                                                    width: 160,
-                                                                    height: 42,
-                                                                    arrowHeight:
-                                                                        10,
-                                                                    arrowWidth:
-                                                                        20,
-                                                                    transition:
-                                                                        PopoverTransition
-                                                                            .scale,
-                                                                  );
+                                                                    ()  {
+                                                                 
                                                                 }),
                                                       ),
                                                       BorderedActionButton(
@@ -439,54 +402,33 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     return RawKeyboardListener(focusNode: _focusNode,
     autofocus: true,
       onKey: (RawKeyEvent event) {
-        if (event is RawKeyDownEvent) {
-          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-            _scrollDown();
-          } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-            _scrollUp();
-          }
-        }
       },
      child: ListView.builder(
-      // primary: true,
       scrollDirection: Axis.vertical,
       controller: _controller,
         itemCount: 20,
         itemBuilder: ((context, index) {
           return Padding(
             padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
-            child: flightCard(index, theme, context, () {
+            child: Focus(
+              onFocusChange: (status){
+              //   if(status){
+              //   setState(() {
+              //     selectedFlightIndex = index;
+              //   });
+              // }
+              },
+              child: flightCard(index, theme, context, () {
               if (mounted) {
                 _focusNode.requestFocus();
                 setState(() {
                   selectedFlightIndex = index;
                 });
               }
-              
-            }),
+            })),
           );
         })));
   }
-
-
-  void _scrollDown() {
-    _controller.animateTo(
-      _controller.offset + 50.0, // Adjust the scroll distance as needed
-      curve: Curves.easeInOut,
-      duration: Duration(milliseconds: 300),
-    );
-    _focusNode.requestFocus();
-  }
-
-  void _scrollUp() {
-    _controller.animateTo(
-      _controller.offset - 50.0, // Adjust the scroll distance as needed
-      curve: Curves.easeInOut,
-      duration: Duration(milliseconds: 300),
-    );
-    _focusNode.requestFocus();
-  }
-
 
   Widget flightCard(
       int index, AppTheme theme, BuildContext context, Function() didSelected) {

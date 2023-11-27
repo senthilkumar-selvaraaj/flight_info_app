@@ -234,13 +234,6 @@ class _FlightListScreenState extends State<FlightListScreen> {
   Widget getFlightList(AppTheme theme) {
     return RawKeyboardListener(focusNode: FocusNode(),
       onKey: (RawKeyEvent event) {
-        if (event is RawKeyDownEvent) {
-          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-            _scrollDown();
-          } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-            _scrollUp();
-          }
-        }
       },
      child: ListView.builder(
       controller: _controller,
@@ -248,13 +241,19 @@ class _FlightListScreenState extends State<FlightListScreen> {
         itemBuilder: ((context, index) {
           return Padding(
             padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
-            child: flightCard(index, theme, context,(){
+            child: Focus(onFocusChange: (status){
+              // if(status){
+              //   setState(() {
+              //     selectedFlightIndex = index;
+              //   });
+              // }
+            }, child: flightCard(index, theme, context,(){
               if(mounted){
                 setState(() {
                   selectedFlightIndex = index;
                 });
               }
-            }),
+            })),
           );
         })));
   }
