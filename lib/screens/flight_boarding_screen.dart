@@ -425,13 +425,6 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
           return Padding(
             padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
             child: Focus(
-              onFocusChange: (status){
-              //   if(status){
-              //   setState(() {
-              //     selectedFlightIndex = index;
-              //   });
-              // }
-              },
               child: flightCard(index, theme, context, () {
               if (mounted) {
                 _focusNode.requestFocus();
@@ -448,7 +441,9 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
       int index, AppTheme theme, BuildContext context, Function() didSelected) {
     return GestureDetector(
       onTap: didSelected,
-      child: Container(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
         decoration: getShadowShape(index, theme, context),
         height: 60.0,
         child: Padding(
@@ -469,7 +464,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 

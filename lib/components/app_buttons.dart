@@ -18,7 +18,9 @@ class FilledActionButton extends StatelessWidget {
       width: width,
       height: height,
       child:
-      Container(decoration: ShapeDecoration(
+      MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(decoration: ShapeDecoration(
         color: theme.loginButtonBgColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -32,7 +34,7 @@ class FilledActionButton extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: AppColors.white),
             ),
-      ),)
+      ),),)
       
     ));
   }
@@ -54,7 +56,9 @@ class BorderedActionButton extends StatelessWidget {
       height: height,
       child:
 
-      Container(decoration: ShapeDecoration(
+      MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(decoration: ShapeDecoration(
         color: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -72,7 +76,7 @@ class BorderedActionButton extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: theme.loginButtonBgColor),
             ),
-      ),)
+      ),),)
       
     ));
   }

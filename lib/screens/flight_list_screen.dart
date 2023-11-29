@@ -221,6 +221,11 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                     });
                                                   case FlightBoaringStatus
                                                         .boarding:
+                                                    setState(() {
+                                                      boardingStatus =
+                                                          FlightBoaringStatus
+                                                              .none;
+                                                    });
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
                                                             builder: (context) =>
@@ -325,7 +330,9 @@ class _FlightListScreenState extends State<FlightListScreen> {
       int index, AppTheme theme, BuildContext context, Function() didSelected) {
     return GestureDetector(
       onTap: didSelected,
-      child: Container(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
         decoration: getShadowShape(index, theme, context),
         height: 75.0,
         child: Padding(
@@ -345,7 +352,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
             ],
           ),
         ),
-      ),
+      ),),
     );
   }
 

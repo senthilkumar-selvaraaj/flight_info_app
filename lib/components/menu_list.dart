@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/menu_card.dart';
 import 'package:flight_info_app/screens/flight_list_screen.dart';
@@ -24,7 +26,9 @@ class _MenuListState extends State<MenuList> {
       children: Menu.values
           .map((e) => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: MenuCard(
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: MenuCard(
                     menu: e,
                     didSelected: (m) {
                       if (m == Menu.flightList) {
@@ -37,10 +41,10 @@ class _MenuListState extends State<MenuList> {
                       } else if (m == Menu.exit) {
                         Dialogs.showAlertDialog(
                             context, DialogType.exit, theme, () {}, () {
-                         SystemNavigator.pop();
+                         exit(0);
                         });
                       }
-                    }),
+                    }),),
               ))
           .toList(),
     );

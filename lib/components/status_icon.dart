@@ -21,7 +21,9 @@ class _StatusIconState extends State<StatusIcon> {
            Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
         }
       },
-      child: MouseRegion(child: Stack(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Stack(
         children: [
           Container(
               margin:
