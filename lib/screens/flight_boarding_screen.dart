@@ -4,6 +4,7 @@ import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
 import 'package:flight_info_app/utils/themes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:popover/popover.dart';
@@ -63,44 +64,45 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                             fontWeight: FontWeight.w300,
                                             color: theme.flightListHeaderColor),
                                       ),
-                                      Row(
-                                        children: [
-                                         Focus(
-                                          descendantsAreFocusable: false,
-                                          canRequestFocus: false,
-                                          child:  InfoIcon()),
-                                          const SizedBox(
-                                            width: 25,
-                                          ),
-                                          Container(
-                                            width: 300,
-                                            height: 40,
-                                            decoration: ShapeDecoration(
-                                                color: theme
-                                                    .dateTimeBackgroundColor,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20))),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                    child: SizedBox(
-                                                        height: 40,
-                                                        child: SearchFromField(
-                                                          hintText: "Search",
-                                                          onChanged: (s) {},
-                                                        ))),
-                                                const Image(
-                                                    image: AssetImage(
-                                                        'assets/icons/search.png')),
-                                                const SizedBox(
-                                                  width: 15,
-                                                )
-                                              ],
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 18),
+                                        child: Row(
+                                          children: [
+                                           Focus(
+                                            descendantsAreFocusable: false,
+                                            canRequestFocus: false,
+                                            child:  InfoIcon()),
+                                            const SizedBox(
+                                              width: 25,
                                             ),
-                                          )
-                                        ],
+                                            Container(
+                                              width: 300,
+                                              height: 40,
+                                              decoration: ShapeDecoration(
+                                                  color: theme
+                                                      .dateTimeBackgroundColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20))),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                      child: SizedBox(
+                                                          height: 40,
+                                                          child: SearchFromField(
+                                                            hintText: "Search",
+                                                            onChanged: (s) {},
+                                                          ))),
+                                                   Icon(CupertinoIcons.search, color: theme.flightBRDTextColor,),
+                                                  const SizedBox(
+                                                    width: 15,
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -217,24 +219,27 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                   )
                                                 : const SizedBox(),
                                           ),
-                                          Container(
-                                            height: 40,
-                                            width: 275,
-                                            decoration: ShapeDecoration(
-                                                color: theme
-                                                    .boardingInfoContainerColor,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5))),
-                                            child: const Center(
-                                                child: Text(
-                                              "3/30  YTB=(25   -   INFT  0/0)",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: AppColors.white),
-                                            )),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 15),
+                                            child: Container(
+                                              height: 40,
+                                              width: 275,
+                                              decoration: ShapeDecoration(
+                                                  color: theme
+                                                      .boardingInfoContainerColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5))),
+                                              child: const Center(
+                                                  child: Text(
+                                                "3/30  YTB=(27)   -   INFT  0/0",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w300,
+                                                    color: AppColors.white),
+                                              )),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -280,43 +285,47 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                  height: 47,
-                  child: Stack(
-                    children: [
-                      Image(
-                          image: AssetImage(
-                              'assets/images/bg-shape-${Provider.of<ThemeNotifier>(context).isDark ? 'dark' : 'light'}.png')),
-                      Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                              child: Text("SG6544",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: theme.flightListHeaderColor))),
-                          const Expanded(
-                              child: Text(
-                            "BLR\n0140",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.white),
-                          )),
-                          const Expanded(
-                              child: Text("DELHJS\n0435",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.white))),
-                        ],
-                      )),
-                    ],
-                  )),
+              Padding(
+                padding: const EdgeInsets.only(left: 13),
+                child: SizedBox(
+                    height: 48,
+                    width: 312,
+                    child: Stack(
+                      children: [
+                        Image(
+                            image: AssetImage(
+                                'assets/images/bg-shape-${Provider.of<ThemeNotifier>(context).isDark ? 'dark' : 'light'}.png'), fit: BoxFit.fill),
+                        Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                                child: Text("SG6544",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: theme.flightListHeaderColor))),
+                            const Expanded(
+                                child: Text(
+                              "BLR\n01:40",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.white),
+                            )),
+                            const Expanded(
+                                child: Text("DELHJS\n04:35",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.white))),
+                          ],
+                        )),
+                      ],
+                    )),
+              ),
               const SizedBox(
-                height: 20,
+                height: 25,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -334,10 +343,14 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                 ],
               ),
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               Expanded(
-                  child: ListView.builder(
+                  child: RawScrollbar(
+                    thumbColor: Colors.redAccent,
+                    radius: Radius.circular(20),
+                    thickness: 5,
+                    child: ListView.builder(
                       itemCount: 2,
                       itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -351,14 +364,15 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                        child: Text(
-                                      'Lane $index',
+                                    SizedBox(height: 5,),
+                                    Text(
+                                      'Lane ${(index+1).toString().padLeft(2, '0')}',
                                       style: TextStyle(
                                         color: theme.laneTitleColor,
                                         fontSize: 16,
                                       ),
-                                    )),
+                                    ),
+                                    SizedBox(height: 20,),
                                     Expanded(
                                         child: Column(
                                       children: [
@@ -367,9 +381,9 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                 color: theme
                                                     .laneBoardingTitleColor,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.w500)),
+                                                fontWeight: FontWeight.w400)),
                                         const SizedBox(
-                                          height: 3,
+                                          height: 1,
                                         ),
                                         Text("07/7E/qq",
                                             style: TextStyle(
@@ -383,7 +397,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                 ),
                               ),
                             ),
-                          )))
+                          ))))
             ],
           ),
         ));
@@ -543,10 +557,7 @@ class InfoIcon extends StatelessWidget {
               arrowWidth: 30,
             );
           },
-          icon: const Image(
-            image: AssetImage(
-                'assets/icons/info.png'),
-          )),
+          icon: Icon(Icons.info, color: theme.flightBRDTextColor, size: 32,)),
     );
   }
 }

@@ -6,15 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async{
+  
   WidgetsFlutterBinding.ensureInitialized();
-  // Must add this line.
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
+    fullScreen: true,
     minimumSize: Size(1260, 768),
-    size: Size(1260, 768),
     center: true,
-    title: 'Chennai International Airport'
+    title: 'AAI (Chennai)'
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
@@ -29,9 +29,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return  MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Montserrat'),
+        theme: ThemeData(fontFamily: 'Montserrat',
+        scrollbarTheme:  ScrollbarThemeData(
+  interactive: true,
+  // thumbVisibility: MaterialStateProperty.all(true),
+  radius: const Radius.circular(10.0),
+  thumbColor: MaterialStateProperty.all(theme.flightBRDTextColor),
+  trackColor: MaterialStateProperty.all(AppColors.black) ,
+  trackBorderColor: MaterialStateProperty.all(AppColors.black) ,
+  thickness: MaterialStateProperty.all(6.0),
+  // minThumbLength: 50,
+),
+
+        ),
         title: 'Airport Authority of India',
         home: const HomeScreen());
   }

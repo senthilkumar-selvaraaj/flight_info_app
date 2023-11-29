@@ -47,8 +47,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                   Text(
                                     "FLIGHT LIST",
                                     style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
                                         color: theme.flightListHeaderColor),
                                   ),
                                   const SizedBox(
@@ -101,40 +101,52 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           )),
-                                      child:  Column(children: [
-                                        Visibility(visible: boardingStatus != FlightBoaringStatus.none, child:  Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10),
-                                          child: Text(
-                                          boardingStatus.getInfoTitle(),
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: AppColors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700
-                                              ),
-                                                                                ),
-                                        )),
-                                        Text(
-                                        boardingStatus.getInfoDescription(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: AppColors.white,
-                                            fontSize: 16),
-                                      )
-                                      ],),
+                                      child: Column(
+                                        children: [
+                                          Visibility(
+                                              visible: boardingStatus !=
+                                                  FlightBoaringStatus.none,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10),
+                                                child: Text(
+                                                  boardingStatus.getInfoTitle(),
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color: AppColors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              )),
+                                          Text(
+                                            boardingStatus.getInfoDescription(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: AppColors.white,
+                                                fontSize: 16),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       SizedBox(
-                                        width: 130,
+                                        width: 155,
                                         height: 45,
                                         child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 backgroundColor:
                                                     theme.backgroundColor,
-                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5))),
                                                 side: const BorderSide(
                                                   width: 2.0,
                                                   color: AppColors.primaryBlue,
@@ -142,59 +154,83 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                 shadowColor:
                                                     Colors.transparent),
                                             onPressed: () {
-                                              
                                               switch (boardingStatus) {
                                                 case FlightBoaringStatus.none:
                                                   Navigator.of(context).pop();
-                                                case FlightBoaringStatus.confirm:
-                                                   setState(() {
-                                                    boardingStatus = FlightBoaringStatus.none;
+                                                case FlightBoaringStatus
+                                                      .confirm:
+                                                  setState(() {
+                                                    boardingStatus =
+                                                        FlightBoaringStatus
+                                                            .none;
                                                   });
-                                                case FlightBoaringStatus.boarding:
-                                                 setState(() {
-                                                   boardingStatus = FlightBoaringStatus.confirm;
-                                                 });
+                                                case FlightBoaringStatus
+                                                      .boarding:
+                                                  setState(() {
+                                                    boardingStatus =
+                                                        FlightBoaringStatus
+                                                            .none;
+                                                  });
                                               }
                                             },
                                             child: Text(
-                                              boardingStatus.getBackButtonTitle(),
+                                              boardingStatus
+                                                  .getBackButtonTitle(),
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
-                                                  color: theme.loginButtonBgColor),
+                                                  color:
+                                                      theme.loginButtonBgColor),
                                             )),
                                       ),
                                       const SizedBox(
                                         width: 15,
                                       ),
                                       SizedBox(
-                                        width: 140,
+                                        width: 155,
                                         height: 45,
                                         child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              side: BorderSide(width: 1.0, color: theme.loginButtonBgColor),
-                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                                                side: BorderSide(
+                                                    width: 1.0,
+                                                    color: theme
+                                                        .loginButtonBgColor),
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5))),
                                                 backgroundColor:
                                                     theme.loginButtonBgColor),
                                             onPressed: () {
-                                              if(selectedFlightIndex > -1){
+                                              if (selectedFlightIndex > -1) {
                                                 switch (boardingStatus) {
-                                                case FlightBoaringStatus.none:
-                                                  setState(() {
-                                                    boardingStatus = FlightBoaringStatus.confirm;
-                                                  });
-                                                case FlightBoaringStatus.confirm:
-                                                   setState(() {
-                                                    boardingStatus = FlightBoaringStatus.boarding;
-                                                  });
-                                                case FlightBoaringStatus.boarding:
-                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const FlightBoardingScreen()));
+                                                  case FlightBoaringStatus.none:
+                                                    setState(() {
+                                                      boardingStatus =
+                                                          FlightBoaringStatus
+                                                              .confirm;
+                                                    });
+                                                  case FlightBoaringStatus
+                                                        .confirm:
+                                                    setState(() {
+                                                      boardingStatus =
+                                                          FlightBoaringStatus
+                                                              .boarding;
+                                                    });
+                                                  case FlightBoaringStatus
+                                                        .boarding:
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const FlightBoardingScreen()));
+                                                }
                                               }
-                                              }
-                                              
                                             },
-                                            child:  Text(
-                                              boardingStatus.getConfirmButtonTitle(),
+                                            child: Text(
+                                              boardingStatus
+                                                  .getConfirmButtonTitle(),
                                               style: const TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500,
@@ -227,43 +263,54 @@ class _FlightListScreenState extends State<FlightListScreen> {
       child: Text(
         header,
         textAlign: TextAlign.left,
-        style:
-            TextStyle(color: theme.flightListSectionHeaderColor, fontSize: 14, fontWeight: FontWeight.w500),
+        style: TextStyle(
+            color: theme.flightListSectionHeaderColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500),
       ));
 
   Widget getFlightList(AppTheme theme) {
-    return RawKeyboardListener(focusNode: FocusNode(),
-      onKey: (RawKeyEvent event) {
-      },
-     child: ListView.builder(
-      controller: _controller,
-        itemCount: 20,
-        itemBuilder: ((context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
-            child: Focus(onFocusChange: (status){
-              // if(status){
-              //   setState(() {
-              //     selectedFlightIndex = index;
-              //   });
-              // }
-            }, child: flightCard(index, theme, context,(){
-              if(mounted){
-                setState(() {
-                  selectedFlightIndex = index;
-                });
-              }
-            })),
-          );
-        })));
+    return RawKeyboardListener(
+        focusNode: FocusNode(),
+        onKey: (RawKeyEvent event) {
+          // if (event.data.logicalKey == LogicalKeyboardKey.arrowDown) {
+          //   _scrollDown();
+          // }
+          // if (event.data.logicalKey == LogicalKeyboardKey.arrowUp) {
+          //   _scrollUp();
+          // }
+        },
+        child: ListView.builder(
+            controller: _controller,
+            physics: boardingStatus == FlightBoaringStatus.none
+                ? const AlwaysScrollableScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
+            itemCount: 20,
+            itemBuilder: ((context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 15, top: 7, bottom: 7),
+                child: Focus(
+                    canRequestFocus: boardingStatus == FlightBoaringStatus.none,
+                    onFocusChange: (status) {},
+                    child: flightCard(index, theme, context, () {
+                      if (mounted) {
+                        if (boardingStatus == FlightBoaringStatus.none) {
+                          setState(() {
+                            selectedFlightIndex = index;
+                          });
+                        }
+                      }
+                    })),
+              );
+            })));
   }
 
   void _scrollDown() {
-    _controller.animateTo(
-      _controller.offset + 50.0, // Adjust the scroll distance as needed
-      curve: Curves.easeInOut,
-      duration: Duration(milliseconds: 300),
-    );
+    if (boardingStatus == FlightBoaringStatus.none  && selectedFlightIndex < 19) {
+      setState(() {
+        selectedFlightIndex += 1;
+      });
+    }
   }
 
   void _scrollUp() {
@@ -274,37 +321,48 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
-  Widget flightCard(int index, AppTheme theme, BuildContext context, Function() didSelected) {
+  Widget flightCard(
+      int index, AppTheme theme, BuildContext context, Function() didSelected) {
     return GestureDetector(
       onTap: didSelected,
       child: Container(
-      decoration: getShadowShape(index, theme, context),
-      height: 75.0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: getFlightNo(theme),
-            ),
-            Expanded(flex: 1, child: getFlightStatus(theme, index)),
-            Expanded(flex: 1, child: getBRD(index, theme)),
-            Expanded(flex: 1, child: getDEP(theme)),
-            Expanded(flex: 1, child: getARR(theme)),
-          ],
+        decoration: getShadowShape(index, theme, context),
+        height: 75.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 1,
+                child: getFlightNo(theme),
+              ),
+              Expanded(flex: 1, child: getFlightStatus(theme, index)),
+              Expanded(flex: 1, child: getBRD(index, theme)),
+              Expanded(flex: 1, child: getDEP(theme)),
+              Expanded(flex: 1, child: getARR(theme)),
+            ],
+          ),
         ),
       ),
-    ),);
+    );
   }
 
-  ShapeDecoration getShadowShape(int index, AppTheme theme, BuildContext context) {
+  ShapeDecoration getShadowShape(
+      int index, AppTheme theme, BuildContext context) {
     return ShapeDecoration(
-      color: (Provider.of<ThemeNotifier>(context).isDark  && selectedFlightIndex == index) ? AppColors.primaryBlue : theme.flightInfoCardBgColor,
+      color: (Provider.of<ThemeNotifier>(context).isDark &&
+              selectedFlightIndex == index)
+          ? AppColors.primaryBlue
+          : theme.flightInfoCardBgColor,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: (!Provider.of<ThemeNotifier>(context).isDark  && selectedFlightIndex == index)?  AppColors.primaryBlue : Colors.transparent , width: 2.0),
+        side: BorderSide(
+            color: (!Provider.of<ThemeNotifier>(context).isDark &&
+                    selectedFlightIndex == index)
+                ? AppColors.primaryBlue
+                : Colors.transparent,
+            width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
       shadows: Provider.of<ThemeNotifier>(context).isDark
@@ -329,7 +387,10 @@ class _FlightListScreenState extends State<FlightListScreen> {
   Widget getFlightNo(AppTheme theme) {
     return Text(
       "SG198",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16, fontWeight: FontWeight.w500),
+      style: TextStyle(
+          color: theme.flightInfoCardTextColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w500),
     );
   }
 
@@ -345,11 +406,17 @@ class _FlightListScreenState extends State<FlightListScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child:  Center(
+        child: Center(
           child: Text(
             "ONTIME",
             textAlign: TextAlign.center,
-            style: TextStyle(color: (Provider.of<ThemeNotifier>(context).isDark && selectedFlightIndex == index) ? AppColors.white : AppColors.flightStatusOnTime, fontSize: 14,  fontWeight: FontWeight.w500),
+            style: TextStyle(
+                color: (Provider.of<ThemeNotifier>(context).isDark &&
+                        selectedFlightIndex == index)
+                    ? AppColors.white
+                    : AppColors.flightStatusOnTime,
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
           ),
         ),
       ),
@@ -358,74 +425,86 @@ class _FlightListScreenState extends State<FlightListScreen> {
 
   Widget getBRD(int index, AppTheme theme) {
     return Text(
-      "1350",
-      style: TextStyle(color: (Provider.of<ThemeNotifier>(context).isDark  && selectedFlightIndex == index) ? AppColors.white : theme.flightBRDTextColor, fontSize: 18,  fontWeight: FontWeight.w600),
+      "13:50",
+      style: TextStyle(
+          color: (Provider.of<ThemeNotifier>(context).isDark &&
+                  selectedFlightIndex == index)
+              ? AppColors.white
+              : theme.flightBRDTextColor,
+          fontSize: 18,
+          fontWeight: FontWeight.w600),
     );
   }
 
   Widget getDEP(AppTheme theme) {
     return Text(
-      "BLR 1400",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16,  fontWeight: FontWeight.w500),
+      "BLR 14:00",
+      style: TextStyle(
+          color: theme.flightInfoCardTextColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w500),
     );
   }
 
   Widget getARR(AppTheme theme) {
     return Text(
-      "MMA 2020",
-      style: TextStyle(color: theme.flightInfoCardTextColor, fontSize: 16,  fontWeight: FontWeight.w500),
+      "MMA 20:20",
+      style: TextStyle(
+          color: theme.flightInfoCardTextColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w500),
     );
   }
 }
 
 enum FlightStatus { ontime, delayed }
 
-enum FlightBoaringStatus{ 
-  
-  none, confirm, boarding;
+enum FlightBoaringStatus {
+  none,
+  confirm,
+  boarding;
 
-  String getConfirmButtonTitle(){
+  String getConfirmButtonTitle() {
     switch (this) {
       case FlightBoaringStatus.none:
-          return "Open Flight";
+        return "Open Flight";
       case FlightBoaringStatus.confirm:
-          return "Confirm";
+        return "Confirm";
       case FlightBoaringStatus.boarding:
-          return "Start Boarding"; 
+        return "Start Boarding";
     }
   }
 
-  String getBackButtonTitle(){
+  String getBackButtonTitle() {
     switch (this) {
       case FlightBoaringStatus.none:
-          return "Back";
+        return "Back";
       case FlightBoaringStatus.confirm:
-          return "Cancel";
+        return "Cancel";
       case FlightBoaringStatus.boarding:
-          return "Cancel"; 
+        return "Cancel";
     }
   }
 
-   String getInfoTitle(){
+  String getInfoTitle() {
     switch (this) {
       case FlightBoaringStatus.none:
-          return "";
+        return "";
       case FlightBoaringStatus.confirm:
-          return "Confirm Flight";
+        return "Confirm Flight";
       case FlightBoaringStatus.boarding:
-          return "Ready to Board"; 
+        return "Ready to Board";
     }
   }
 
-  String getInfoDescription(){
+  String getInfoDescription() {
     switch (this) {
       case FlightBoaringStatus.none:
-          return "Select a flight from the list then choose 'Open Flight' when ready";
+        return "Select a flight from the list then choose 'Open Flight' when ready";
       case FlightBoaringStatus.confirm:
-          return "The gate will close automatically after confirmation. Please ensure the gate area is clear of any objects of persons before proceeding";
+        return "The gate will close automatically after confirmation. Please ensure the gate area is clear of any objects of persons before proceeding";
       case FlightBoaringStatus.boarding:
-          return "E-Gate is now ready to board flight SG198. Select 'Start Boarding' to begin boarding"; 
+        return "E-Gate is now ready to board flight SG198. Select 'Start Boarding' to begin boarding";
     }
   }
-  
-  }
+}
