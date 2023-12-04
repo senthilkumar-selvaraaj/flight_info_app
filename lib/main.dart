@@ -1,18 +1,25 @@
 
+import 'package:flight_info_app/blocs/login/login_bloc.dart';
+import 'package:flight_info_app/repos/auth_repository.dart';
+import 'package:flight_info_app/screens/dashboard_screen.dart';
 import 'package:flight_info_app/screens/login_screen.dart';
+import 'package:flight_info_app/screens/splash_screen.dart';
+import 'package:flight_info_app/utils/global_storage.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async{
   
   WidgetsFlutterBinding.ensureInitialized();
+  await Global.storage.load();
   await windowManager.ensureInitialized();
-
+  
   WindowOptions windowOptions = const WindowOptions(
+    minimumSize: Size(1270, 768),
     fullScreen: true,
-    minimumSize: Size(1260, 768),
     center: true,
     title: 'AAI (Chennai)'
   );
@@ -46,6 +53,10 @@ class MyApp extends StatelessWidget {
 
         ),
         title: 'Airport Authority of India',
-        home: const HomeScreen());
+        home: MultiProvider(providers: [
+         BlocProvider<LoginBloc>(
+      create: (BuildContext context) => LoginBloc(AuthRepositary()),
+    )
+        ], child: Global.storage.hasUserLogined ? const DashboardScreen() : const HomeScreen(),) );
   }
 }

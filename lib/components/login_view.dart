@@ -1,7 +1,9 @@
+import 'package:flight_info_app/blocs/login/login_bloc.dart';
 import 'package:flight_info_app/components/app_text_field.dart';
 import 'package:flight_info_app/screens/dashboard_screen.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -12,7 +14,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  @override
+ @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Column(
@@ -66,7 +68,8 @@ class _LoginViewState extends State<LoginView> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   backgroundColor: theme.loginButtonBgColor),
               onPressed: () {
-                navigateToDashBoard();
+                //navigateToDashBoard();
+                BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
               },
               child: const Text(
                 "Login",
@@ -90,7 +93,9 @@ class _LoginViewState extends State<LoginView> {
           // textFieldLabel("Username"),
           AppTextField(
             label: "Username",
-            onChanged: (p0) {},
+            onChanged: (p0) {
+              BlocProvider.of<LoginBloc>(context).add(LoginUsernameChanged(p0 ?? ''));
+            },
           ),
         ],
       ),
@@ -111,7 +116,9 @@ class _LoginViewState extends State<LoginView> {
           AppTextField(
             label: "Password",
             isSecured: true,
-            onChanged: (p0) {},
+            onChanged: (p0) {
+              BlocProvider.of<LoginBloc>(context).add(LoginPasswordChanged(p0 ?? ''));
+            },
           ),
         ],
       ),
