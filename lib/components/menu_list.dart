@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/menu_card.dart';
 import 'package:flight_info_app/screens/flight_list_screen.dart';
+import 'package:flight_info_app/screens/login_screen.dart';
+import 'package:flight_info_app/utils/global_storage.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,8 +37,11 @@ class _MenuListState extends State<MenuList> {
                         navigateToFlightListScreen();
                       } else if (m == Menu.logOut) {
                         Dialogs.showAlertDialog(
-                            context, DialogType.logout, theme, () {}, () {
-                          Navigator.of(context).pop();
+                            context, DialogType.logout, theme, () {}, () async{
+                              await Global.storage.logOut();
+                              if(mounted){
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const HomeScreen()));
+                              }
                         });
                       } else if (m == Menu.exit) {
                         Dialogs.showAlertDialog(

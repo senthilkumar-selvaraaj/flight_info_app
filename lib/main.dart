@@ -3,7 +3,6 @@ import 'package:flight_info_app/blocs/login/login_bloc.dart';
 import 'package:flight_info_app/repos/auth_repository.dart';
 import 'package:flight_info_app/screens/dashboard_screen.dart';
 import 'package:flight_info_app/screens/login_screen.dart';
-import 'package:flight_info_app/screens/splash_screen.dart';
 import 'package:flight_info_app/utils/global_storage.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +18,12 @@ void main() async{
   
   WindowOptions windowOptions = const WindowOptions(
     minimumSize: Size(1270, 768),
-    fullScreen: true,
+    size: Size(1270, 768),
+    // fullScreen: true,
     center: true,
     title: 'AAI (Chennai)'
   );
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
+ await windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });

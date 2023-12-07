@@ -29,6 +29,10 @@ class Global {
     return user?.authToken;
   }
 
+  String? get refreshToken {
+    return user?.refreshToken;
+  }
+
   String get name {
     return '${user?.name}';
   }

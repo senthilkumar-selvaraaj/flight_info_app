@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flight_info_app/models/user_model.dart';
 import 'package:flight_info_app/utils/global_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,8 +8,11 @@ enum HttpRequest implements HttpBaseRequest {
   login,
   logout,
   refreshToken,
-  flightList;
-  
+  flightList,
+  startBoarding,
+  paxList,
+  paxBoarding,
+  paxDeboarding;
 
   @override
   String get url {
@@ -17,10 +21,16 @@ enum HttpRequest implements HttpBaseRequest {
         return '${APIConfig.basApiUrl}user/signin';
       case HttpRequest.logout:
         return '${APIConfig.basApiUrl}user/logout';
-     case HttpRequest.refreshToken:
+      case HttpRequest.refreshToken:
         return '${APIConfig.basApiUrl}user/refreshtoken';
-        case HttpRequest.flightList:
+      case HttpRequest.flightList:
         return '${APIConfig.basApiUrl}airline/flight/list';
+      case HttpRequest.startBoarding:
+        return '${APIConfig.basApiUrl}airline/boarding/start';
+      //airline/pax/list
+      //airline/pax/board
+      //airline/pax/deboard
+      //airline/boarding/end
       default:
         return '';
     }
@@ -45,7 +55,7 @@ enum HttpRequest implements HttpBaseRequest {
       'x-user-agent': 'Windows',
     };
     if (Global.storage.accessToken != null) {
-      headers.addAll({'x-access-token': 'Bearer ${Global.storage.accessToken}'});
+      headers.addAll({'x-access-token': '${Global.storage.accessToken}'});
     }
     return headers;
   }
@@ -141,7 +151,6 @@ class HttpClient implements HttpService {
   Future<dynamic> send() async {
     try {
       var response = await makeRequest();
-      print(response.body);
       if (response.statusCode == 401 || response.statusCode == 406) {}
       return handleResponse(response);
     } on SocketException {
@@ -165,7 +174,6 @@ class HttpClient implements HttpService {
   Future<dynamic> post() async {
     try {
       var response = await makeRequest();
-      print(response.body);
       return handleResponse(response);
     } on SocketException {
       throw NoInternetException(
@@ -178,8 +186,18 @@ class HttpClient implements HttpService {
     try {
       var response =
           await http.get(Uri.parse(getURL()), headers: request.headers);
-          
-      return handleResponse(response);
+      if (response.statusCode == 401) {
+        try {
+          bool status = await renewToken();
+          if (status) {
+            return await get();
+          }
+        } catch (e) {
+          throw BadRequestException();
+        }
+      } else {
+        return handleResponse(response);
+      }
     } on SocketException {
       throw NoInternetException(
           'No Internet connection. Please make sure your internet conenction.');
@@ -188,11 +206,9 @@ class HttpClient implements HttpService {
 
   @override
   Future<dynamic> put() async {
-    print(getURL());
     try {
-    var response = await http.put(Uri.parse(getURL()),
+      var response = await http.put(Uri.parse(getURL()),
           headers: request.headers, body: jsonEncode(body));
-          print(response.body);
       return handleResponse(response);
     } on SocketException {
       throw NoInternetException(
@@ -202,18 +218,15 @@ class HttpClient implements HttpService {
 
   @override
   Future<dynamic> delete() async {
-    print(getURL());
     try {
       var response = await http.delete(Uri.parse(getURL()),
           headers: request.headers, body: jsonEncode(body));
-          print(response.body);
       return handleResponse(response);
     } on SocketException {
       throw NoInternetException(
           'No Internet connection. Please make sure your internet conenction.');
     }
   }
-
 
   Future<dynamic> makeRequest() async {
     try {
@@ -232,7 +245,9 @@ class HttpClient implements HttpService {
         return json.decode(response.body.toString());
       case 400:
         final jsonData = json.decode(response.body.toString());
-        final message = jsonData["message"] ?? jsonData["error"]['message'] ?? 'Oops! Something went wrong';
+        final message = jsonData["message"] ??
+            jsonData["error"]['message'] ??
+            'Oops! Something went wrong';
         throw BadRequestException(message);
       default:
         throw UnExpectedException('Oops! Something went wrong');
@@ -241,7 +256,25 @@ class HttpClient implements HttpService {
 
   @override
   Future<bool> renewToken() async {
-    return false;
+    try {
+      final params = {"refresh_token": Global.storage.refreshToken ?? ""};
+      final url = HttpRequest.refreshToken.url;
+      var response = await http.post(Uri.parse(url),
+          headers: request.headers, body: jsonEncode(params));
+      if (response.statusCode == 200) {
+        final user = User.fromJson(json.decode(response.body.toString()));
+        Global.storage.user?.authToken = user.authToken;
+        if(user.refreshToken != null){
+           Global.storage.user?.refreshToken = user.refreshToken;
+        }
+        Global.storage.saveUser(Global.storage.user!);
+        return true;
+      }
+      return false;
+    } on SocketException {
+      throw NoInternetException(
+          'No Internet connection. Please make sure your internet conenction.');
+    }
   }
 }
 

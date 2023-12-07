@@ -12,8 +12,8 @@ part of 'login_bloc.dart';
   bool get obscuredText => visiblityStatus;
 
    LoginState({
-      this.userName = 'admin@fastfin.com',
-      this.password = 'admin@fastfin',
+      this.userName = '',
+      this.password = '',
       this.formStatus =  const InitialFormStatus(),
       this.visiblityStatus = true
     });
