@@ -30,6 +30,10 @@ abstract class AppTheme {
   Color get laneBoardingValueColor;
   Color get boardingInfoContainerColor;
   Color get dialogBackgroundColor;
+  Color get flightStatusOnTimeBgColor;
+  Color get flightStatusDelayedBgColor;
+  Color get flightStatusOntTmeTextColor;
+  Color get flightStatusDelayedTextColor;
 }
 
 class LightTheme extends AppTheme{
@@ -100,7 +104,7 @@ class LightTheme extends AppTheme{
   Color get flightInfoHintBannerBg => AppColors.flightInfoBannerBg;
   
   @override
-  Color get flightStatusBgColor => AppColors.flightStatusOnTimeBg.withAlpha(127);
+  Color get flightStatusBgColor => AppColors.flightStatusOnTimeBg;
   
   @override
   Color get popOverBackgroundColor => AppColors.popOverBGColor;
@@ -119,6 +123,18 @@ class LightTheme extends AppTheme{
   
   @override
   Color get dialogBackgroundColor => AppColors.white;
+  
+  @override
+  Color get flightStatusDelayedBgColor => AppColors.orangePrimary;
+  
+  @override
+  Color get flightStatusDelayedTextColor => AppColors.orangeSecondary;
+  
+  @override
+  Color get flightStatusOnTimeBgColor => flightStatusBgColor;
+  
+  @override
+  Color get flightStatusOntTmeTextColor => AppColors.flightStatusOnTime;
 }
 
 class DarkTheme extends AppTheme{
@@ -208,6 +224,18 @@ class DarkTheme extends AppTheme{
   
   @override
   Color get dialogBackgroundColor => AppColors.secondaryBlue;
+  
+  @override
+  Color get flightStatusDelayedBgColor => AppColors.orangePrimary.withAlpha(127);
+  
+  @override
+  Color get flightStatusDelayedTextColor => AppColors.orangeSecondary;
+  
+  @override
+  Color get flightStatusOnTimeBgColor => AppColors.flightStatusOnTime.withAlpha(25);
+  
+  @override
+  Color get flightStatusOntTmeTextColor => AppColors.flightStatusOnTime;
 }
 
 
@@ -242,6 +270,8 @@ class AppColors{
   static const popOverBGColorDark = Color(0xFF2d3866);
   static const secondaryBlack = Color(0xFF2a2732);
   static const lightGrey = Color(0xFFdedddd);
+  static const orangePrimary = Color(0xFFfff1c9);
+  static const orangeSecondary = Color(0xFFfec627);
 }
 
 

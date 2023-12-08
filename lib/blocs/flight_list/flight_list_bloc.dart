@@ -26,13 +26,15 @@ class FlightListBloc extends Bloc<FlightListEvent, FlightListState> {
   }
 
   void onStartBoarding(StartBoardingEvent event, Emitter<FlightListState> emit ) async{
-      emit(state.copyWith(flightListFetchingState: const FlightListFetchingState(APIRequestState.loading, null)));
+      emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.loading, null)));
+      Map<String, dynamic> request = {"flight_no": event.flight.flightNo??'', "gate_ref_id": ["62638e4b0e43012248aab387"]};
+      print(request);
       try{
-        await repo.getFlightList();
-         emit(state.copyWith(flightListFetchingState: const FlightListFetchingState(APIRequestState.sucess, null)));
+          await repo.startBoarding(request);
+          emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.sucess, null)));
       }catch(e){
-         emit(state.copyWith(flightListFetchingState:  FlightListFetchingState(APIRequestState.faulure, e as Exception)));
-         emit(state.copyWith(flightListFetchingState: const FlightListFetchingState(APIRequestState.initial, null)));
+         emit(state.copyWith(startBoardingState:  StartBoardingState(APIRequestState.faulure, e as Exception)));
+         emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.initial, null)));
       }
   }
 

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-List<FlightList> flightListFromJson(String str) => List<FlightList>.from(json.decode(str).map((x) => FlightList.fromJson(x)));
+List<Flight> flightListFromJson(String str) => List<Flight>.from(json.decode(str).map((x) => Flight.fromJson(x)));
 
-String flightListToJson(List<FlightList> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String flightListToJson(List<Flight> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 
-class FlightList {
+class Flight {
     String? airline;
     String? iataCode;
     String? flightNo;
@@ -15,7 +15,11 @@ class FlightList {
     DateTime? arrTime;
     bool? isDelayed;
 
-    FlightList({
+    String statusMessage(){
+      return (isDelayed ?? false) ? "DELAYED" : "ONTIME";
+    }
+
+    Flight({
         this.airline,
         this.iataCode,
         this.flightNo,
@@ -26,7 +30,7 @@ class FlightList {
         this.isDelayed,
     });
 
-    factory FlightList.fromJson(Map<String, dynamic> json) => FlightList(
+    factory Flight.fromJson(Map<String, dynamic> json) => Flight(
         airline: json["airline"],
         iataCode: json["iata_code"],
         flightNo: json["flight_no"],

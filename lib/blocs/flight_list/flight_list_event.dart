@@ -8,5 +8,8 @@ class FetchFlightListEvent extends FlightListEvent{
 }
 
 class StartBoardingEvent extends FlightListEvent{
-    StartBoardingEvent();
+    Flight flight;
+    StartBoardingEvent(this.flight);
 }
+
+

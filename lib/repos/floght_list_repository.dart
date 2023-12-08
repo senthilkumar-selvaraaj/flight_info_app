@@ -5,13 +5,27 @@ import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/services/api_service.dart';
 
 class FlightListRepository {
-  Future<List<FlightList>> getFlightList() async {
+  Future<List<Flight>> getFlightList() async {
     try {
       final response = await const HttpClient(
-          request: HttpRequest.flightList).get();
+          request: HttpRequest.flightList).send();
       try {
-      List<FlightList> list = flightListFromJson(json.encode(response));
+      List<Flight> list = flightListFromJson(json.encode(response));
       return list;
+      } catch (e) {
+        throw BadRequestException('Data Exception');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+   Future<void> startBoarding(Map<String,dynamic> body) async {
+    try {
+      final response = await  HttpClient(
+          request: HttpRequest.startBoarding, body: body).send();
+          print(response);
+      try {
       } catch (e) {
         throw BadRequestException('Data Exception');
       }

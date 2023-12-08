@@ -12,7 +12,8 @@ enum HttpRequest implements HttpBaseRequest {
   startBoarding,
   paxList,
   paxBoarding,
-  paxDeboarding;
+  paxDeboarding,
+  endBoarding;
 
   @override
   String get url {
@@ -27,10 +28,14 @@ enum HttpRequest implements HttpBaseRequest {
         return '${APIConfig.basApiUrl}airline/flight/list';
       case HttpRequest.startBoarding:
         return '${APIConfig.basApiUrl}airline/boarding/start';
-      //airline/pax/list
-      //airline/pax/board
-      //airline/pax/deboard
-      //airline/boarding/end
+        case HttpRequest.paxList:
+        return '${APIConfig.basApiUrl}airline/pax/list';
+        case HttpRequest.paxBoarding:
+        return '${APIConfig.basApiUrl}airline/pax/board';
+        case HttpRequest.paxDeboarding:
+        return '${APIConfig.basApiUrl}airline/pax/deboard';
+        case HttpRequest.endBoarding:
+        return '${APIConfig.basApiUrl}airline/boarding/end';
       default:
         return '';
     }
@@ -108,10 +113,10 @@ abstract class HttpService {
       this.files = const []});
 
   void send();
-  void post();
-  void get();
-  void put();
-  void delete();
+  // void post();
+  // void get();
+  // void put();
+  // void delete();
   void renewToken();
 }
 
@@ -151,8 +156,19 @@ class HttpClient implements HttpService {
   Future<dynamic> send() async {
     try {
       var response = await makeRequest();
-      if (response.statusCode == 401 || response.statusCode == 406) {}
-      return handleResponse(response);
+      print(response.body);
+      if (response.statusCode == 401){
+      try {
+          bool status = await renewToken();
+          if (status) {
+            return await send();
+          }
+        } catch (e) {
+          throw BadRequestException();
+        }
+      }else{
+          return handleResponse(response);
+      }
     } on SocketException {
       throw NoInternetException(
           'No Internet connection. Please make sure your internet conenction.');
@@ -170,72 +186,53 @@ class HttpClient implements HttpService {
     return url;
   }
 
-  @override
-  Future<dynamic> post() async {
-    try {
-      var response = await makeRequest();
-      return handleResponse(response);
-    } on SocketException {
-      throw NoInternetException(
-          'No Internet connection. Please make sure your internet conenction.');
-    }
-  }
+  // @override
+  // Future<dynamic> post() async {
+  //   try {
+  //     var response = await makeRequest();
+  //     return handleResponse(response);
+  //   } on SocketException {
+  //     throw NoInternetException(
+  //         'No Internet connection. Please make sure your internet conenction.');
+  //   }
+  // }
 
-  @override
-  Future<dynamic> get() async {
-    try {
-      var response =
-          await http.get(Uri.parse(getURL()), headers: request.headers);
-      if (response.statusCode == 401) {
-        try {
-          bool status = await renewToken();
-          if (status) {
-            return await get();
-          }
-        } catch (e) {
-          throw BadRequestException();
-        }
-      } else {
-        return handleResponse(response);
-      }
-    } on SocketException {
-      throw NoInternetException(
-          'No Internet connection. Please make sure your internet conenction.');
-    }
-  }
-
-  @override
-  Future<dynamic> put() async {
-    try {
-      var response = await http.put(Uri.parse(getURL()),
-          headers: request.headers, body: jsonEncode(body));
-      return handleResponse(response);
-    } on SocketException {
-      throw NoInternetException(
-          'No Internet connection. Please make sure your internet conenction.');
-    }
-  }
-
-  @override
-  Future<dynamic> delete() async {
-    try {
-      var response = await http.delete(Uri.parse(getURL()),
-          headers: request.headers, body: jsonEncode(body));
-      return handleResponse(response);
-    } on SocketException {
-      throw NoInternetException(
-          'No Internet connection. Please make sure your internet conenction.');
-    }
-  }
+  // @override
+  // Future<dynamic> get() async {
+  //   try {
+  //     var response =
+  //         await http.get(Uri.parse(getURL()), headers: request.headers);
+  //     if (response.statusCode == 401) {
+  //       try {
+  //         bool status = await renewToken();
+  //         if (status) {
+  //           return await get();
+  //         }
+  //       } catch (e) {
+  //         throw BadRequestException();
+  //       }
+  //     } else {
+  //       return handleResponse(response);
+  //     }
+  //   } on SocketException {
+  //     throw NoInternetException(
+  //         'No Internet connection. Please make sure your internet conenction.');
+  //   }
+  // }
 
   Future<dynamic> makeRequest() async {
-    try {
-      var response = await http.post(Uri.parse(getURL()),
+    switch (request.method) {
+      case HttpMethod.get:
+          return await http.get(Uri.parse(getURL()), headers: request.headers);
+        case HttpMethod.post:
+        return await http.post(Uri.parse(getURL()),
           headers: request.headers, body: jsonEncode(body));
-      return response;
-    } on SocketException {
-      throw NoInternetException(
-          'No Internet connection. Please make sure your internet conenction.');
+        case HttpMethod.put:
+            return await http.put(Uri.parse(getURL()),
+          headers: request.headers, body: jsonEncode(body));
+        case HttpMethod.delete:
+        return  await http.delete(Uri.parse(getURL()),
+          headers: request.headers, body: jsonEncode(body));
     }
   }
 
@@ -256,15 +253,18 @@ class HttpClient implements HttpService {
 
   @override
   Future<bool> renewToken() async {
+    print("Refresh Token ===> Entered");
     try {
       final params = {"refresh_token": Global.storage.refreshToken ?? ""};
       final url = HttpRequest.refreshToken.url;
       var response = await http.post(Uri.parse(url),
           headers: request.headers, body: jsonEncode(params));
+        print(response.body);
       if (response.statusCode == 200) {
         final user = User.fromJson(json.decode(response.body.toString()));
         Global.storage.user?.authToken = user.authToken;
         if(user.refreshToken != null){
+           print("Refresh Token ===> Refresh Token");
            Global.storage.user?.refreshToken = user.refreshToken;
         }
         Global.storage.saveUser(Global.storage.user!);
@@ -272,6 +272,7 @@ class HttpClient implements HttpService {
       }
       return false;
     } on SocketException {
+      print("object");
       throw NoInternetException(
           'No Internet connection. Please make sure your internet conenction.');
     }

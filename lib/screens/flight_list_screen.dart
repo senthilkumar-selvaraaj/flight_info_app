@@ -9,6 +9,7 @@ import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class FlightListScreen extends StatefulWidget {
@@ -32,7 +33,9 @@ class _FlightListScreenState extends State<FlightListScreen> {
             FlightListBloc(FlightListRepository())..add(FetchFlightListEvent()),
         child: BlocConsumer<FlightListBloc, FlightListState>(
           listener: (context, state) {
-            print(state.flightListFetchingState.state);
+            if(state.startBoardingState.state == APIRequestState.sucess){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const FlightBoardingScreen()));
+            }
           },
           builder: (context, state) {
             return Padding(
@@ -50,9 +53,15 @@ class _FlightListScreenState extends State<FlightListScreen> {
                             children: [
                               Expanded(
                                   flex: 10,
-                                  child: BlocBuilder<FlightListBloc, FlightListState>(
+                                  child: BlocBuilder<FlightListBloc,
+                                      FlightListState>(
                                     builder: (context, state) {
-                                      if(state.flightListFetchingState.state == APIRequestState.loading) return  Center(child:  CircularProgressIndicator(color: theme.flightBRDTextColor,));
+                                      if (state.flightListFetchingState.state ==
+                                          APIRequestState.loading)
+                                        return Center(
+                                            child: CircularProgressIndicator(
+                                          color: theme.flightBRDTextColor,
+                                        ));
                                       return Container(
                                         child: Column(
                                           crossAxisAlignment:
@@ -100,7 +109,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                               height: 10,
                                             ),
                                             Expanded(
-                                                child: getFlightList(theme, context))
+                                                child: getFlightList(
+                                                    theme, context))
                                           ],
                                         ),
                                       );
@@ -229,62 +239,68 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             SizedBox(
                                               width: 155,
                                               height: 45,
-                                              child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      side: BorderSide(
-                                                          width: 1.0,
-                                                          color: theme
-                                                              .loginButtonBgColor),
-                                                      shape: const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
+                                              child: BlocBuilder<FlightListBloc,
+                                                  FlightListState>(
+                                                builder: (context, state) {
+                                                  if(state.startBoardingState.state == APIRequestState.loading){
+                                                    return Center(child: CircularProgressIndicator(color: theme.flightBRDTextColor,),);
+                                                  }
+                                                  print(state.startBoardingState.state);
+                                                  return ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                          side: BorderSide(
+                                                              width: 1.0,
+                                                              color: theme
+                                                                  .loginButtonBgColor),
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
                                                                       .circular(
                                                                           5))),
-                                                      backgroundColor: theme
-                                                          .loginButtonBgColor),
-                                                  onPressed: () {
-                                                    if (selectedFlightIndex >
-                                                        -1) {
-                                                      switch (boardingStatus) {
-                                                        case FlightBoaringStatus
-                                                              .none:
-                                                          setState(() {
-                                                            boardingStatus =
-                                                                FlightBoaringStatus
-                                                                    .confirm;
-                                                          });
-                                                        case FlightBoaringStatus
-                                                              .confirm:
-                                                          setState(() {
-                                                            boardingStatus =
-                                                                FlightBoaringStatus
-                                                                    .boarding;
-                                                          });
-                                                        case FlightBoaringStatus
-                                                              .boarding:
-                                                          setState(() {
-                                                            boardingStatus =
-                                                                FlightBoaringStatus
-                                                                    .none;
-                                                          });
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const FlightBoardingScreen()));
-                                                      }
-                                                    }
-                                                  },
-                                                  child: Text(
-                                                    boardingStatus
-                                                        .getConfirmButtonTitle(),
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: AppColors.white),
-                                                  )),
+                                                          backgroundColor: theme
+                                                              .loginButtonBgColor),
+                                                      onPressed: () {
+                                                        if (selectedFlightIndex >
+                                                            -1) {
+                                                          switch (
+                                                              boardingStatus) {
+                                                            case FlightBoaringStatus
+                                                                  .none:
+                                                              setState(() {
+                                                                boardingStatus =
+                                                                    FlightBoaringStatus
+                                                                        .confirm;
+                                                              });
+                                                            case FlightBoaringStatus
+                                                                  .confirm:
+                                                              setState(() {
+                                                                boardingStatus =
+                                                                    FlightBoaringStatus
+                                                                        .boarding;
+                                                              });
+                                                            case FlightBoaringStatus
+                                                                  .boarding:
+                                                              setState(() {
+                                                                boardingStatus =
+                                                                    FlightBoaringStatus
+                                                                        .none;
+                                                              });
+                                                              BlocProvider.of<FlightListBloc>(context).add(StartBoardingEvent(BlocProvider.of<FlightListBloc>(context).state.flights[selectedFlightIndex]));
+                                                          }
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        boardingStatus
+                                                            .getConfirmButtonTitle(),
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: AppColors
+                                                                .white),
+                                                      ));
+                                                },
+                                              ),
                                             )
                                           ],
                                         )
@@ -325,8 +341,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
     final flights = BlocProvider.of<FlightListBloc>(buildContext).state.flights;
     return RawKeyboardListener(
         focusNode: FocusNode(),
-        onKey: (RawKeyEvent event) {
-        },
+        onKey: (RawKeyEvent event) {},
         child: ListView.builder(
             controller: _controller,
             physics: boardingStatus == FlightBoaringStatus.none
@@ -339,7 +354,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
                 child: Focus(
                     canRequestFocus: boardingStatus == FlightBoaringStatus.none,
                     onFocusChange: (status) {},
-                    child: flightCard(flights[index], index, theme, context, () {
+                    child:
+                        flightCard(flights[index], index, theme, context, () {
                       if (mounted) {
                         if (boardingStatus == FlightBoaringStatus.none) {
                           setState(() {
@@ -369,8 +385,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
-  Widget flightCard( FlightList flight,
-      int index, AppTheme theme, BuildContext context, Function() didSelected) {
+  Widget flightCard(Flight flight, int index, AppTheme theme,
+      BuildContext context, Function() didSelected) {
     return GestureDetector(
       onTap: didSelected,
       child: MouseRegion(
@@ -388,10 +404,17 @@ class _FlightListScreenState extends State<FlightListScreen> {
                   flex: 1,
                   child: getFlightNo(flight.flightNo ?? '', theme),
                 ),
-                Expanded(flex: 1, child: getFlightStatus(flight.isDelayed.toString() ,theme, index)),
-                Expanded(flex: 1, child: getBRD(flight.iataCode.toString(), index, theme)),
-                Expanded(flex: 1, child: getDEP(flight.depDate.toString(), theme)),
-                Expanded(flex: 1, child: getARR(flight.arrTime.toString(), theme)),
+                Expanded(
+                    flex: 1,
+                    child: getFlightStatus(
+                        flight, theme, index)),
+                Expanded(
+                    flex: 1,
+                    child: getBRD(DateFormat.Hm().format(flight.depDate!), index, theme)),
+                Expanded(
+                    flex: 1, child: getDEP("${flight.origin} ${DateFormat.Hm().format(flight.depDate!)}", theme)),
+                Expanded(
+                    flex: 1, child: getARR("${flight.destination} ${DateFormat.Hm().format(flight.arrTime!)}", theme)),
               ],
             ),
           ),
@@ -446,14 +469,14 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
-  Widget getFlightStatus(String value, AppTheme theme, int index) {
+  Widget getFlightStatus(Flight flight, AppTheme theme, int index) {
     return Padding(
       padding: const EdgeInsets.only(right: 30),
       child: Container(
         height: 46,
         width: 100,
         decoration: ShapeDecoration(
-          color: theme.flightStatusBgColor,
+          color: getFlightStatusBackGroundColor(theme, flight.isDelayed ?? false),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -461,13 +484,10 @@ class _FlightListScreenState extends State<FlightListScreen> {
         child: Center(
           child: Text(
             //"ONTIME",
-            value,
+            flight.statusMessage(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: (Provider.of<ThemeNotifier>(context).isDark &&
-                        selectedFlightIndex == index)
-                    ? AppColors.white
-                    : AppColors.flightStatusOnTime,
+                color: getFlightStatusTextColor(theme, flight.isDelayed ?? false , (Provider.of<ThemeNotifier>(context).isDark && selectedFlightIndex == index) ),
                 fontSize: 14,
                 fontWeight: FontWeight.w500),
           ),
@@ -476,10 +496,27 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
+  Color getFlightStatusBackGroundColor(AppTheme theme, bool status){
+        if(status){
+            return theme.flightStatusDelayedBgColor;
+        }else{
+          return theme.flightStatusOnTimeBgColor;
+        }
+  }
+
+  Color getFlightStatusTextColor(AppTheme theme, bool status, bool isSelected){
+
+        if(status){
+            return isSelected ? AppColors.white : theme.flightStatusDelayedTextColor;
+        }else{
+          return isSelected ? AppColors.white : theme.flightStatusOntTmeTextColor;
+        }
+  }
+
   Widget getBRD(String value, int index, AppTheme theme) {
     return Text(
-     // "13:50",
-     value,
+      // "13:50",
+      value,
       style: TextStyle(
           color: (Provider.of<ThemeNotifier>(context).isDark &&
                   selectedFlightIndex == index)
