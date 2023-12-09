@@ -68,7 +68,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                         padding: const EdgeInsets.only(right: 18),
                                         child: Row(
                                           children: [
-                                           Focus(
+                                           const Focus(
                                             descendantsAreFocusable: false,
                                             canRequestFocus: false,
                                             child:  InfoIcon()),

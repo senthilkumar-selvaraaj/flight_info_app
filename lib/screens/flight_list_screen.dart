@@ -33,8 +33,9 @@ class _FlightListScreenState extends State<FlightListScreen> {
             FlightListBloc(FlightListRepository())..add(FetchFlightListEvent()),
         child: BlocConsumer<FlightListBloc, FlightListState>(
           listener: (context, state) {
-            if(state.startBoardingState.state == APIRequestState.sucess){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const FlightBoardingScreen()));
+            if (state.startBoardingState.state == APIRequestState.success) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const FlightBoardingScreen()));
             }
           },
           builder: (context, state) {
@@ -57,11 +58,13 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                       FlightListState>(
                                     builder: (context, state) {
                                       if (state.flightListFetchingState.state ==
-                                          APIRequestState.loading)
+                                          APIRequestState.loading) {
                                         return Center(
                                             child: CircularProgressIndicator(
                                           color: theme.flightBRDTextColor,
                                         ));
+                                      }
+
                                       return Container(
                                         child: Column(
                                           crossAxisAlignment:
@@ -242,10 +245,19 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                               child: BlocBuilder<FlightListBloc,
                                                   FlightListState>(
                                                 builder: (context, state) {
-                                                  if(state.startBoardingState.state == APIRequestState.loading){
-                                                    return Center(child: CircularProgressIndicator(color: theme.flightBRDTextColor,),);
+                                                  if (state.startBoardingState
+                                                          .state ==
+                                                      APIRequestState.loading) {
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: theme
+                                                            .flightBRDTextColor,
+                                                      ),
+                                                    );
                                                   }
-                                                  print(state.startBoardingState.state);
+                                                  print(state.startBoardingState
+                                                      .state);
                                                   return ElevatedButton(
                                                       style: ElevatedButton.styleFrom(
                                                           side: BorderSide(
@@ -285,7 +297,14 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                                     FlightBoaringStatus
                                                                         .none;
                                                               });
-                                                              BlocProvider.of<FlightListBloc>(context).add(StartBoardingEvent(BlocProvider.of<FlightListBloc>(context).state.flights[selectedFlightIndex]));
+                                                              BlocProvider.of<
+                                                                          FlightListBloc>(
+                                                                      context)
+                                                                  .add(StartBoardingEvent(
+                                                                      BlocProvider.of<FlightListBloc>(
+                                                                              context)
+                                                                          .state
+                                                                          .flights[selectedFlightIndex]));
                                                           }
                                                         }
                                                       },
@@ -404,17 +423,21 @@ class _FlightListScreenState extends State<FlightListScreen> {
                   flex: 1,
                   child: getFlightNo(flight.flightNo ?? '', theme),
                 ),
+                Expanded(flex: 1, child: getFlightStatus(flight, theme, index)),
                 Expanded(
                     flex: 1,
-                    child: getFlightStatus(
-                        flight, theme, index)),
+                    child: getBRD(
+                        DateFormat.Hm().format(flight.depDate!), index, theme)),
                 Expanded(
                     flex: 1,
-                    child: getBRD(DateFormat.Hm().format(flight.depDate!), index, theme)),
+                    child: getDEP(
+                        "${flight.origin} ${DateFormat.Hm().format(flight.depDate!)}",
+                        theme)),
                 Expanded(
-                    flex: 1, child: getDEP("${flight.origin} ${DateFormat.Hm().format(flight.depDate!)}", theme)),
-                Expanded(
-                    flex: 1, child: getARR("${flight.destination} ${DateFormat.Hm().format(flight.arrTime!)}", theme)),
+                    flex: 1,
+                    child: getARR(
+                        "${flight.destination} ${DateFormat.Hm().format(flight.arrTime!)}",
+                        theme)),
               ],
             ),
           ),
@@ -476,7 +499,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
         height: 46,
         width: 100,
         decoration: ShapeDecoration(
-          color: getFlightStatusBackGroundColor(theme, flight.isDelayed ?? false),
+          color:
+              getFlightStatusBackGroundColor(theme, flight.isDelayed ?? false),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -487,7 +511,11 @@ class _FlightListScreenState extends State<FlightListScreen> {
             flight.statusMessage(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: getFlightStatusTextColor(theme, flight.isDelayed ?? false , (Provider.of<ThemeNotifier>(context).isDark && selectedFlightIndex == index) ),
+                color: getFlightStatusTextColor(
+                    theme,
+                    flight.isDelayed ?? false,
+                    (Provider.of<ThemeNotifier>(context).isDark &&
+                        selectedFlightIndex == index)),
                 fontSize: 14,
                 fontWeight: FontWeight.w500),
           ),
@@ -496,21 +524,20 @@ class _FlightListScreenState extends State<FlightListScreen> {
     );
   }
 
-  Color getFlightStatusBackGroundColor(AppTheme theme, bool status){
-        if(status){
-            return theme.flightStatusDelayedBgColor;
-        }else{
-          return theme.flightStatusOnTimeBgColor;
-        }
+  Color getFlightStatusBackGroundColor(AppTheme theme, bool status) {
+    if (status) {
+      return theme.flightStatusDelayedBgColor;
+    } else {
+      return theme.flightStatusOnTimeBgColor;
+    }
   }
 
-  Color getFlightStatusTextColor(AppTheme theme, bool status, bool isSelected){
-
-        if(status){
-            return isSelected ? AppColors.white : theme.flightStatusDelayedTextColor;
-        }else{
-          return isSelected ? AppColors.white : theme.flightStatusOntTmeTextColor;
-        }
+  Color getFlightStatusTextColor(AppTheme theme, bool status, bool isSelected) {
+    if (status) {
+      return isSelected ? AppColors.white : theme.flightStatusDelayedTextColor;
+    } else {
+      return isSelected ? AppColors.white : theme.flightStatusOntTmeTextColor;
+    }
   }
 
   Widget getBRD(String value, int index, AppTheme theme) {

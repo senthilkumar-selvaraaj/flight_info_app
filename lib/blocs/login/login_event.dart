@@ -22,3 +22,7 @@ class LoginUsernameChanged extends LoginEvent{
 class PasswordEyeIconClicked extends LoginEvent{
    PasswordEyeIconClicked();
 }
+
+class LogoutSubmittedEvent extends LoginEvent{
+  LogoutSubmittedEvent();
+}

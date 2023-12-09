@@ -19,9 +19,9 @@ class AuthRepositary {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(Map<String, dynamic> body) async {
     try {
-      await const HttpClient(request: HttpRequest.logout).send();
+      await HttpClient(request: HttpRequest.logout, body: body).send();
     } catch (e) {
       rethrow;
     }

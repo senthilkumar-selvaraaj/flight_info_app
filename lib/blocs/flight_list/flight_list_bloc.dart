@@ -18,9 +18,9 @@ class FlightListBloc extends Bloc<FlightListEvent, FlightListState> {
       try{
        final flights =  await repo.getFlightList();
        print(flights.length);
-         emit(state.copyWith(flights: flights, flightListFetchingState: const FlightListFetchingState(APIRequestState.sucess, null)));
+         emit(state.copyWith(flights: flights, flightListFetchingState: const FlightListFetchingState(APIRequestState.success, null)));
       }catch(e){
-         emit(state.copyWith(flightListFetchingState: FlightListFetchingState(APIRequestState.faulure, e as Exception)));
+         emit(state.copyWith(flightListFetchingState: FlightListFetchingState(APIRequestState.failure, e as Exception)));
          emit(state.copyWith(flightListFetchingState: const FlightListFetchingState(APIRequestState.initial, null)));
       }
   }
@@ -31,9 +31,9 @@ class FlightListBloc extends Bloc<FlightListEvent, FlightListState> {
       print(request);
       try{
           await repo.startBoarding(request);
-          emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.sucess, null)));
+          emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.success, null)));
       }catch(e){
-         emit(state.copyWith(startBoardingState:  StartBoardingState(APIRequestState.faulure, e as Exception)));
+         emit(state.copyWith(startBoardingState:  StartBoardingState(APIRequestState.failure, e as Exception)));
          emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.initial, null)));
       }
   }

@@ -12,7 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MenuList extends StatefulWidget {
-  const MenuList({super.key});
+  final Function(Menu) didSelected;
+  const MenuList({super.key, required this.didSelected});
 
   @override
   State<MenuList> createState() => _MenuListState();
@@ -22,7 +23,6 @@ class _MenuListState extends State<MenuList> {
   @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: Menu.values
@@ -33,31 +33,10 @@ class _MenuListState extends State<MenuList> {
                   child: MenuCard(
                     menu: e,
                     didSelected: (m) {
-                      if (m == Menu.flightList) {
-                        navigateToFlightListScreen();
-                      } else if (m == Menu.logOut) {
-                        Dialogs.showAlertDialog(
-                            context, DialogType.logout, theme, () {}, () async{
-                              await Global.storage.logOut();
-                              if(mounted){
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const HomeScreen()));
-                              }
-                        });
-                      } else if (m == Menu.exit) {
-                        Dialogs.showAlertDialog(
-                            context, DialogType.exit, theme, () {}, () {
-                         exit(0);
-                        });
-                      }
+                     widget.didSelected(m);
                     }),),
               ))
           .toList(),
     );
-  }
-
-  navigateToFlightListScreen() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const FlightListScreen(),
-    ));
   }
 }

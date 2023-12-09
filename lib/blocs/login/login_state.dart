@@ -5,6 +5,7 @@ part of 'login_bloc.dart';
   final String userName;
   final String password;
   final FormSubmissionStatus formStatus;
+  final LogOutSubmissionState logoutSubmissionState;
   final bool visiblityStatus;
 
   bool get isValidUserName => true;
@@ -14,6 +15,7 @@ part of 'login_bloc.dart';
    LoginState({
       this.userName = '',
       this.password = '',
+      this.logoutSubmissionState = const LogOutSubmissionState(APIRequestState.initial, null),
       this.formStatus =  const InitialFormStatus(),
       this.visiblityStatus = true
     });
@@ -22,11 +24,13 @@ part of 'login_bloc.dart';
      String? userName,
      String? password,
      FormSubmissionStatus? formStatus,
+    LogOutSubmissionState? logoutSubmissionState,
     bool? visiblityStatus}){
       return LoginState(
         userName: userName ?? this.userName, 
         password: password ?? this.password, 
         formStatus: formStatus ?? this.formStatus,
+        logoutSubmissionState: logoutSubmissionState ?? this.logoutSubmissionState,
         visiblityStatus: visiblityStatus ?? this.visiblityStatus
         );
    }
@@ -37,5 +41,11 @@ part of 'login_bloc.dart';
         'password':password
     };
   }
+
+  Map<String, String> get logoutRequestJson{
+     return {"refresh_token": Global.storage.refreshToken ?? ""};
+  }
+
+ 
 
 }

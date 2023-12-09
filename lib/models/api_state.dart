@@ -1,5 +1,5 @@
 enum APIRequestState{
-  initial, loading, sucess, faulure
+  initial, loading, success, failure
 }
 
 abstract class RestAPIState{
