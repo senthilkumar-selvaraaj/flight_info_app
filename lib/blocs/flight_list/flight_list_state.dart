@@ -5,8 +5,10 @@ class FlightListState {
   final FlightListFetchingState flightListFetchingState;
   final StartBoardingState startBoardingState;
   final int selectedFlightIndex;
+  final String sessionId;
   const FlightListState(
       {
+      this.sessionId = '',
       this.selectedFlightIndex = -1,
       this.flights = const [],
       this.flightListFetchingState =
@@ -15,9 +17,12 @@ class FlightListState {
           const StartBoardingState(APIRequestState.initial, null)});
 
   FlightListState copyWith(
-      {List<Flight>? flights,
+      {
+        String? sessionId,
+        List<Flight>? flights,
       FlightListFetchingState? flightListFetchingState, StartBoardingState? startBoardingState}) {
     return FlightListState(
+      sessionId: sessionId ?? this.sessionId,
         flights: flights ?? this.flights,
         flightListFetchingState:
             flightListFetchingState ?? this.flightListFetchingState,

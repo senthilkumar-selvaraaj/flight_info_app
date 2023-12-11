@@ -32,10 +32,10 @@ class _FlightListScreenState extends State<FlightListScreen> {
         create: (context) =>
             FlightListBloc(FlightListRepository())..add(FetchFlightListEvent()),
         child: BlocConsumer<FlightListBloc, FlightListState>(
-          listener: (context, state) {
+          listener: (buildContext, state) {
             if (state.startBoardingState.state == APIRequestState.success) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const FlightBoardingScreen()));
+                  builder: (context) =>  FlightBoardingScreen(sessionId: state.sessionId, flight: BlocProvider.of<FlightListBloc>(buildContext).state.flights[selectedFlightIndex])));
             }
           },
           builder: (context, state) {

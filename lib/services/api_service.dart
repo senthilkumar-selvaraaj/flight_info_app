@@ -156,7 +156,7 @@ class HttpClient implements HttpService {
   Future<dynamic> send() async {
     try {
       var response = await makeRequest();
-      print(response.body);
+      ;
       if (response.statusCode == 401){
       try {
           bool status = await renewToken();
@@ -259,7 +259,6 @@ class HttpClient implements HttpService {
       final url = HttpRequest.refreshToken.url;
       var response = await http.post(Uri.parse(url),
           headers: request.headers, body: jsonEncode(params));
-        print(response.body);
       if (response.statusCode == 200) {
         final user = User.fromJson(json.decode(response.body.toString()));
         Global.storage.user?.authToken = user.authToken;
@@ -272,7 +271,6 @@ class HttpClient implements HttpService {
       }
       return false;
     } on SocketException {
-      print("object");
       throw NoInternetException(
           'No Internet connection. Please make sure your internet conenction.');
     }

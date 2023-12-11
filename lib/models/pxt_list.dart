@@ -90,4 +90,8 @@ class Pax {
         "is_ssr": isSsr,
         "is_infant": isInfant,
     };
+
+    String description(){
+      return "Selected: $seqNo | $pnr | $seatNo | MR/Ms $name | $origin > $destination";
+    }
 }

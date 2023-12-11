@@ -20,12 +20,12 @@ class FlightListRepository {
     }
   }
 
-   Future<void> startBoarding(Map<String,dynamic> body) async {
+   Future<String> startBoarding(Map<String,dynamic> body) async {
     try {
       final response = await  HttpClient(
           request: HttpRequest.startBoarding, body: body).send();
-          print(response);
       try {
+        return response['session_ref_id'];
       } catch (e) {
         throw BadRequestException('Data Exception');
       }

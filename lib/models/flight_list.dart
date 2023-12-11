@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 List<Flight> flightListFromJson(String str) => List<Flight>.from(json.decode(str).map((x) => Flight.fromJson(x)));
 
 String flightListToJson(List<Flight> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -17,6 +19,18 @@ class Flight {
 
     String statusMessage(){
       return (isDelayed ?? false) ? "DELAYED" : "ONTIME";
+    }
+
+    String getDepartureTime(){
+      return DateFormat.Hm().format(depDate!);
+    }
+
+    String getArrivalTime(){
+      return DateFormat.Hm().format(arrTime!);
+    }
+
+    String getBoardingTime(){
+      return DateFormat.Hm().format(depDate!);
     }
 
     Flight({

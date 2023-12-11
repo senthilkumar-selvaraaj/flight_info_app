@@ -1,15 +1,6 @@
-import 'dart:io';
 
-import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/menu_card.dart';
-import 'package:flight_info_app/screens/flight_list_screen.dart';
-import 'package:flight_info_app/screens/login_screen.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
-import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-// import 'package:popover/popover.dart';
-import 'package:provider/provider.dart';
 
 class MenuList extends StatefulWidget {
   final Function(Menu) didSelected;
@@ -22,7 +13,6 @@ class MenuList extends StatefulWidget {
 class _MenuListState extends State<MenuList> {
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: Menu.values
