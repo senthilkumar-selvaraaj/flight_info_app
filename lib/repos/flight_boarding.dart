@@ -19,18 +19,18 @@ class FlightBoardingRepository {
       rethrow;
     }
   }
-Future<void> onBoardPax(Map<String, String> body) async {
+Future<void> onBoardPax(Map<String, dynamic> body) async {
     try {
-      await HttpClient(
+    final response =  await HttpClient(
           request: HttpRequest.paxBoarding,
           body: body).send();
-      
+      print(response);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> deBoardPax(Map<String, String> body) async {
+  Future<void> deBoardPax(Map<String, dynamic> body) async {
     try {
       await HttpClient(
           request: HttpRequest.paxDeboarding,
@@ -41,7 +41,7 @@ Future<void> onBoardPax(Map<String, String> body) async {
     }
   }
 
-  Future<void> endBoarding(Map<String, String> body) async {
+  Future<void> endBoarding(Map<String, dynamic> body) async {
     try {
       await HttpClient(
           request: HttpRequest.endBoarding,

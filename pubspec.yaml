@@ -89,6 +89,7 @@ flutter:
         - asset: assets/fonts/Montserrat-Bold.ttf
         - asset: assets/fonts/Montserrat-SemiBold.ttf
         - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Benguiat Bold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

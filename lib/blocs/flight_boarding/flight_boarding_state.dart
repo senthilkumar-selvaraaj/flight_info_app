@@ -53,6 +53,28 @@ class FlightBoardingState {
   Map<String, dynamic> getPaxListRequestJson() {
     return {"session_ref_id": sessionId};
   }
+
+ Map<String, dynamic> getOnBoardRequestJson() {
+    return {
+      "session_ref_id": sessionId,
+      "pnr": pax?.pnr ,
+      "seq_no": pax?.seqNo};
+  }
+
+ Map<String, dynamic> getDeBoardRequestJson() {
+    return {
+      "session_ref_id": sessionId,
+      "pnr": pax?.pnr ,
+      "seq_no": pax?.seqNo
+    };
+  }
+
+   Map<String, dynamic> getEndBoardRequestJson() {
+    return {
+      "session_ref_id": sessionId
+    };
+  }
+
 }
 
 class PaxListFetchingState extends RestAPIState {

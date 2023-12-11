@@ -69,8 +69,15 @@ class FlightBoardingBloc
         paxOnBoardingState:
             const PaxOnBoardingState(APIRequestState.loading, null)));
     try {
-       await repo.onBoardPax({});
+       await repo.onBoardPax(state.getOnBoardRequestJson());
+        List<Pax> paxes = state.paxResult?.data ?? [];
+      final index = state.paxResult?.data?.indexWhere((element) => element.pnr == state.pax?.pnr);
+      if(index != null){
+        paxes[index].status = "B";
+      }
+      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: ((state.paxResult?.boarded ??0) + 1), infant: state.paxResult?.infant);
       emit(state.copyWith(
+        paxResult: paxResult,
           paxOnBoardingState:
               const PaxOnBoardingState(APIRequestState.success, null)));
     } catch (e) {
@@ -89,8 +96,15 @@ class FlightBoardingBloc
         paxDeBoardingState:
             const PaxDeBoardingState(APIRequestState.loading, null)));
     try {
-      await repo.deBoardPax({});
+      await repo.deBoardPax(state.getDeBoardRequestJson());
+      List<Pax> paxes = state.paxResult?.data ?? [];
+      final index = state.paxResult?.data?.indexWhere((element) => element.pnr == state.pax?.pnr);
+      if(index != null){
+        paxes[index].status = "D";
+      }
+      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: ((state.paxResult?.boarded ??0) - 1), infant: state.paxResult?.infant);
       emit(state.copyWith(
+        paxResult: paxResult,
           paxDeBoardingState:
               const PaxDeBoardingState(APIRequestState.success, null)));
     } catch (e) {
@@ -109,7 +123,7 @@ class FlightBoardingBloc
         endBoardingState:
             const EndBoardingState(APIRequestState.loading, null)));
     try {
-      await repo.endBoarding({});
+      await repo.endBoarding(state.getEndBoardRequestJson());
       emit(state.copyWith(
           endBoardingState:
               const EndBoardingState(APIRequestState.success, null)));
