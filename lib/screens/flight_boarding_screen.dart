@@ -11,10 +11,12 @@ import 'package:flight_info_app/repos/flight_boarding.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class FlightBoardingScreen extends StatefulWidget {
   final String sessionId;
@@ -29,6 +31,8 @@ class FlightBoardingScreen extends StatefulWidget {
 class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   final ScrollController _controller = ScrollController();
   final _focusNode = FocusNode();
+  final doc = pw.Document();
+
   @override
   void initState() {
     super.initState();
@@ -259,7 +263,17 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                     builder:
                                                                         (context,
                                                                             state) {
-                                                                      if(state.paxOnBoardingState.state == APIRequestState.loading || state.paxDeBoardingState.state == APIRequestState.loading) return CircularProgressIndicator(color: theme.flightBRDTextColor,);
+                                                                      if (state.paxOnBoardingState.state ==
+                                                                              APIRequestState
+                                                                                  .loading ||
+                                                                          state.paxDeBoardingState.state ==
+                                                                              APIRequestState.loading) {
+                                                                        return CircularProgressIndicator(
+                                                                          color:
+                                                                              theme.flightBRDTextColor,
+                                                                        );
+                                                                      }
+
                                                                       return Padding(
                                                                         padding: const EdgeInsets
                                                                             .only(
@@ -292,14 +306,18 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                             right:
                                                                                 15),
                                                                         child: BorderedActionButton(
-                                                                            title:
-                                                                                'Print Manifest',
-                                                                            height:
-                                                                                42,
-                                                                            width:
-                                                                                150,
-                                                                            didTapped:
-                                                                                () {}),
+                                                                            title: 'Print Manifest',
+                                                                            height: 42,
+                                                                            width: 150,
+                                                                            didTapped: () {
+                                                                              doc.addPage(pw.Page(
+                                                                                  pageFormat: PdfPageFormat.a4,
+                                                                                  build: (pw.Context context) {
+                                                                                    return pw.Center(
+                                                                                      child: pw.Text('Hello World'),
+                                                                                    ); // Center
+                                                                                  }));
+                                                                            }),
                                                                       )),
                                                                   BorderedActionButton(
                                                                       title:
@@ -329,12 +347,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5))),
-                                                      child: const Center(
+                                                      child:  Center(
                                                           child: Text(
-                                                        "3/30  YTB=(27)   -   INFT  0/0",
+                                                        "${BlocProvider.of<FlightBoardingBloc>(context).state.getBoadringInfo()}",
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w300,
                                                             color: AppColors

@@ -11,6 +11,28 @@ class FlightBoardingState {
   final PaxDeBoardingState paxDeBoardingState;
   final EndBoardingState endBoardingState;
 
+  int getTotalPaxList(){
+    return paxResult?.data?.length ?? 0;
+  }
+
+  int getTotalBoardedPaxList(){
+    return paxResult?.data?.where((element) => element.status == 'B').toList().length ?? 0;
+  }
+
+  int getInfantsCount(){
+        return paxResult?.data?.where((element) => element.isInfant == true).toList().length ?? 0;
+  }
+
+  int getInfantsBoardedCount(){
+        return paxResult?.data?.where((element) => element.isInfant == true && element.status == 'B').toList().length ?? 0;
+  }
+
+  String getBoadringInfo(){
+    int totalPax = getTotalPaxList();
+    int boardedPax = getTotalBoardedPaxList();
+    return "$boardedPax/$totalPax   YTB=(${totalPax-boardedPax})   -   INFT  ${getInfantsBoardedCount()}/${getInfantsCount()}";
+  }
+
   const FlightBoardingState({
     this.paxes = const [],
     this.flight,

@@ -10,7 +10,8 @@ class User {
     String? refreshToken;
     String? appId;
     String? userAgent;
-
+    String? logoLight;
+    String? logoDark;
     User({
         this.name,
         this.role,
@@ -22,6 +23,8 @@ class User {
         this.refreshToken,
         this.appId,
         this.userAgent,
+        this.logoLight,
+        this.logoDark
     });
 
     factory User.fromJson(Map<String, dynamic> json) => User(
@@ -35,6 +38,8 @@ class User {
         refreshToken: json["refresh_token"],
         appId: json["app_id"],
         userAgent: json["user_agent"],
+        logoLight: json["logo_light"],
+        logoDark: json["logo_dark"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -48,5 +53,7 @@ class User {
         "refresh_token": refreshToken,
         "app_id": appId,
         "user_agent": userAgent,
+        "logo_light":logoLight,
+        "logo_dark": logoDark
     };
 }

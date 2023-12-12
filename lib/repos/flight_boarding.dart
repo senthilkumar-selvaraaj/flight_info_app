@@ -9,6 +9,7 @@ class FlightBoardingRepository {
       final response = await HttpClient(
           request: HttpRequest.paxList,
           body: body).send();
+          print(response);
       try {
          PaxList paxList = paxListFromJson(json.encode(response));
          return paxList;

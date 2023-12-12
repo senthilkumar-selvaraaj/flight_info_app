@@ -3,7 +3,6 @@ import 'package:flight_info_app/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
-
   User? user;
 
   Global._();
@@ -37,6 +36,13 @@ class Global {
     return '${user?.name}';
   }
 
+  String getLightLogo() {
+    return user?.logoLight ?? '';
+  }
+
+  String getDarkLogo() {
+    return user?.logoDark ?? '';
+  }
 
   Future logOut() async {
     SharedPreferences preference = await SharedPreferences.getInstance();

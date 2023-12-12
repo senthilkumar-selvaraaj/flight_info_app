@@ -9,6 +9,7 @@ class AuthRepositary {
       final response = await HttpClient(
           request: HttpRequest.login,
           body: body).send();
+          print(response);
       try {
         Global.storage.saveUser(User.fromJson(response));
       } catch (e) {

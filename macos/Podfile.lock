@@ -1,5 +1,7 @@
 PODS:
   - FlutterMacOS (1.0.0)
+  - printing (1.0.0):
+    - FlutterMacOS
   - screen_retriever (0.0.1):
     - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
@@ -10,6 +12,7 @@ PODS:
 
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - printing (from `Flutter/ephemeral/.symlinks/plugins/printing/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
@@ -17,6 +20,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   FlutterMacOS:
     :path: Flutter/ephemeral
+  printing:
+    :path: Flutter/ephemeral/.symlinks/plugins/printing/macos
   screen_retriever:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
   shared_preferences_foundation:
@@ -26,6 +31,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  printing: 1dd6a1fce2209ec240698e2439a4adbb9b427637
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8

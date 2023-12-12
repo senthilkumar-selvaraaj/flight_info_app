@@ -10,8 +10,8 @@ String paxListToJson(PaxList data) => json.encode(data.toJson());
 
 class PaxList {
   List<Pax>? data;
-  int? total;
-  int? infant;
+  String? total;
+  String? infant;
   int? boarded;
 
   PaxList({
@@ -25,9 +25,9 @@ class PaxList {
         data: json["data"] == null
             ? []
             : List<Pax>.from(json["data"]!.map((x) => Pax.fromJson(x))),
-        total: json["total"],
-        infant: json["infant"],
-        boarded: json["boarded"],
+        total: json["total_count"],
+        infant: json["infant_count"],
+        boarded: json["ytb_count"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -98,7 +98,7 @@ class Pax {
       };
 
   String description() {
-    return "Selected: $seqNo | $pnr | $seatNo | $name | $origin > $destination";
+    return "Selected: $seqNo  |  $pnr  |  $seatNo  |  $name  |  $origin > $destination";
   }
 
   String getName() {

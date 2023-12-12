@@ -75,7 +75,7 @@ class FlightBoardingBloc
       if(index != null){
         paxes[index].status = "B";
       }
-      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: ((state.paxResult?.boarded ??0) + 1), infant: state.paxResult?.infant);
+      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: state.paxResult?.boarded, infant: state.paxResult?.infant);
       emit(state.copyWith(
         paxResult: paxResult,
           paxOnBoardingState:
@@ -102,7 +102,7 @@ class FlightBoardingBloc
       if(index != null){
         paxes[index].status = "D";
       }
-      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: ((state.paxResult?.boarded ??0) - 1), infant: state.paxResult?.infant);
+      final paxResult = PaxList(data: paxes, total: state.paxResult?.total, boarded: state.paxResult?.boarded, infant: state.paxResult?.infant);
       emit(state.copyWith(
         paxResult: paxResult,
           paxDeBoardingState:
