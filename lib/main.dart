@@ -1,25 +1,32 @@
 
 import 'package:flight_info_app/blocs/login/login_bloc.dart';
+import 'package:flight_info_app/models/lane.dart';
 import 'package:flight_info_app/repos/auth_repository.dart';
 import 'package:flight_info_app/screens/dashboard_screen.dart';
+import 'package:flight_info_app/screens/lane_screen.dart';
 import 'package:flight_info_app/screens/login_screen.dart';
 import 'package:flight_info_app/utils/global_storage.dart';
+import 'package:flight_info_app/utils/object_box.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+late ObjectBox database;
+List<Lane> allLanes = [];
 void main() async{
   
   WidgetsFlutterBinding.ensureInitialized();
   await Global.storage.load();
+  database = await ObjectBox.create();
+  allLanes = database.store.box<Lane>().getAll();
   await windowManager.ensureInitialized();
   
   WindowOptions windowOptions = const WindowOptions(
     minimumSize: Size(1270, 768),
     size: Size(1270, 768),
-    // fullScreen: true,
+    fullScreen: true,
     center: true,
     title: 'AAI (Chennai)'
   );
@@ -42,7 +49,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Montserrat',
         scrollbarTheme:  ScrollbarThemeData(
   interactive: true,
-  // thumbVisibility: MaterialStateProperty.all(true),
   radius: const Radius.circular(10.0),
   thumbColor: MaterialStateProperty.all(theme.flightBRDTextColor),
   trackColor: MaterialStateProperty.all(AppColors.black) ,
@@ -57,6 +63,8 @@ class MyApp extends StatelessWidget {
          BlocProvider<LoginBloc>(
       create: (BuildContext context) => LoginBloc(AuthRepositary()),
     )
-        ], child: Global.storage.hasUserLogined ? const DashboardScreen() : const HomeScreen(),) );
+        ], child: allLanes.isEmpty ? const LaneScreen(): Global.storage.hasUserLogined ? const DashboardScreen() : const HomeScreen(),
+        
+        ) );
   }
 }

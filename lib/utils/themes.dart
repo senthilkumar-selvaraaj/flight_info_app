@@ -7,6 +7,7 @@ abstract class AppTheme {
   Color get loginHeaderColor;
   Color get welcomeMessageColor;
   Color get loginContainerBorderColor;
+  Color get laneBorderColor;
   Color get placeholderColor;
   Color get textFiledTextColor;
   Color get loginButtonBgColor;
@@ -34,6 +35,7 @@ abstract class AppTheme {
   Color get flightStatusDelayedBgColor;
   Color get flightStatusOntTmeTextColor;
   Color get flightStatusDelayedTextColor;
+  Color get laneColor;
 }
 
 class LightTheme extends AppTheme{
@@ -42,7 +44,10 @@ class LightTheme extends AppTheme{
 
   @override
   Color get loginContainerBorderColor => AppColors.loginContainerBorderColor;
-  
+
+  @override
+  Color get laneBorderColor => AppColors.loginContainerBorderColor;
+
   @override
   Color get dateTimeBackgroundColor => AppColors.blueGrey;
   
@@ -135,6 +140,10 @@ class LightTheme extends AppTheme{
   
   @override
   Color get flightStatusOntTmeTextColor => AppColors.flightStatusOnTime;
+  
+  @override
+  // TODO: implement laneColor
+   Color get laneColor => AppColors.blueGrey;
 }
 
 class DarkTheme extends AppTheme{
@@ -143,6 +152,9 @@ class DarkTheme extends AppTheme{
 
   @override
   Color get loginContainerBorderColor => AppColors.loginContainerDarkBorderColor;
+
+  @override
+  Color get laneBorderColor => AppColors.backgroundColor.withAlpha(50);
   
   @override
   Color get dateTimeBackgroundColor => AppColors.darkBlueGrey;
@@ -236,6 +248,9 @@ class DarkTheme extends AppTheme{
   
   @override
   Color get flightStatusOntTmeTextColor => AppColors.flightStatusOnTime;
+  
+  @override
+  Color get laneColor => AppColors.secondaryBlue;
 }
 
 

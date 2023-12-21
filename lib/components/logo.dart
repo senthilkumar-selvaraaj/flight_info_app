@@ -13,7 +13,8 @@ class LogoPlaceHolder extends StatefulWidget {
 class _LogoPlaceHolderState extends State<LogoPlaceHolder> {
   @override
   Widget build(BuildContext context) {
-    String url = Provider.of<ThemeNotifier>(context).isDark ? Global.storage.getDarkLogo() : Global.storage.getLightLogo();
-    return url.isEmpty ? const SizedBox() : Image.network(url);
+    bool isDark = Provider.of<ThemeNotifier>(context).isDark;
+    String url = isDark ? Global.storage.getDarkLogo() : Global.storage.getLightLogo();
+    return url.isEmpty ?  Image(image: AssetImage('assets/icons/logo-${isDark ? 'dark' : 'light'}.png')): Image.network(url);
   }
 }//

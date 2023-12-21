@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/repos/floght_list_repository.dart';
-import 'package:flutter/material.dart';
 
 part 'flight_list_event.dart';
 part 'flight_list_state.dart';

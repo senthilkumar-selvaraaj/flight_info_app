@@ -14,9 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 class FlightBoardingScreen extends StatefulWidget {
   final String sessionId;
@@ -31,7 +28,7 @@ class FlightBoardingScreen extends StatefulWidget {
 class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   final ScrollController _controller = ScrollController();
   final _focusNode = FocusNode();
-  final doc = pw.Document();
+  // final doc = pw.Document();
 
   @override
   void initState() {
@@ -310,13 +307,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                             height: 42,
                                                                             width: 150,
                                                                             didTapped: () {
-                                                                              doc.addPage(pw.Page(
-                                                                                  pageFormat: PdfPageFormat.a4,
-                                                                                  build: (pw.Context context) {
-                                                                                    return pw.Center(
-                                                                                      child: pw.Text('Hello World'),
-                                                                                    ); // Center
-                                                                                  }));
+                                                                              // doc.addPage(pw.Page(
+                                                                              //     pageFormat: PdfPageFormat.a4,
+                                                                              //     build: (pw.Context context) {
+                                                                              //       return pw.Center(
+                                                                              //         child: pw.Text('Hello World'),
+                                                                              //       ); // Center
+                                                                              //     }));
                                                                             }),
                                                                       )),
                                                                   BorderedActionButton(
@@ -349,7 +346,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                           5))),
                                                       child:  Center(
                                                           child: Text(
-                                                        "${BlocProvider.of<FlightBoardingBloc>(context).state.getBoadringInfo()}",
+                                                        BlocProvider.of<FlightBoardingBloc>(context).state.getBoadringInfo(),
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
