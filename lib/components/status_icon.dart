@@ -1,11 +1,15 @@
+import 'package:flight_info_app/services/socket_client.dart';
+import 'package:flight_info_app/services/socket_notifier.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StatusIcon extends StatefulWidget {
-  final IconData icon;
+  final String toolTipMessage;
+  final IconData? icon;
+  final Color? badgeColor;
   final bool showBadge;
-  const StatusIcon({super.key, required this.icon, this.showBadge = true});
+  const StatusIcon({super.key, required this.toolTipMessage, this.badgeColor = Colors.transparent,  this.icon, this.showBadge = true});
 
   @override
   State<StatusIcon> createState() => _StatusIconState();
@@ -15,7 +19,7 @@ class _StatusIconState extends State<StatusIcon> {
   @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
-    return GestureDetector(
+    return  Tooltip(decoration: BoxDecoration(color: theme.popOverBackgroundColor, borderRadius: BorderRadius.circular(5)), preferBelow: false, message: widget.toolTipMessage, child:  GestureDetector(
       onTap: () {
         if (widget.icon == Icons.contrast){
            Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
@@ -50,7 +54,7 @@ class _StatusIconState extends State<StatusIcon> {
                 height: 10,
                 width: 10,
                 decoration: ShapeDecoration(
-                  color: Colors.green,
+                  color:  widget.badgeColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -69,6 +73,6 @@ class _StatusIconState extends State<StatusIcon> {
         
       },
       ),
-    );
+    ));
   }
 }

@@ -12,13 +12,13 @@ class PaxList {
   List<Pax>? data;
   String? total;
   String? infant;
-  int? boarded;
+  int? ytbCount;
 
   PaxList({
     this.data,
     this.total,
     this.infant,
-    this.boarded,
+    this.ytbCount,
   });
 
   factory PaxList.fromJson(Map<String, dynamic> json) => PaxList(
@@ -27,7 +27,7 @@ class PaxList {
             : List<Pax>.from(json["data"]!.map((x) => Pax.fromJson(x))),
         total: json["total_count"],
         infant: json["infant_count"],
-        boarded: json["ytb_count"],
+        ytbCount: json["ytb_count"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,7 +36,7 @@ class PaxList {
             : List<dynamic>.from(data!.map((x) => x.toJson())),
         "total": total,
         "infant": infant,
-        "boarded": boarded,
+        "ytbCount": ytbCount,
       };
 }
 
@@ -70,8 +70,8 @@ class Pax {
   factory Pax.fromJson(Map<String, dynamic> json) => Pax(
         iataCode: json["iata_code"],
         flightNo: json["flight_no"],
-        seqNo: json["seq_no"],
-        pnr: json["pnr"],
+        seqNo: json["sequence_no"],
+        pnr: json["pnr_no"],
         seatNo: json["seat_no"],
         name: json["name"],
         origin: json["origin"],
@@ -115,11 +115,11 @@ class Pax {
 
   String paxButtonTitle() {
     if (status == null) return 'Board Pax';
-    return status == 'B' ? 'Deboard Pax' : 'Board Pax';
+    return status == 'Board' ? 'Deboard Pax' : 'Board Pax';
   }
 
   bool showManifest() {
     if (status == null) return true;
-    return status != 'B';
+    return status != 'Board';
   }
 }

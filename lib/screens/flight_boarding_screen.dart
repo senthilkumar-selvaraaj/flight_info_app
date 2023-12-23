@@ -51,7 +51,11 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
       child: Scaffold(
         backgroundColor: theme.backgroundColor,
         body: BlocListener<FlightBoardingBloc, FlightBoardingState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if(state.endBoardingState.state == APIRequestState.success){
+              Navigator.of(context).pop();
+            }
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 75),
             child: Column(
@@ -281,7 +285,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                             height: 42,
                                                                             width: 150,
                                                                             didTapped: () {
-                                                                              if (BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status != null && BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status == 'B') {
+                                                                              if (BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status != null && BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status == 'Board') {
                                                                                 BlocProvider.of<FlightBoardingBloc>(context).add(const DeBoardingPaxEvent());
                                                                               } else {
                                                                                 BlocProvider.of<FlightBoardingBloc>(context).add(const BoardingPaxEvent());
@@ -364,7 +368,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                         ],
                                       ),
                                     )),
-                                rigthContainer(theme)
+                                rigthContainer(context, theme)
                               ],
                             ))
                           ],
@@ -385,7 +389,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     );
   }
 
-  Expanded rigthContainer(AppTheme theme) {
+  Expanded rigthContainer(BuildContext context, AppTheme theme) {
     return Expanded(
         flex: 4,
         child: Container(
@@ -405,46 +409,51 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 13),
-                child: SizedBox(
-                    height: 48,
-                    width: 312,
-                    child: Stack(
-                      children: [
-                        Image(
-                            image: AssetImage(
-                                'assets/images/bg-shape-${Provider.of<ThemeNotifier>(context).isDark ? 'dark' : 'light'}.png'),
-                            fit: BoxFit.fill),
-                        Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 13),
+                    child: SizedBox(
+                        height: 48,
+                        width: 312,
+                        child: Stack(
                           children: [
-                            Expanded(
-                                child: Text(widget.flight.flightNo ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: theme.flightListHeaderColor))),
-                            Expanded(
-                                child: Text(
-                              "${widget.flight.origin ?? ''}\n${widget.flight.getDepartureTime()}",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.white),
+                            Image(
+                                image: AssetImage(
+                                    'assets/images/bg-shape-${Provider.of<ThemeNotifier>(context).isDark ? 'dark' : 'light'}.png'),
+                                fit: BoxFit.fill),
+                            Center(
+                                child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                    child: Text('${widget.flight.iataCode ?? ''}${widget.flight.flightNo ?? ''}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: theme.flightListHeaderColor))),
+                                Expanded(
+                                    child: Text(
+                                  "${widget.flight.origin ?? ''}\n${widget.flight.getDepartureTime()}",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.white),
+                                )),
+                                Expanded(
+                                    child: Text(
+                                        "${widget.flight.destination ?? ''}\n${widget.flight.getArrivalTime()}",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.white))),
+                              ],
                             )),
-                            Expanded(
-                                child: Text(
-                                    "${widget.flight.destination ?? ''}\n${widget.flight.getArrivalTime()}",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.white))),
                           ],
                         )),
-                      ],
-                    )),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 25,
@@ -456,9 +465,14 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                   FilledActionButton(
                     title: 'End Boarding',
                     didTapped: () {
+
+/// SOCKET ===> \u0002BE\u0003\n
+/// BEOK - Back to flight list screen
+/// BEERR - Error Message - Gate not ready
+
                       Dialogs.showAlertDialog(
                           context, DialogType.endBoarding, theme, () {}, () {
-                        Navigator.of(context).pop();
+                        BlocProvider.of<FlightBoardingBloc>(context).add(const EndBoardingEvent());
                       });
                     },
                   )
@@ -669,7 +683,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
         ? Colors.white
         : Colors.green;
     if (pax.status != null) {
-      return pax.status == 'B'
+      return pax.status == 'Board'
           ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

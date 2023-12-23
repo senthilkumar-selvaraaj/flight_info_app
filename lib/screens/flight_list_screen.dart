@@ -272,6 +272,11 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                           backgroundColor: theme
                                                               .loginButtonBgColor),
                                                       onPressed: () {
+
+/// SOCKET ===> \u0002BS\u0003SG\n1980\nMAA\nBLR\ne4496a4a-f8a6-4a1a-be7e-ed6cc1dafd87
+/// BSOK
+/// BSERR - Gate not ready - error message
+
                                                         if (selectedFlightIndex >
                                                             -1) {
                                                           switch (
@@ -421,7 +426,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: getFlightNo(flight.flightNo ?? '', theme),
+                  child: getFlightNo('${flight.iataCode}${flight.flightNo ?? ''}', theme),
                 ),
                 Expanded(flex: 1, child: getFlightStatus(flight, theme, index)),
                 Expanded(

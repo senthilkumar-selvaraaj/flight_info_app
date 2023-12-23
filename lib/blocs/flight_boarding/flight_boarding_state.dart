@@ -28,9 +28,7 @@ class FlightBoardingState {
   }
 
   String getBoadringInfo(){
-    int totalPax = getTotalPaxList();
-    int boardedPax = getTotalBoardedPaxList();
-    return "$boardedPax/$totalPax   YTB=(${totalPax-boardedPax})   -   INFT  ${getInfantsBoardedCount()}/${getInfantsCount()}";
+    return "${paxResult?.total ?? ''}  YTB=(${paxResult?.ytbCount})   -   INFT ${paxResult?.infant ?? ''} ";
   }
 
   const FlightBoardingState({
@@ -79,16 +77,21 @@ class FlightBoardingState {
  Map<String, dynamic> getOnBoardRequestJson() {
     return {
       "session_ref_id": sessionId,
-      "pnr": pax?.pnr ,
-      "seq_no": pax?.seqNo};
+      "pnr_no": pax?.pnr ,
+      "sequence_no": pax?.seqNo,
+      "iata_code": pax?.iataCode,
+      "flight_no": pax?.flightNo
+      };
   }
 
  Map<String, dynamic> getDeBoardRequestJson() {
     return {
       "session_ref_id": sessionId,
-      "pnr": pax?.pnr ,
-      "seq_no": pax?.seqNo
-    };
+      "pnr_no": pax?.pnr ,
+      "sequence_no": pax?.seqNo,
+      "iata_code": pax?.iataCode,
+      "flight_no": pax?.flightNo
+      };
   }
 
    Map<String, dynamic> getEndBoardRequestJson() {

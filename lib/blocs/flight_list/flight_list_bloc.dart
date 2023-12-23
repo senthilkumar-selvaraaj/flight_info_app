@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/repos/floght_list_repository.dart';
+import 'package:flight_info_app/services/socket_client.dart';
+import 'package:flight_info_app/utils/strings.dart';
 
 part 'flight_list_event.dart';
 part 'flight_list_state.dart';
@@ -29,7 +31,16 @@ class FlightListBloc extends Bloc<FlightListEvent, FlightListState> {
       Map<String, dynamic> request = {"flight_no": event.flight.flightNo??'', "gate_ref_id": ["62638e4b0e43012248aab387"]};
       try{
          final sessionId = await repo.startBoarding(request);
-          emit(state.copyWith(sessionId: sessionId, startBoardingState: const StartBoardingState(APIRequestState.success, null)));
+         String startBoardCommand = event.flight.getStartBoardCommand(sessionId);
+         SocketClient().startBoardingCommand(startBoardCommand, (p0){
+          if(p0 == lnOK){
+              emit(state.copyWith(sessionId: sessionId, startBoardingState: const StartBoardingState(APIRequestState.success, null)));
+          }else{
+             emit(state.copyWith(startBoardingState:  StartBoardingState(APIRequestState.failure, Exception("Gate not ready"))));
+             emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.initial, null)));
+          }
+         });
+         
       }catch(e){
          emit(state.copyWith(startBoardingState:  StartBoardingState(APIRequestState.failure, e as Exception)));
          emit(state.copyWith(startBoardingState: const StartBoardingState(APIRequestState.initial, null)));

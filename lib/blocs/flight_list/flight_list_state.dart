@@ -28,6 +28,8 @@ class FlightListState {
             flightListFetchingState ?? this.flightListFetchingState,
             startBoardingState: startBoardingState ?? this.startBoardingState);
   }
+
+  
 }
 
 class FlightListFetchingState extends RestAPIState {

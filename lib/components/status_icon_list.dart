@@ -1,4 +1,5 @@
 import 'package:flight_info_app/components/status_icon.dart';
+import 'package:flight_info_app/services/socket_notifier.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +17,14 @@ class _StatusListState extends State<StatusList> {
         AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
 
     return Row(children:  [
-       Tooltip(decoration: BoxDecoration(color: theme.popOverBackgroundColor, borderRadius: BorderRadius.circular(5)), preferBelow: false, message: "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? "Light" : "Dark"} Mode", child: StatusIcon(icon: Icons.contrast, showBadge: false,)),
-       const StatusIcon(icon: Icons.flight,),
-       const StatusIcon(icon: Icons.settings,),
-       const StatusIcon(icon: Icons.monitor,)
+        StatusIcon(icon: Icons.contrast, showBadge: false, toolTipMessage: "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? "Light" : "Dark"} Mode"),
+        const StatusIcon(icon: Icons.flight,  toolTipMessage: "Airline DCS", showBadge: false,),
+         StatusIcon(icon: Icons.dns,  toolTipMessage: "Boarding Gate", badgeColor: Provider.of<SocketStatusNotifier>(context).connectionState.getColor(),),
     ],);
   }
+}
+
+
+enum StatusIconMenu{
+  theme, airline, gate
 }

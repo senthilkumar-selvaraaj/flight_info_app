@@ -142,7 +142,6 @@ class LightTheme extends AppTheme{
   Color get flightStatusOntTmeTextColor => AppColors.flightStatusOnTime;
   
   @override
-  // TODO: implement laneColor
    Color get laneColor => AppColors.blueGrey;
 }
 

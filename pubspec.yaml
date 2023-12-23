@@ -46,7 +46,7 @@ dependencies:
   printing: ^5.11.1
   objectbox: ^2.4.0
   objectbox_flutter_libs: any
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

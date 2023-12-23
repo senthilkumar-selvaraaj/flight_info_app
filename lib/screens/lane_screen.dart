@@ -188,13 +188,16 @@ class _LaneScreenState extends State<LaneScreen> {
                                         fontSize: 13,
                                         color: theme.dateTimeColor),
                                   ),
-                                  Text(
+                                 Expanded(child:  Text(
                                     lanes[index].deviceId ?? '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 13,
+                                      
                                         color: theme.flightBRDTextColor),
-                                  )
+                                  ))
                                 ],
                               )
                             ],

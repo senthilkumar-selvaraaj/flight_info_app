@@ -31,9 +31,9 @@ enum HttpRequest implements HttpBaseRequest {
         case HttpRequest.paxList:
         return '${APIConfig.basApiUrl}airline/pax/list';
         case HttpRequest.paxBoarding:
-        return '${APIConfig.basApiUrl}airline/pax/board';
+        return '${APIConfig.basApiUrl}airline/board';
         case HttpRequest.paxDeboarding:
-        return '${APIConfig.basApiUrl}airline/pax/deboard';
+        return '${APIConfig.basApiUrl}airline/deboard';
         case HttpRequest.endBoarding:
         return '${APIConfig.basApiUrl}airline/boarding/end';
       default:

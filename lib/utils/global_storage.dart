@@ -12,9 +12,7 @@ class Global {
   Future load() async {
     SharedPreferences preference = await SharedPreferences.getInstance();
     String? userModal = preference.getString('UserModal');
-    print("serModel ==> $userModal");
     if (userModal != null) {
-      print(userModal);
       User user = User.fromJson(json.decode(userModal));
       this.user = user;
     }

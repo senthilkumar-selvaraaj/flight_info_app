@@ -25,7 +25,6 @@ Future<void> onBoardPax(Map<String, dynamic> body) async {
     final response =  await HttpClient(
           request: HttpRequest.paxBoarding,
           body: body).send();
-      print(response);
     } catch (e) {
       rethrow;
     }
@@ -47,7 +46,6 @@ Future<void> onBoardPax(Map<String, dynamic> body) async {
       await HttpClient(
           request: HttpRequest.endBoarding,
           body: body).send();
-      
     } catch (e) {
       rethrow;
     }

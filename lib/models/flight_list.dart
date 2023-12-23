@@ -33,6 +33,10 @@ class Flight {
       return DateFormat.Hm().format(depDate!);
     }
 
+    String getStartBoardCommand(String sessionId){
+        return "$iataCode\n$flightNo\n$origin\n$destination\n$sessionId";
+    }
+
     Flight({
         this.airline,
         this.iataCode,

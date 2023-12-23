@@ -6,6 +6,7 @@ import 'package:flight_info_app/components/snack_bar.dart';
 import 'package:flight_info_app/components/status_icon_list.dart';
 import 'package:flight_info_app/repos/auth_repository.dart';
 import 'package:flight_info_app/screens/dashboard_screen.dart';
+import 'package:flight_info_app/services/socket_client.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+@override
+  void initState() {
+
+    super.initState();
+
+    /// SOCKET ===> socket.writeln("\u0002LN\u000362638e4b0e43012248aab387\n");
+    /// LNOK - GREEN
+    /// LNERR - ORANGE
+    /// 
+    /// 
+    
+    SocketClient().connect();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
