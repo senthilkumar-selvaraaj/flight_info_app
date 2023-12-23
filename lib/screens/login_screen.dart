@@ -23,17 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
 @override
   void initState() {
-
     super.initState();
-
-    /// SOCKET ===> socket.writeln("\u0002LN\u000362638e4b0e43012248aab387\n");
-    /// LNOK - GREEN
-    /// LNERR - ORANGE
-    /// 
-    /// 
-    
-    SocketClient().connect();
-    
+    if(!SocketClient().isConnected){
+         SocketClient().connect();
+    }
   }
 
   @override

@@ -34,7 +34,7 @@ class Flight {
     }
 
     String getStartBoardCommand(String sessionId){
-        return "$iataCode\n$flightNo\n$origin\n$destination\n$sessionId";
+        return "$iataCode\n$flightNo\n$origin\n$destination\n$sessionId\n";
     }
 
     Flight({

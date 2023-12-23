@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:flight_info_app/blocs/flight_boarding/flight_boarding_bloc.dart';
 import 'package:flight_info_app/components/app_buttons.dart';
 import 'package:flight_info_app/components/app_text_field.dart';
 import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
+import 'package:flight_info_app/components/snack_bar.dart';
+import 'package:flight_info_app/main.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/models/pxt_list.dart';
 import 'package:flight_info_app/repos/flight_boarding.dart';
+import 'package:flight_info_app/services/lane_service.dart';
+import 'package:flight_info_app/services/socket_client.dart';
+import 'package:flight_info_app/utils/strings.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +36,36 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   final ScrollController _controller = ScrollController();
   final _focusNode = FocusNode();
   // final doc = pw.Document();
+  final lanes = allLanes;
+
+  Map<String, Pax>? paxInfo;
 
   @override
   void initState() {
     super.initState();
+   listenCC();
+  }
+
+  void listenCC(){
+     SocketClient().listenBoardingEvent((p0) {
+      List<String> query = p0.split("\u0002CC\u0003");
+      if (query.length > 1) {
+        List<String> fields = query[1].split("\n");
+        if (fields.length == 4) {
+          setState(() {
+            paxInfo = {
+              fields[3]:
+                  Pax(seqNo: fields[0], seatNo: fields[1], pnr: fields[2])
+            };
+          });
+          Future.delayed( const Duration(seconds: 5), (){
+              setState(() {
+                paxInfo = null;
+              });
+          });
+        }
+      }
+    });
   }
 
   void onSearchTextChanged(BuildContext context, String? keyword) {
@@ -52,7 +85,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
         backgroundColor: theme.backgroundColor,
         body: BlocListener<FlightBoardingBloc, FlightBoardingState>(
           listener: (context, state) {
-            if(state.endBoardingState.state == APIRequestState.success){
+            if (state.endBoardingState.state == APIRequestState.success) {
               Navigator.of(context).pop();
             }
           },
@@ -348,9 +381,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           5))),
-                                                      child:  Center(
+                                                      child: Center(
                                                           child: Text(
-                                                        BlocProvider.of<FlightBoardingBloc>(context).state.getBoadringInfo(),
+                                                        BlocProvider.of<
+                                                                    FlightBoardingBloc>(
+                                                                context)
+                                                            .state
+                                                            .getBoadringInfo(),
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
@@ -428,11 +465,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Expanded(
-                                    child: Text('${widget.flight.iataCode ?? ''}${widget.flight.flightNo ?? ''}',
+                                    child: Text(
+                                        '${widget.flight.iataCode ?? ''}${widget.flight.flightNo ?? ''}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            color: theme.flightListHeaderColor))),
+                                            color:
+                                                theme.flightListHeaderColor))),
                                 Expanded(
                                     child: Text(
                                   "${widget.flight.origin ?? ''}\n${widget.flight.getDepartureTime()}",
@@ -465,14 +504,23 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                   FilledActionButton(
                     title: 'End Boarding',
                     didTapped: () {
-
-/// SOCKET ===> \u0002BE\u0003\n
-/// BEOK - Back to flight list screen
-/// BEERR - Error Message - Gate not ready
+                      /// SOCKET ===> \u0002BE\u0003\n
+                      /// BEOK - Back to flight list screen
+                      /// BEERR - Error Message - Gate not ready
 
                       Dialogs.showAlertDialog(
                           context, DialogType.endBoarding, theme, () {}, () {
-                        BlocProvider.of<FlightBoardingBloc>(context).add(const EndBoardingEvent());
+                        SocketClient().endBoardingCommand((p0) async {
+                          print("ENDBOARDING ==> $p0");
+                          if (p0 == beOK) {
+                            BlocProvider.of<FlightBoardingBloc>(context)
+                                .add(const EndBoardingEvent());
+                          } else {
+                            if (context.mounted) {
+                              AppSnackBar.show(context, "Gate not ready");
+                            }
+                          }
+                        });
                       });
                     },
                   )
@@ -487,14 +535,14 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                       radius: const Radius.circular(20),
                       thickness: 5,
                       child: ListView.builder(
-                          itemCount: 2,
+                          itemCount: lanes.length,
                           itemBuilder: (context, index) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Container(
                                   height: 120,
                                   decoration:
-                                      getLaneShadowShape(theme, context),
+                                      getLaneShadowShape((paxInfo != null && ((paxInfo?.keys.first ?? '' ) == lanes[index].deviceId)), theme, context),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 9.0),
@@ -508,7 +556,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Lane ${(index + 1).toString().padLeft(2, '0')}',
+                                          lanes[index].name ?? '',
                                           style: TextStyle(
                                             color: theme.laneTitleColor,
                                             fontSize: 16,
@@ -518,7 +566,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           height: 20,
                                         ),
                                         Expanded(
-                                            child: Column(
+                                            child: (paxInfo != null && ((paxInfo?.keys.first ?? '' ) == lanes[index].deviceId)) ?  Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text("Boarded",
                                                 style: TextStyle(
@@ -530,14 +579,14 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                             const SizedBox(
                                               height: 1,
                                             ),
-                                            Text("07/7E/qq",
+                                            Text(paxInfo?[lanes[index].deviceId]?.getBoardingMessage() ?? '',
                                                 style: TextStyle(
                                                   color: theme
                                                       .laneBoardingValueColor,
                                                   fontSize: 16,
                                                 ))
                                           ],
-                                        ))
+                                        ) : const SizedBox() )
                                       ],
                                     ),
                                   ),
@@ -652,11 +701,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     );
   }
 
-  ShapeDecoration getLaneShadowShape(AppTheme theme, BuildContext context) {
+  ShapeDecoration getLaneShadowShape(bool isSelected, AppTheme theme, BuildContext context) {
     return ShapeDecoration(
       color: theme.flightInfoCardBgColor,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(color: Colors.transparent, width: 2.0),
+        side:  BorderSide(color:  (!Provider.of<ThemeNotifier>(context).isDark && isSelected)
+                ? AppColors.primaryBlue
+                : Colors.transparent, width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
       shadows: Provider.of<ThemeNotifier>(context).isDark
@@ -688,7 +739,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image(
-                  image: AssetImage('assets/icons/tick.png'),
+                  image: const AssetImage('assets/icons/tick.png'),
                   color: c,
                 )
               ],

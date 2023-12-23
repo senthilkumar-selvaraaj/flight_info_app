@@ -58,13 +58,8 @@ class _LaneScreenState extends State<LaneScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: ShapeDecoration(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                  ClipRRect(
+                     borderRadius: BorderRadius.circular(10),
                     child: const Image(
                       image: AssetImage('assets/images/flight-pic.jpg'),
                       fit: BoxFit.fitWidth,

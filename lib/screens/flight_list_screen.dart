@@ -1,10 +1,13 @@
 import 'package:flight_info_app/blocs/flight_list/flight_list_bloc.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
+import 'package:flight_info_app/components/snack_bar.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/repos/floght_list_repository.dart';
 import 'package:flight_info_app/screens/flight_boarding_screen.dart';
+import 'package:flight_info_app/services/socket_client.dart';
+import 'package:flight_info_app/utils/strings.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,8 +37,29 @@ class _FlightListScreenState extends State<FlightListScreen> {
         child: BlocConsumer<FlightListBloc, FlightListState>(
           listener: (buildContext, state) {
             if (state.startBoardingState.state == APIRequestState.success) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  FlightBoardingScreen(sessionId: state.sessionId, flight: BlocProvider.of<FlightListBloc>(buildContext).state.flights[selectedFlightIndex])));
+              Flight flight = state.flights[selectedFlightIndex];
+              String startBoardCommand =
+                  flight.getStartBoardCommand(state.sessionId);
+              SocketClient().startBoardingCommand(startBoardCommand, (p0) {
+                 print("STARTBOARDING ==> $p0");
+                if (p0 == bsOK) {
+                  if (context.mounted) {
+                    setState(() {
+                      boardingStatus = FlightBoaringStatus.none;
+                    });
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FlightBoardingScreen(
+                            sessionId: state.sessionId,
+                            flight: state.flights[selectedFlightIndex])));
+                  }
+                } else {
+                  if (context.mounted) {
+                    AppSnackBar.show(context, "Gate not ready");
+                  }
+                }
+                
+              });
+              
             }
           },
           builder: (context, state) {
@@ -272,10 +296,9 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                           backgroundColor: theme
                                                               .loginButtonBgColor),
                                                       onPressed: () {
-
-/// SOCKET ===> \u0002BS\u0003SG\n1980\nMAA\nBLR\ne4496a4a-f8a6-4a1a-be7e-ed6cc1dafd87
-/// BSOK
-/// BSERR - Gate not ready - error message
+                                                        /// SOCKET ===> \u0002BS\u0003SG\n1980\nMAA\nBLR\ne4496a4a-f8a6-4a1a-be7e-ed6cc1dafd87
+                                                        /// BSOK
+                                                        /// BSERR - Gate not ready - error message
 
                                                         if (selectedFlightIndex >
                                                             -1) {
@@ -297,11 +320,6 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                               });
                                                             case FlightBoaringStatus
                                                                   .boarding:
-                                                              setState(() {
-                                                                boardingStatus =
-                                                                    FlightBoaringStatus
-                                                                        .none;
-                                                              });
                                                               BlocProvider.of<
                                                                           FlightListBloc>(
                                                                       context)
@@ -426,7 +444,8 @@ class _FlightListScreenState extends State<FlightListScreen> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: getFlightNo('${flight.iataCode}${flight.flightNo ?? ''}', theme),
+                  child: getFlightNo(
+                      '${flight.iataCode}${flight.flightNo ?? ''}', theme),
                 ),
                 Expanded(flex: 1, child: getFlightStatus(flight, theme, index)),
                 Expanded(

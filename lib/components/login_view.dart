@@ -14,6 +14,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  bool showError = false;
  @override
   Widget build(BuildContext context) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
@@ -56,9 +57,11 @@ class _LoginViewState extends State<LoginView> {
             ],
           ),
         ),
+         Visibility(visible: showError, child: const Padding(padding: EdgeInsets.only(top: 20), child: Text("Please enter username and password", style: TextStyle(fontSize: 12, color: Colors.red),),)),
         const SizedBox(
           height: 50,
         ),
+       
         SizedBox(
           width: 180,
           height: 50,
@@ -69,7 +72,16 @@ class _LoginViewState extends State<LoginView> {
                   backgroundColor: theme.loginButtonBgColor),
               onPressed: () {
                 //navigateToDashBoard();
-                BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
+                String userName = BlocProvider.of<LoginBloc>(context).state.userName;
+                 String password = BlocProvider.of<LoginBloc>(context).state.password;
+                 if(userName.isEmpty || password.isEmpty){
+                    setState(() {
+                      showError = true;
+                    });
+                 }else{
+                   BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
+                 }
+              
               },
               child: const Text(
                 "Login",
@@ -94,6 +106,11 @@ class _LoginViewState extends State<LoginView> {
           AppTextField(
             label: "Username",
             onChanged: (p0) {
+              if(p0?.isNotEmpty ?? false){
+                   setState(() {
+                      showError = false;
+                    });
+              }
               BlocProvider.of<LoginBloc>(context).add(LoginUsernameChanged(p0 ?? ''));
             },
           ),
@@ -117,6 +134,11 @@ class _LoginViewState extends State<LoginView> {
             label: "Password",
             isSecured: true,
             onChanged: (p0) {
+              if(p0?.isNotEmpty ?? false){
+                   setState(() {
+                      showError = false;
+                    });
+              }
               BlocProvider.of<LoginBloc>(context).add(LoginPasswordChanged(p0 ?? ''));
             },
           ),

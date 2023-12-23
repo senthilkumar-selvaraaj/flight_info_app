@@ -110,21 +110,10 @@ class FlightBoardingBloc
         endBoardingState:
             const EndBoardingState(APIRequestState.loading, null)));
     try {
-      SocketClient().endBoardingCommand((p0) async {
-        if (p0 == beOK) {
-          await repo.endBoarding(state.getEndBoardRequestJson());
-          emit(state.copyWith(
+       await repo.endBoarding(state.getEndBoardRequestJson());
+       emit(state.copyWith(
               endBoardingState:
                   const EndBoardingState(APIRequestState.success, null)));
-        } else {
-          emit(state.copyWith(
-              endBoardingState: EndBoardingState(
-                  APIRequestState.failure, Exception("Gate not ready"))));
-          emit(state.copyWith(
-              endBoardingState:
-                  const EndBoardingState(APIRequestState.initial, null)));
-        }
-      });
     } catch (e) {
       emit(state.copyWith(
           endBoardingState:

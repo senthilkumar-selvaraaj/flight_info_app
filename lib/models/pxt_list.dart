@@ -53,6 +53,11 @@ class Pax {
   bool? isSsr;
   bool? isInfant;
   String? status;
+
+ String getBoardingMessage(){
+  return '$seqNo/$seatNo/$pnr';
+ }
+
   Pax(
       {this.iataCode,
       this.flightNo,

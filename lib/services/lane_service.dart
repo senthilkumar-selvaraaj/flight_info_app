@@ -7,10 +7,16 @@ static List<Lane> getLanes(){
   return database.store.box<Lane>().getAll();
 }
 
+static List<String> getLaneIds(){
+  final lanes =  database.store.box<Lane>().getAll();
+  return lanes.map((e) => e.deviceId ?? '').toList();
+}
+
+
 static String getLaneCommand(){
-  final lanes = getLanes();
+  // final lanes = getLanes();
   String command = "";
-  lanes.forEach((element) { 
+  allLanes.forEach((element) { 
     command = "$command${element.deviceId ?? ''}\n";
   });
   print(command);
