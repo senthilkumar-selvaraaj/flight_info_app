@@ -45,20 +45,20 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     super.initState();
    listenCC();
   }
-
   void listenCC(){
      SocketClient().listenBoardingEvent((p0) {
-      List<String> query = p0.split("\u0002CC\u0003");
+      // print("object ==> $p0");
+      List<String> query = p0.split("\u0002CCOK\u0003");
       if (query.length > 1) {
         List<String> fields = query[1].split("\n");
-        if (fields.length == 4) {
+        if (fields.length  > 3) {
           setState(() {
             paxInfo = {
-              fields[3]:
-                  Pax(seqNo: fields[0], seatNo: fields[1], pnr: fields[2])
+              fields[3].replaceAll(' ', ''):
+                  Pax(seqNo: fields[0].replaceAll(' ', ''), seatNo: fields[1].replaceAll(' ', ''), pnr: fields[2].replaceAll(' ', ''))
             };
           });
-          Future.delayed( const Duration(seconds: 5), (){
+          Future.delayed( const Duration(seconds: 10), (){
               setState(() {
                 paxInfo = null;
               });

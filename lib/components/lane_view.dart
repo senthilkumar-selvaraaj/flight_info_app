@@ -3,6 +3,8 @@ import 'package:flight_info_app/components/app_buttons.dart';
 import 'package:flight_info_app/components/app_text_field.dart';
 import 'package:flight_info_app/main.dart';
 import 'package:flight_info_app/models/lane.dart';
+import 'package:flight_info_app/screens/lane_screen.dart';
+import 'package:flight_info_app/services/lane_service.dart';
 import 'package:flight_info_app/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:provider/provider.dart';
 class LaneView extends StatefulWidget {
   final Function() didNewLaneAdded;
   final String laneName;
+
   const LaneView(
       {super.key, required this.laneName, required this.didNewLaneAdded});
 
@@ -22,6 +25,7 @@ class _LaneViewState extends State<LaneView> {
   TextEditingController nameTextController = TextEditingController();
   TextEditingController deviceIDController = TextEditingController();
   bool showErrorView = false;
+  String errorMEssage = "";
   @override
   void initState() {
     super.initState();
@@ -69,11 +73,11 @@ class _LaneViewState extends State<LaneView> {
         ),
          Visibility(
             visible: showErrorView,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+            child:  Padding(
+              padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                'Please enter Device Id',
-                style: TextStyle(fontSize: 12, color: Colors.red),
+                errorMEssage,
+                style: const TextStyle(fontSize: 12, color: Colors.red),
               ),
             )),
         const SizedBox(
@@ -97,10 +101,19 @@ class _LaneViewState extends State<LaneView> {
                 didTapped: () {
                   if(deviceIDController.text.isEmpty){
                     setState(() {
+                      errorMEssage = 'Please enter Device Id';
                       showErrorView = true;
                     });
                     return;
                   } 
+
+                  if(LaneService.isExist(deviceIDController.text)){
+                    setState(() {
+                      errorMEssage = 'Device Id already exist';
+                      showErrorView = true;
+                    });
+                      return;
+                    }
                   final laneBox = database.store.box<Lane>();
                   final lane = Lane();
                   lane.name = nameTextController.text;

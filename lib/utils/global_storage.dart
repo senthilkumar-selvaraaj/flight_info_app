@@ -48,9 +48,7 @@ class Global {
     user = null;
   }
 
-  Future<void> saveUser(User userResult) async {
-    SharedPreferences preference = await SharedPreferences.getInstance();
+  void saveUser(User userResult) {
     Global.storage.user = userResult;
-    await preference.setString('UserModal', json.encode(userResult.toJson()));
   }
 }

@@ -18,6 +18,7 @@ class LaneScreen extends StatefulWidget {
 
 class _LaneScreenState extends State<LaneScreen> {
   List<Lane> lanes = [];
+  
   @override
   void initState() {
     super.initState();
@@ -97,7 +98,7 @@ class _LaneScreenState extends State<LaneScreen> {
                 : addNewLaneCard(context, theme, index),
           ),
         )),
-        Padding(
+        Visibility(visible: lanes.isNotEmpty, child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -109,7 +110,7 @@ class _LaneScreenState extends State<LaneScreen> {
 
             })],
           ),
-        )
+        ))
       ],
     );
   }
