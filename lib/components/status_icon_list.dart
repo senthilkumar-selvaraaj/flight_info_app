@@ -20,7 +20,7 @@ class _StatusListState extends State<StatusList> {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Row(children:  [
         StatusIcon(icon: Icons.contrast, showBadge: false, toolTipMessage: "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? "Light" : "Dark"} Mode"),
-        Global.storage.hasUserLogined ?  const StatusIcon(icon: Icons.flight,  toolTipMessage: "Airline DCS", showBadge: true,) : const SizedBox(),
+        Global.storage.hasUserLogined ?  const StatusIcon(icon: Icons.flight,  toolTipMessage: "Airline DCS", showBadge: true, badgeColor: Colors.green,) : const SizedBox(),
         allLanes.isEmpty ? const SizedBox() :  StatusIcon(icon: Icons.dns,  toolTipMessage: "Boarding Gate", badgeColor: Provider.of<SocketStatusNotifier>(context).connectionState.getColor(),),
     ],);
   }

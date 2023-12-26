@@ -119,6 +119,7 @@ class _LaneViewState extends State<LaneView> {
                   lane.name = nameTextController.text;
                   lane.deviceId = deviceIDController.text;
                   laneBox.put(lane);
+                  allLanes = LaneService.getLanes();
                   widget.didNewLaneAdded();
                   Navigator.of(context).pop();
                 })

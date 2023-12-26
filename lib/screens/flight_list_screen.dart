@@ -1,6 +1,7 @@
 import 'package:flight_info_app/blocs/flight_list/flight_list_bloc.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
+import 'package:flight_info_app/components/no_data_placeholder.dart';
 import 'package:flight_info_app/components/snack_bar.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
@@ -41,7 +42,6 @@ class _FlightListScreenState extends State<FlightListScreen> {
               String startBoardCommand =
                   flight.getStartBoardCommand(state.sessionId);
               SocketClient().startBoardingCommand(startBoardCommand, (p0) {
-                 print("STARTBOARDING ==> $p0");
                 if (p0 == bsOK) {
                   if (context.mounted) {
                     setState(() {
@@ -136,7 +136,10 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                               height: 10,
                                             ),
                                             Expanded(
-                                                child: getFlightList(
+                                                child: state.flightListFetchingState.state ==
+                                          APIRequestState.loading ?   Center(
+                                            child: Container(height: 200, width: 200, child: const Image(image: AssetImage('assets/images/loader.gif')))) :  (state.flightListFetchingState.state ==
+                                          APIRequestState.success && state.flights.isEmpty) ? const NoDataView() : getFlightList(
                                                     theme, context))
                                           ],
                                         ),
@@ -192,7 +195,13 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                     )),
                                                 Text(
                                                   boardingStatus
-                                                      .getInfoDescription(),
+                                                      .getInfoDescription().replaceAll("##FLIGHTNO##",  selectedFlightIndex < 0 ? '' : '${BlocProvider.of<FlightListBloc>(
+                                                                              context)
+                                                                          .state
+                                                                          .flights[selectedFlightIndex].iataCode}${BlocProvider.of<FlightListBloc>(
+                                                                              context)
+                                                                          .state
+                                                                          .flights[selectedFlightIndex].flightNo}'),
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                       color: AppColors.white,
@@ -263,7 +272,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             const SizedBox(
                                               width: 15,
                                             ),
-                                            SizedBox(
+                                            selectedFlightIndex < 0 ? const SizedBox() : SizedBox(
                                               width: 155,
                                               height: 45,
                                               child: BlocBuilder<FlightListBloc,
@@ -282,7 +291,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                   }
                                                   print(state.startBoardingState
                                                       .state);
-                                                  return ElevatedButton(
+                                                  return Visibility(visible: !(selectedFlightIndex < 0), child:  ElevatedButton(
                                                       style: ElevatedButton.styleFrom(
                                                           side: BorderSide(
                                                               width: 1.0,
@@ -340,7 +349,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                                 FontWeight.w500,
                                                             color: AppColors
                                                                 .white),
-                                                      ));
+                                                      )));
                                                 },
                                               ),
                                             )
@@ -648,7 +657,7 @@ enum FlightBoaringStatus {
       case FlightBoaringStatus.confirm:
         return "The gate will close automatically after confirmation. Please ensure the gate area is clear of any objects of persons before proceeding";
       case FlightBoaringStatus.boarding:
-        return "E-Gate is now ready to board flight SG198. Select 'Start Boarding' to begin boarding";
+        return "E-Gate is now ready to board flight ##FLIGHTNO##. Select 'Start Boarding' to begin boarding";
     }
   }
 }

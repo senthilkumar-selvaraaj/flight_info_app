@@ -6,11 +6,13 @@ import 'package:flight_info_app/components/app_text_field.dart';
 import 'package:flight_info_app/components/dialogs.dart';
 import 'package:flight_info_app/components/footter.dart';
 import 'package:flight_info_app/components/header.dart';
+import 'package:flight_info_app/components/no_data_placeholder.dart';
 import 'package:flight_info_app/components/snack_bar.dart';
 import 'package:flight_info_app/main.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/models/pxt_list.dart';
+import 'package:flight_info_app/objectbox.g.dart';
 import 'package:flight_info_app/repos/flight_boarding.dart';
 import 'package:flight_info_app/services/lane_service.dart';
 import 'package:flight_info_app/services/socket_client.dart';
@@ -103,6 +105,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                         color: theme.flightBRDTextColor,
                       ));
                     }
+                    print("HJHJHHHJHJ=>>>> ${state.paxListFetchingState.state}");
                     return Expanded(
                       child: Container(
                         child: Column(
@@ -238,7 +241,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                             height: 10,
                                           ),
                                           Expanded(
-                                              child: getPaxList(
+                                              child: state.paxListFetchingState.state ==
+                                          APIRequestState.loading ?   Center(
+                                            child: Container(height: 200, width: 200, child: const Image(image: AssetImage('assets/images/loader.gif')))) : (state.paxListFetchingState.state !=
+                        APIRequestState.loading && (state.paxResult?.data?.isEmpty ?? true)) ? const NoDataView(): getPaxList(
                                                   BlocProvider.of<
                                                               FlightBoardingBloc>(
                                                           context)
@@ -284,14 +290,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                         BlocProvider.of<FlightBoardingBloc>(
                                                                         context)
                                                                     .state
-                                                                    .pax !=
-                                                                null
+                                                                    .paxResult?.data?.isNotEmpty ??false
                                                             ? Row(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  BlocBuilder<
+                                                                  Visibility(visible: state.pax != null, child: BlocBuilder<
                                                                       FlightBoardingBloc,
                                                                       FlightBoardingState>(
                                                                     builder:
@@ -307,6 +312,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                               theme.flightBRDTextColor,
                                                                         );
                                                                       }
+                                                                      
 
                                                                       return Padding(
                                                                         padding: const EdgeInsets
@@ -326,13 +332,9 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                             }),
                                                                       );
                                                                     },
-                                                                  ),
+                                                                  )),
                                                                   Visibility(
-                                                                      visible: (BlocProvider.of<FlightBoardingBloc>(context)
-                                                                              .state
-                                                                              .pax
-                                                                              ?.showManifest() ??
-                                                                          false),
+                                                                      visible: (state.paxResult?.data?.isNotEmpty ??false),
                                                                       child:
                                                                           Padding(
                                                                         padding: const EdgeInsets
@@ -353,7 +355,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                               //     }));
                                                                             }),
                                                                       )),
-                                                                  BorderedActionButton(
+                                                                 Visibility(visible: state.pax != null, child:  BorderedActionButton(
                                                                       title:
                                                                           'Print ATB',
                                                                       height:
@@ -361,12 +363,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                       width:
                                                                           150,
                                                                       didTapped:
-                                                                          () {})
+                                                                          () {}))
                                                                 ],
                                                               )
                                                             : const SizedBox(),
                                                   ),
-                                                  Padding(
+
+                                                  Visibility(visible: (state.paxResult?.data?.isNotEmpty ??false), child: Padding(
                                                     padding:
                                                         const EdgeInsets.only(
                                                             right: 15),
@@ -397,7 +400,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                 .white),
                                                       )),
                                                     ),
-                                                  )
+                                                  ))
+                                                  
                                                 ],
                                               ),
                                             ),

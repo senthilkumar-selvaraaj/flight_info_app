@@ -69,7 +69,10 @@ class FlightBoardingBloc
       await repo.onBoardPax(state.getOnBoardRequestJson());
       print("ONBOARDING");
       add(const FetchPaxListEvent());
+      Pax? pax = state.pax;
+      pax?.status = 'Board';
       emit(state.copyWith(
+        pax: pax,
           paxOnBoardingState:
               const PaxOnBoardingState(APIRequestState.success, null)));
     } catch (e) {
@@ -91,7 +94,10 @@ class FlightBoardingBloc
     try {
       await repo.deBoardPax(state.getDeBoardRequestJson());
       add(const FetchPaxListEvent());
+       Pax? pax = state.pax;
+      pax?.status = 'Deboard';
       emit(state.copyWith(
+        pax: pax,
           paxDeBoardingState:
               const PaxDeBoardingState(APIRequestState.success, null)));
     } catch (e) {

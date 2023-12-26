@@ -20,15 +20,14 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Global.storage.load();
+  // await Global.storage.load();
   database = await ObjectBox.create();
-  allLanes = []; // database.store.box<Lane>().getAll();
+  allLanes =  database.store.box<Lane>().getAll();
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = const WindowOptions(
       minimumSize: Size(1270, 768),
-      size: Size(1270, 768),
-      // fullScreen: true,
-      center: true,
+      fullScreen: true,
+      // center: true,
       title: 'AAI (Chennai)');
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
