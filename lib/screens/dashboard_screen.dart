@@ -31,9 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 @override
   void initState() {
     super.initState();
-    print("Coming-===>");
     if(!SocketClient().isConnected){
-      
          SocketClient().connect();
     }
   }

@@ -41,6 +41,10 @@ class _FlightListScreenState extends State<FlightListScreen> {
               Flight flight = state.flights[selectedFlightIndex];
               String startBoardCommand =
                   flight.getStartBoardCommand(state.sessionId);
+                   Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FlightBoardingScreen(
+                            sessionId: state.sessionId,
+                            flight: state.flights[selectedFlightIndex])));
               SocketClient().startBoardingCommand(startBoardCommand, (p0) {
                 if (p0 == bsOK) {
                   if (context.mounted) {
@@ -81,13 +85,13 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                   child: BlocBuilder<FlightListBloc,
                                       FlightListState>(
                                     builder: (context, state) {
-                                      if (state.flightListFetchingState.state ==
-                                          APIRequestState.loading) {
-                                        return Center(
-                                            child: CircularProgressIndicator(
-                                          color: theme.flightBRDTextColor,
-                                        ));
-                                      }
+                                      // if (state.flightListFetchingState.state ==
+                                      //     APIRequestState.loading) {
+                                      //   return Center(
+                                      //       child: CircularProgressIndicator(
+                                      //     color: theme.flightBRDTextColor,
+                                      //   ));
+                                      // }
 
                                       return Container(
                                         child: Column(

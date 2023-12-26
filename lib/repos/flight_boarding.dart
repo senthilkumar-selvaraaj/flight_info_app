@@ -9,7 +9,6 @@ class FlightBoardingRepository {
       final response = await HttpClient(
           request: HttpRequest.paxList,
           body: body).send();
-          print(response);
       try {
          PaxList paxList = paxListFromJson(json.encode(response));
          return paxList;
@@ -22,7 +21,7 @@ class FlightBoardingRepository {
   }
 Future<void> onBoardPax(Map<String, dynamic> body) async {
     try {
-    final response =  await HttpClient(
+     await HttpClient(
           request: HttpRequest.paxBoarding,
           body: body).send();
     } catch (e) {

@@ -253,7 +253,6 @@ class HttpClient implements HttpService {
 
   @override
   Future<bool> renewToken() async {
-    print("Refresh Token ===> Entered");
     try {
       final params = {"refresh_token": Global.storage.refreshToken ?? ""};
       final url = HttpRequest.refreshToken.url;
@@ -263,7 +262,6 @@ class HttpClient implements HttpService {
         final user = User.fromJson(json.decode(response.body.toString()));
         Global.storage.user?.authToken = user.authToken;
         if(user.refreshToken != null){
-           print("Refresh Token ===> Refresh Token");
            Global.storage.user?.refreshToken = user.refreshToken;
         }
         Global.storage.saveUser(Global.storage.user!);

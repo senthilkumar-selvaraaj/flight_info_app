@@ -67,16 +67,17 @@ class FlightBoardingBloc
             const PaxOnBoardingState(APIRequestState.loading, null)));
     try {
       await repo.onBoardPax(state.getOnBoardRequestJson());
-      print("ONBOARDING");
-      add(const FetchPaxListEvent());
+      final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
+
       Pax? pax = state.pax;
       pax?.status = 'Board';
       emit(state.copyWith(
-        pax: pax,
+          paxes: paxResult.data ?? [],
+          paxResult: paxResult,
+          pax: pax,
           paxOnBoardingState:
               const PaxOnBoardingState(APIRequestState.success, null)));
     } catch (e) {
-      print("ONBOARDING EXFEPTION");
       emit(state.copyWith(
           paxOnBoardingState:
               PaxOnBoardingState(APIRequestState.failure, e as Exception)));
@@ -93,11 +94,13 @@ class FlightBoardingBloc
             const PaxDeBoardingState(APIRequestState.loading, null)));
     try {
       await repo.deBoardPax(state.getDeBoardRequestJson());
-      add(const FetchPaxListEvent());
-       Pax? pax = state.pax;
+      final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
+      Pax? pax = state.pax;
       pax?.status = 'Deboard';
       emit(state.copyWith(
-        pax: pax,
+          paxes: paxResult.data ?? [],
+          paxResult: paxResult,
+          pax: pax,
           paxDeBoardingState:
               const PaxDeBoardingState(APIRequestState.success, null)));
     } catch (e) {
@@ -116,10 +119,10 @@ class FlightBoardingBloc
         endBoardingState:
             const EndBoardingState(APIRequestState.loading, null)));
     try {
-       await repo.endBoarding(state.getEndBoardRequestJson());
-       emit(state.copyWith(
-              endBoardingState:
-                  const EndBoardingState(APIRequestState.success, null)));
+      await repo.endBoarding(state.getEndBoardRequestJson());
+      emit(state.copyWith(
+          endBoardingState:
+              const EndBoardingState(APIRequestState.success, null)));
     } catch (e) {
       emit(state.copyWith(
           endBoardingState:

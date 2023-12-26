@@ -11,6 +11,11 @@ class FlightBoardingState {
   final PaxDeBoardingState paxDeBoardingState;
   final EndBoardingState endBoardingState;
 
+  
+  bool showLoader(){
+    return paxOnBoardingState.state == APIRequestState.loading || paxDeBoardingState.state == APIRequestState.loading;
+  }
+
   int getTotalPaxList(){
     return paxResult?.data?.length ?? 0;
   }
