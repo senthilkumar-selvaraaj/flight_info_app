@@ -27,7 +27,6 @@ void main() async {
   WindowOptions windowOptions = const WindowOptions(
       minimumSize: Size(1270, 768),
       fullScreen: true,
-      // center: true,
       title: 'AAI (Chennai)');
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();

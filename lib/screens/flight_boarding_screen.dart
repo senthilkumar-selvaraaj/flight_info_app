@@ -12,7 +12,6 @@ import 'package:flight_info_app/main.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
 import 'package:flight_info_app/models/pxt_list.dart';
-import 'package:flight_info_app/objectbox.g.dart';
 import 'package:flight_info_app/repos/flight_boarding.dart';
 import 'package:flight_info_app/services/lane_service.dart';
 import 'package:flight_info_app/services/socket_client.dart';
@@ -40,37 +39,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
   // final doc = pw.Document();
   final lanes = allLanes;
 
-  Map<String, Pax>? paxInfo;
-
   @override
   void initState() {
     super.initState();
-    listenCC();
-  }
-
-  void listenCC() {
-    SocketClient().listenBoardingEvent((p0) {
-      // print("object ==> $p0");
-      List<String> query = p0.split("\u0002CCOK\u0003");
-      if (query.length > 1) {
-        List<String> fields = query[1].split("\n");
-        if (fields.length > 3) {
-          setState(() {
-            paxInfo = {
-              fields[3].replaceAll(' ', ''): Pax(
-                  seqNo: fields[0].replaceAll(' ', ''),
-                  seatNo: fields[1].replaceAll(' ', ''),
-                  pnr: fields[2].replaceAll(' ', ''))
-            };
-          });
-          Future.delayed(const Duration(seconds: 10), () {
-            setState(() {
-              paxInfo = null;
-            });
-          });
-        }
-      }
-    });
+    // listenCC();
   }
 
   void onSearchTextChanged(BuildContext context, String? keyword) {
@@ -85,6 +57,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
       create: (context) => FlightBoardingBloc(FlightBoardingRepository())
         ..add(UpdateFlightInfoEvent(widget.flight))
         ..add(UpdateSessionIdEvent(widget.sessionId))
+        ..add(const ListenCCOKEvent())
         ..add(const FetchPaxListEvent()),
       child: Scaffold(
         backgroundColor: theme.backgroundColor,
@@ -252,12 +225,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                             Visibility(
                                                               visible: state.showLoader(),
                                                               child: Center(
-                                                                child: Container(
-                                                                    height: 200,
-                                                                    width: 200,
-                                                                    child: const Image(
-                                                                        image: AssetImage(
-                                                                            'assets/images/loader.gif'))))),
+                                                                child: Container(height: 50, width: 50, child:  CircularProgressIndicator(color: theme.flightBRDTextColor,)))),
                                                           ],
                                                         )),
                                           Visibility(
@@ -349,11 +317,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                     },
                                                                   )),
                                                               Visibility(
-                                                                  visible: (state
-                                                                          .paxResult
-                                                                          ?.data
-                                                                          ?.isNotEmpty ??
-                                                                      false),
+                                                                  // visible: (state
+                                                                  //         .paxResult
+                                                                  //         ?.data
+                                                                  //         ?.isNotEmpty ??
+                                                                  //     false),
+                                                                  visible: false,
                                                                   child:
                                                                       Padding(
                                                                     padding: const EdgeInsets
@@ -375,9 +344,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                         }),
                                                                   )),
                                                               Visibility(
-                                                                  visible: state
-                                                                          .pax !=
-                                                                      null,
+                                                                  // visible: state
+                                                                  //         .pax !=
+                                                                  //     null,
+                                                                  visible: false,
                                                                   child: BorderedActionButton(
                                                                       title:
                                                                           'Print ATB',
@@ -574,9 +544,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                 child: Container(
                                   height: 120,
                                   decoration: getLaneShadowShape(
-                                      (paxInfo != null &&
-                                          ((paxInfo?.keys.first ?? '') ==
-                                              lanes[index].deviceId)),
+                                       BlocProvider.of<FlightBoardingBloc>(context).state.laneBoardingInfo?[lanes[index].deviceId] != null,
                                       theme,
                                       context),
                                   child: Padding(
@@ -602,10 +570,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           height: 20,
                                         ),
                                         Expanded(
-                                            child: (paxInfo != null &&
-                                                    ((paxInfo?.keys.first ??
-                                                            '') ==
-                                                        lanes[index].deviceId))
+                                            child:  BlocProvider.of<FlightBoardingBloc>(context)
+                                .state.laneBoardingInfo?[lanes[index].deviceId] != null
                                                 ? Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -623,10 +589,10 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                         height: 1,
                                                       ),
                                                       Text(
-                                                          paxInfo?[lanes[index]
-                                                                      .deviceId]
-                                                                  ?.getBoardingMessage() ??
-                                                              '',
+                                                           BlocProvider.of<FlightBoardingBloc>(context)
+                                .state.laneBoardingInfo?[lanes[index].deviceId]?.getBoardingMessage() ?? ''
+                                                                  
+                                                              ,
                                                           style: TextStyle(
                                                             color: theme
                                                                 .laneBoardingValueColor,

@@ -10,7 +10,7 @@ class FlightBoardingState {
   final PaxOnBoardingState paxOnBoardingState;
   final PaxDeBoardingState paxDeBoardingState;
   final EndBoardingState endBoardingState;
-
+  final Map<String, Pax>? laneBoardingInfo;
   
   bool showLoader(){
     return paxOnBoardingState.state == APIRequestState.loading || paxDeBoardingState.state == APIRequestState.loading;
@@ -37,6 +37,7 @@ class FlightBoardingState {
   }
 
   const FlightBoardingState({
+    this.laneBoardingInfo ,
     this.paxes = const [],
     this.flight,
     this.paxResult,
@@ -54,6 +55,7 @@ class FlightBoardingState {
 
   FlightBoardingState copyWith(
       {
+      Map<String, Pax>? laneBoardingInfo,
       List<Pax>? paxes,
       Flight? flight,
       Pax? pax,
@@ -64,6 +66,7 @@ class FlightBoardingState {
       PaxDeBoardingState? paxDeBoardingState,
       EndBoardingState? endBoardingState}) {
     return FlightBoardingState(
+        laneBoardingInfo: laneBoardingInfo ?? this.laneBoardingInfo,
         paxes: paxes ?? this.paxes,
         flight: this.flight,
         pax: pax ?? this.pax,

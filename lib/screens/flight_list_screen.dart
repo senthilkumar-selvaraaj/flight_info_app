@@ -41,10 +41,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
               Flight flight = state.flights[selectedFlightIndex];
               String startBoardCommand =
                   flight.getStartBoardCommand(state.sessionId);
-                   Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => FlightBoardingScreen(
-                            sessionId: state.sessionId,
-                            flight: state.flights[selectedFlightIndex])));
+               
               SocketClient().startBoardingCommand(startBoardCommand, (p0) {
                 if (p0 == bsOK) {
                   if (context.mounted) {
@@ -142,7 +139,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                             Expanded(
                                                 child: state.flightListFetchingState.state ==
                                           APIRequestState.loading ?   Center(
-                                            child: Container(height: 200, width: 200, child: const Image(image: AssetImage('assets/images/loader.gif')))) :  (state.flightListFetchingState.state ==
+                                            child: Container(height: 50, width: 50, child:  CircularProgressIndicator(color: theme.flightBRDTextColor, ))) :  (state.flightListFetchingState.state ==
                                           APIRequestState.success && state.flights.isEmpty) ? const NoDataView() : getFlightList(
                                                     theme, context))
                                           ],

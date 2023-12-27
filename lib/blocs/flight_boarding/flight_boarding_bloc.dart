@@ -1,3 +1,4 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:flight_info_app/models/api_state.dart';
 import 'package:flight_info_app/models/flight_list.dart';
@@ -21,6 +22,35 @@ class FlightBoardingBloc
     on<UpdateSelectedPaxEvent>(onUpdatePax);
     on<UpdateFlightInfoEvent>(onUpdateFlight);
     on<SearchtextChangedEvent>(onSearch);
+    on<ListenCCOKEvent>(listenCCOK);
+    on<UpdateLaneBoardingInfo>(updateLaneBoardingInfo);
+  }
+
+void listenCCOK(
+      ListenCCOKEvent event, Emitter<FlightBoardingState> emit) async {
+       
+        SocketClient().listenBoardingEvent((p0) {
+          List<String> query = p0.split("\u0002CCOK\u0003");
+      if (query.length > 1) {
+         print("CCCC===> ${query}" );
+        List<String> fields = query[1].split("\n");
+        if (fields.length > 3) {
+          Map<String, Pax>? laneBoardingInfo = state.laneBoardingInfo;
+          laneBoardingInfo ??= {};
+          laneBoardingInfo[fields[3].replaceAll(' ', '')] = Pax(
+                  seqNo: fields[0].replaceAll(' ', ''),
+                  seatNo: fields[1].replaceAll(' ', ''),
+                  pnr: fields[2].replaceAll(' ', ''));
+            add(UpdateLaneBoardingInfo(laneBoardingInfo));
+        }
+      }
+          add(const FetchPaxListEvent());
+      });
+  }
+
+   void updateLaneBoardingInfo(
+      UpdateLaneBoardingInfo event, Emitter<FlightBoardingState> emit) async {
+    emit(state.copyWith(laneBoardingInfo: event.laneBoardingInfo));
   }
 
   void onUpdateSessionId(
@@ -45,8 +75,16 @@ class FlightBoardingBloc
             const PaxListFetchingState(APIRequestState.loading, null)));
     try {
       final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
+      Pax? pax = state.pax;
+      if(pax != null){
+       final index = paxResult.data?.indexWhere((element) => pax?.seqNo == element.seqNo);
+       if(index != null && index != -1){
+        pax = paxResult.data?[index];
+       }
+      }
       emit(state.copyWith(
           paxes: paxResult.data ?? [],
+          pax: pax,
           paxResult: paxResult,
           paxListFetchingState:
               const PaxListFetchingState(APIRequestState.success, null)));

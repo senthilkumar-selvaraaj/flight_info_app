@@ -40,3 +40,13 @@ class SearchtextChangedEvent extends FlightBoardingEvent{
   const SearchtextChangedEvent(this.keyword);
 }
 
+class ListenCCOKEvent extends FlightBoardingEvent{
+  const ListenCCOKEvent();
+}
+
+class UpdateLaneBoardingInfo extends FlightBoardingEvent{
+ final Map<String, Pax> laneBoardingInfo;
+  const UpdateLaneBoardingInfo(this.laneBoardingInfo);
+}
+
+
