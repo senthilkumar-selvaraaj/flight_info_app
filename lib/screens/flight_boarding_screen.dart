@@ -513,16 +513,17 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
 
                       Dialogs.showAlertDialog(
                           context, DialogType.endBoarding, theme, () {}, () {
+                       
                         SocketClient().endBoardingCommand((p0) async {
                           if (p0 == beOK) {
-                            BlocProvider.of<FlightBoardingBloc>(context)
-                                .add(const EndBoardingEvent());
                           } else {
                             if (context.mounted) {
-                              AppSnackBar.show(context, "Gate not ready");
+                             // AppSnackBar.show(context, "Gate not ready");
                             }
                           }
                         });
+                         BlocProvider.of<FlightBoardingBloc>(context)
+                                .add(const EndBoardingEvent());
                       });
                     },
                   )

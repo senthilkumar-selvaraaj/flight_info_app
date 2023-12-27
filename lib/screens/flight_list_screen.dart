@@ -41,21 +41,21 @@ class _FlightListScreenState extends State<FlightListScreen> {
               Flight flight = state.flights[selectedFlightIndex];
               String startBoardCommand =
                   flight.getStartBoardCommand(state.sessionId);
-               
-              SocketClient().startBoardingCommand(startBoardCommand, (p0) {
-                if (p0 == bsOK) {
                   if (context.mounted) {
                     setState(() {
                       boardingStatus = FlightBoaringStatus.none;
-                    });
-                    Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => FlightBoardingScreen(
                             sessionId: state.sessionId,
-                            flight: state.flights[selectedFlightIndex])));
+                            flight: state.flights[selectedFlightIndex]))); 
+                    });
                   }
+              SocketClient().startBoardingCommand(startBoardCommand, (p0) {
+                if (p0 == bsOK) {
+                  
                 } else {
                   if (context.mounted) {
-                    AppSnackBar.show(context, "Gate not ready");
+                   // AppSnackBar.show(context, "Gate not ready");
                   }
                 }
                 

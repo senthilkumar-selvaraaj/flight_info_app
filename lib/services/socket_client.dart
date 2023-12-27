@@ -21,6 +21,8 @@ class SocketClient {
 
   bool get isConnected => _isConnected;
 
+ String startBaordingCommand = "";
+
   factory SocketClient() {
     return _instance;
   }
@@ -31,7 +33,7 @@ class SocketClient {
       try {
         //Local IP 192.168.1.11
         // Remote IP  3.111.72.224
-        _socket = await Socket.connect('192.168.1.11', 2100,
+        _socket = await Socket.connect('3.111.72.224', 2100,
             timeout: const Duration(seconds: 10));
         _isConnected = true;
         print(
@@ -64,6 +66,9 @@ class SocketClient {
                   }
                   break;
                 case lnOK:
+                  if(startBaordingCommand != ''){
+                    restartBoardingCommand();
+                  }
                   Provider.of<SocketStatusNotifier>(context!, listen: false)
                       .setConnectionState(SocketStatus.connected);
                   break;
@@ -86,6 +91,18 @@ class SocketClient {
                   break;
                 default:
               }
+
+              switch (command) {
+                case lnERR:
+                case bsERR:
+                case beERR:
+                Provider.of<SocketStatusNotifier>(context!, listen: false)
+                      .setConnectionState(SocketStatus.disconnected);
+                      break;
+                default:
+                break;
+              }
+
             } else {
               print('STX or ETX markers not found in data: $serverResponse');
             }
@@ -134,14 +151,19 @@ class SocketClient {
     String laneCommand = LaneService.getLaneCommand();
     _socket?.writeln("\u0002LN\u0003$laneCommand");
   }
-
+  
   void startBoardingCommand(String command, Function(String) onCallback) {
-    print(command);
     boardingStartCallback = onCallback;
+    startBaordingCommand = "\u0002BS\u0003$command";
     _socket?.writeln("\u0002BS\u0003$command");
   }
 
+  void restartBoardingCommand(){
+    _socket?.writeln(startBaordingCommand);
+  }
+
   void endBoardingCommand(Function(String) onCallback) {
+    startBaordingCommand = "";
     boardingEndCallback = onCallback;
     _socket?.writeln("\u0002BE\u0003\n");
   }
