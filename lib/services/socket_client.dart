@@ -33,7 +33,7 @@ class SocketClient {
       try {
         //Local IP 192.168.1.11
         // Remote IP  3.111.72.224
-        _socket = await Socket.connect('3.111.72.224', 2100,
+        _socket = await Socket.connect('192.168.1.11', 2100,
             timeout: const Duration(seconds: 10));
         _isConnected = true;
         print(
@@ -67,6 +67,7 @@ class SocketClient {
                   break;
                 case lnOK:
                   if(startBaordingCommand != ''){
+                    print("BS COMMAND ==>");
                     restartBoardingCommand();
                   }
                   Provider.of<SocketStatusNotifier>(context!, listen: false)
