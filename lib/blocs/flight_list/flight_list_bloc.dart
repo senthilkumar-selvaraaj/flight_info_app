@@ -5,8 +5,6 @@ import 'package:aai_chennai/models/api_state.dart';
 import 'package:aai_chennai/models/flight_list.dart';
 import 'package:aai_chennai/repos/floght_list_repository.dart';
 import 'package:aai_chennai/services/lane_service.dart';
-import 'package:aai_chennai/services/socket_client.dart';
-import 'package:aai_chennai/utils/strings.dart';
 
 part 'flight_list_event.dart';
 part 'flight_list_state.dart';

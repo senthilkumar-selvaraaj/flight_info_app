@@ -1,7 +1,6 @@
 
 import 'package:aai_chennai/components/app_buttons.dart';
 import 'package:aai_chennai/components/lane_view.dart';
-import 'package:aai_chennai/components/login_view.dart';
 import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 

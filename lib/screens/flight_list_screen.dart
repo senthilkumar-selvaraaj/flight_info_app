@@ -2,7 +2,6 @@ import 'package:aai_chennai/blocs/flight_list/flight_list_bloc.dart';
 import 'package:aai_chennai/components/footter.dart';
 import 'package:aai_chennai/components/header.dart';
 import 'package:aai_chennai/components/no_data_placeholder.dart';
-import 'package:aai_chennai/components/snack_bar.dart';
 import 'package:aai_chennai/models/api_state.dart';
 import 'package:aai_chennai/models/flight_list.dart';
 import 'package:aai_chennai/repos/floght_list_repository.dart';
