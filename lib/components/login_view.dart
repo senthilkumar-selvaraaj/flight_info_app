@@ -3,6 +3,7 @@ import 'package:aai_chennai/components/app_text_field.dart';
 import 'package:aai_chennai/screens/dashboard_screen.dart';
 import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
           height: 50,
         ),
         Container(
-          height: 164,
+          height: 246,
           width: double.infinity,
           decoration: BoxDecoration(
               border: Border.all(color: theme.loginContainerBorderColor)),
@@ -44,6 +45,15 @@ class _LoginViewState extends State<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Expanded(
+                child: getAgentNameTextField(),
+              ),
+              SizedBox(
+                height: 2,
+                child: Divider(
+                  color: theme.loginContainerBorderColor,
+                ),
+              ),
               Expanded(
                 child: getUserNameTextField(),
               ),
@@ -89,6 +99,34 @@ class _LoginViewState extends State<LoginView> {
               )),
         )
       ],
+    );
+  }
+  
+   Widget getAgentNameTextField() {
+    return Container(
+      height: 80,
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          // textFieldLabel("Username"),
+          AppTextField(
+            inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]")), ],
+            label: "Agent Name",
+            onChanged: (p0) {
+              if(p0?.isNotEmpty ?? false){
+                   setState(() {
+                      showError = false;
+                    });
+              }
+              BlocProvider.of<LoginBloc>(context).add(LoginAgentNameChanged(p0 ?? ''));
+            },
+          ),
+        ],
+      ),
     );
   }
 

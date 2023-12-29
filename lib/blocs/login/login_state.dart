@@ -2,6 +2,7 @@ part of 'login_bloc.dart';
 
 
  class LoginState {
+   final String agentName;
   final String userName;
   final String password;
   final FormSubmissionStatus formStatus;
@@ -13,6 +14,7 @@ part of 'login_bloc.dart';
   bool get obscuredText => visiblityStatus;
 
    LoginState({
+      this.agentName ='',
       this.userName = '',
       this.password = '',
       this.logoutSubmissionState = const LogOutSubmissionState(APIRequestState.initial, null),
@@ -21,12 +23,14 @@ part of 'login_bloc.dart';
     });
 
    LoginState copyWith({
+     String? agentName,
      String? userName,
      String? password,
      FormSubmissionStatus? formStatus,
     LogOutSubmissionState? logoutSubmissionState,
     bool? visiblityStatus}){
       return LoginState(
+        agentName: agentName ?? this.agentName,
         userName: userName ?? this.userName, 
         password: password ?? this.password, 
         formStatus: formStatus ?? this.formStatus,
@@ -37,6 +41,7 @@ part of 'login_bloc.dart';
 
   Map<String, String> get loginRequestJson{
     return {
+        'agent_name': agentName,
         'username':userName,
         'password':password
     };

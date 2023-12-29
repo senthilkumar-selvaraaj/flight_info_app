@@ -14,11 +14,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   
   LoginBloc(this.authRepo) : super(LoginState()) {
     on<LoginUsernameChanged>(_onUserNameChanged);
+    on<LoginAgentNameChanged>(_onAgentNameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onLoginSubmitted);
     on<PasswordEyeIconClicked>(_onPasswordEyeIconClicked);
     on<LogoutSubmittedEvent>(_onLogOutSubmitted);
   }
+
+   void _onAgentNameChanged(LoginAgentNameChanged event, Emitter<LoginState> emit ){
+      emit(state.copyWith(agentName: event.agentName));
+  }
+
   void _onUserNameChanged(LoginUsernameChanged event, Emitter<LoginState> emit ){
       emit(state.copyWith(userName: event.userName));
   }

@@ -3,6 +3,12 @@ part of 'login_bloc.dart';
 sealed class LoginEvent {
 }
 
+class LoginAgentNameChanged extends LoginEvent{
+  LoginAgentNameChanged(this.agentName);
+
+  final String agentName;
+}
+
 class LoginUsernameChanged extends LoginEvent{
   LoginUsernameChanged(this.userName);
 
