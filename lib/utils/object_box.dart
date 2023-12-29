@@ -1,4 +1,4 @@
-import 'package:flight_info_app/objectbox.g.dart';
+import 'package:aai_chennai/objectbox.g.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 
-import 'package:flight_info_app/models/flight_list.dart';
-import 'package:flight_info_app/services/api_service.dart';
+import 'package:aai_chennai/models/flight_list.dart';
+import 'package:aai_chennai/services/api_service.dart';
 
 class FlightListRepository {
   Future<List<Flight>> getFlightList() async {

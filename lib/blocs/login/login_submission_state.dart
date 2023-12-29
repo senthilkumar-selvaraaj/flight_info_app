@@ -1,4 +1,4 @@
-import 'package:flight_info_app/models/api_state.dart';
+import 'package:aai_chennai/models/api_state.dart';
 
 abstract class FormSubmissionStatus{
   const FormSubmissionStatus();

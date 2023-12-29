@@ -1,6 +1,6 @@
 {
-    "name": "flight_info_app",
-    "short_name": "flight_info_app",
+    "name": "aai_chennai",
+    "short_name": "aai_chennai",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

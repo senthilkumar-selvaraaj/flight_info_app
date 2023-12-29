@@ -1,4 +1,4 @@
-import 'package:flight_info_app/utils/themes.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

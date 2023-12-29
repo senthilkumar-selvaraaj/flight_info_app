@@ -1,6 +1,6 @@
-import 'package:flight_info_app/main.dart';
-import 'package:flight_info_app/models/lane.dart';
-import 'package:flight_info_app/objectbox.g.dart';
+import 'package:aai_chennai/main.dart';
+import 'package:aai_chennai/models/lane.dart';
+import 'package:aai_chennai/objectbox.g.dart';
 
 class LaneService {
   

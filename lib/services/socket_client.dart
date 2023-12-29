@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:async';
 
-import 'package:flight_info_app/main.dart';
-import 'package:flight_info_app/models/lane.dart';
-import 'package:flight_info_app/services/lane_service.dart';
-import 'package:flight_info_app/services/socket_notifier.dart';
-import 'package:flight_info_app/utils/strings.dart';
+import 'package:aai_chennai/main.dart';
+import 'package:aai_chennai/models/lane.dart';
+import 'package:aai_chennai/services/lane_service.dart';
+import 'package:aai_chennai/services/socket_notifier.dart';
+import 'package:aai_chennai/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

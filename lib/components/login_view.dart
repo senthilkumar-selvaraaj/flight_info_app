@@ -1,7 +1,7 @@
-import 'package:flight_info_app/blocs/login/login_bloc.dart';
-import 'package:flight_info_app/components/app_text_field.dart';
-import 'package:flight_info_app/screens/dashboard_screen.dart';
-import 'package:flight_info_app/utils/themes.dart';
+import 'package:aai_chennai/blocs/login/login_bloc.dart';
+import 'package:aai_chennai/components/app_text_field.dart';
+import 'package:aai_chennai/screens/dashboard_screen.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';

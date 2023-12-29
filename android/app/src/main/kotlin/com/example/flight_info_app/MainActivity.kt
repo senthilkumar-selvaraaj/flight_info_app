@@ -1,4 +1,4 @@
-package com.example.flight_info_app
+package com.example.aai_chennai
 
 import io.flutter.embedding.android.FlutterActivity
 

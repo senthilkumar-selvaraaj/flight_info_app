@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flight_info_app/models/user_model.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
+import 'package:aai_chennai/models/user_model.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
 import 'package:http/http.dart' as http;
 
 enum HttpRequest implements HttpBaseRequest {

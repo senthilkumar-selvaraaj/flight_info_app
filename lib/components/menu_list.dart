@@ -1,5 +1,5 @@
 
-import 'package:flight_info_app/components/menu_card.dart';
+import 'package:aai_chennai/components/menu_card.dart';
 import 'package:flutter/material.dart';
 
 class MenuList extends StatefulWidget {

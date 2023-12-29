@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flight_info_app/models/api_state.dart';
-import 'package:flight_info_app/models/flight_list.dart';
-import 'package:flight_info_app/repos/floght_list_repository.dart';
-import 'package:flight_info_app/services/lane_service.dart';
-import 'package:flight_info_app/services/socket_client.dart';
-import 'package:flight_info_app/utils/strings.dart';
+import 'package:aai_chennai/models/api_state.dart';
+import 'package:aai_chennai/models/flight_list.dart';
+import 'package:aai_chennai/repos/floght_list_repository.dart';
+import 'package:aai_chennai/services/lane_service.dart';
+import 'package:aai_chennai/services/socket_client.dart';
+import 'package:aai_chennai/utils/strings.dart';
 
 part 'flight_list_event.dart';
 part 'flight_list_state.dart';

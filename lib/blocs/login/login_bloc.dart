@@ -1,10 +1,10 @@
 
 
 import 'package:bloc/bloc.dart';
-import 'package:flight_info_app/blocs/login/login_submission_state.dart';
-import 'package:flight_info_app/models/api_state.dart';
-import 'package:flight_info_app/repos/auth_repository.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
+import 'package:aai_chennai/blocs/login/login_submission_state.dart';
+import 'package:aai_chennai/models/api_state.dart';
+import 'package:aai_chennai/repos/auth_repository.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

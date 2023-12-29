@@ -1,11 +1,11 @@
-import 'package:flight_info_app/components/app_buttons.dart';
-import 'package:flight_info_app/components/dialogs.dart';
-import 'package:flight_info_app/components/footter.dart';
-import 'package:flight_info_app/components/header.dart';
-import 'package:flight_info_app/main.dart';
-import 'package:flight_info_app/models/lane.dart';
-import 'package:flight_info_app/screens/login_screen.dart';
-import 'package:flight_info_app/utils/themes.dart';
+import 'package:aai_chennai/components/app_buttons.dart';
+import 'package:aai_chennai/components/dialogs.dart';
+import 'package:aai_chennai/components/footter.dart';
+import 'package:aai_chennai/components/header.dart';
+import 'package:aai_chennai/main.dart';
+import 'package:aai_chennai/models/lane.dart';
+import 'package:aai_chennai/screens/login_screen.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

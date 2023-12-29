@@ -1,11 +1,11 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:flight_info_app/models/api_state.dart';
-import 'package:flight_info_app/models/flight_list.dart';
-import 'package:flight_info_app/models/pxt_list.dart';
-import 'package:flight_info_app/repos/flight_boarding.dart';
-import 'package:flight_info_app/services/socket_client.dart';
-import 'package:flight_info_app/utils/strings.dart';
+import 'package:aai_chennai/models/api_state.dart';
+import 'package:aai_chennai/models/flight_list.dart';
+import 'package:aai_chennai/models/pxt_list.dart';
+import 'package:aai_chennai/repos/flight_boarding.dart';
+import 'package:aai_chennai/services/socket_client.dart';
+import 'package:aai_chennai/utils/strings.dart';
 
 part 'flight_boarding_event.dart';
 part 'flight_boarding_state.dart';

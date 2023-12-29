@@ -1,5 +1,5 @@
-import 'package:flight_info_app/components/date_widget.dart';
-import 'package:flight_info_app/components/logo.dart';
+import 'package:aai_chennai/components/date_widget.dart';
+import 'package:aai_chennai/components/logo.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {

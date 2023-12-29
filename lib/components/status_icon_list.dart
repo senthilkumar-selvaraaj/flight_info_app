@@ -1,9 +1,9 @@
-import 'package:flight_info_app/components/status_icon.dart';
-import 'package:flight_info_app/main.dart';
-import 'package:flight_info_app/models/user_model.dart';
-import 'package:flight_info_app/services/socket_notifier.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
-import 'package:flight_info_app/utils/themes.dart';
+import 'package:aai_chennai/components/status_icon.dart';
+import 'package:aai_chennai/main.dart';
+import 'package:aai_chennai/models/user_model.dart';
+import 'package:aai_chennai/services/socket_notifier.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

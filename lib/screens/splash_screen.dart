@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flight_info_app/screens/dashboard_screen.dart';
-import 'package:flight_info_app/screens/login_screen.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
+import 'package:aai_chennai/screens/dashboard_screen.dart';
+import 'package:aai_chennai/screens/login_screen.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="flight_info_app"
+        android:label="aai_chennai"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

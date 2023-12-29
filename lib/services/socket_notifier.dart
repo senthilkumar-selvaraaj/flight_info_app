@@ -1,5 +1,5 @@
 
-import 'package:flight_info_app/services/socket_client.dart';
+import 'package:aai_chennai/services/socket_client.dart';
 import 'package:flutter/material.dart';
 
 class SocketStatusNotifier with ChangeNotifier {

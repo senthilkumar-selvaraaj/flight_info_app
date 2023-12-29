@@ -1,5 +1,5 @@
-import 'package:flight_info_app/utils/global_storage.dart';
-import 'package:flight_info_app/utils/themes.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

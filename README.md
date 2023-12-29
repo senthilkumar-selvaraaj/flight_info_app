@@ -1,4 +1,4 @@
-# flight_info_app
+# aai_chennai
 
 A new Flutter project.
 

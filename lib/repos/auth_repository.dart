@@ -1,7 +1,7 @@
 
-import 'package:flight_info_app/models/user_model.dart';
-import 'package:flight_info_app/services/api_service.dart';
-import 'package:flight_info_app/utils/global_storage.dart';
+import 'package:aai_chennai/models/user_model.dart';
+import 'package:aai_chennai/services/api_service.dart';
+import 'package:aai_chennai/utils/global_storage.dart';
 
 class AuthRepositary {
   Future<void> login(Map<String, String> body) async {
