@@ -55,7 +55,7 @@ class Pax {
   String? status;
 
  String getBoardingMessage(){
-  return '$seqNo/$seatNo/$pnr';
+  return '$seqNo/$seatNo/$pnr/JGJgjgjgjgjgjgjggvfytftdfvtfttftfytfvyt';
  }
 
   Pax(

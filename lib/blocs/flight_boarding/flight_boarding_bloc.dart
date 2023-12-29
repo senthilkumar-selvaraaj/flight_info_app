@@ -1,10 +1,12 @@
-
+import 'package:aai_chennai/utils/strings.dart';
+import 'package:aai_chennai/utils/themes.dart';
 import 'package:bloc/bloc.dart';
 import 'package:aai_chennai/models/api_state.dart';
 import 'package:aai_chennai/models/flight_list.dart';
 import 'package:aai_chennai/models/pxt_list.dart';
 import 'package:aai_chennai/repos/flight_boarding.dart';
 import 'package:aai_chennai/services/socket_client.dart';
+import 'package:flutter/material.dart';
 
 part 'flight_boarding_event.dart';
 part 'flight_boarding_state.dart';
@@ -25,29 +27,35 @@ class FlightBoardingBloc
     on<UpdateLaneBoardingInfo>(updateLaneBoardingInfo);
   }
 
-void listenCCOK(
+  void listenCCOK(
       ListenCCOKEvent event, Emitter<FlightBoardingState> emit) async {
-       
-        SocketClient().listenBoardingEvent((p0) {
-          List<String> query = p0.split("\u0002CCOK\u0003");
-      if (query.length > 1) {
-         print("CCCC===> ${query}" );
-        List<String> fields = query[1].split("\n");
-        if (fields.length > 3) {
-          Map<String, Pax>? laneBoardingInfo = state.laneBoardingInfo;
-          laneBoardingInfo ??= {};
-          laneBoardingInfo[fields[3].replaceAll(' ', '')] = Pax(
-                  seqNo: fields[0].replaceAll(' ', ''),
-                  seatNo: fields[1].replaceAll(' ', ''),
-                  pnr: fields[2].replaceAll(' ', ''));
+    SocketClient().listenBoardingEvent((p0, p1) {
+      if (p1.isNotEmpty) {
+        if (p0 == cCOKStatus) {
+          List<String> fields = p1.split("\n");
+          if (fields.length > 4) {
+            Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
+            laneBoardingInfo ??= {};
+            laneBoardingInfo[fields[4].replaceAll(' ', '')] = BoardingStatus(p0, Pax(
+                seqNo: fields[0].replaceAll(' ', ''),
+                seatNo: fields[1].replaceAll(' ', ''),
+                pnr: fields[2].replaceAll(' ', ''),
+                name: fields[3].replaceAll(' ', '')));
+            add(UpdateLaneBoardingInfo(laneBoardingInfo));
+          }
+        } 
+        else if(p0 == cEOKStatus) {
+           Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
+            laneBoardingInfo ??= {};
+            laneBoardingInfo[p1.split('\n')[0].split('\n')[0]] = BoardingStatus(p0, null);
             add(UpdateLaneBoardingInfo(laneBoardingInfo));
         }
       }
-          add(const FetchPaxListEvent());
-      });
+      add(const FetchPaxListEvent());
+    });
   }
 
-   void updateLaneBoardingInfo(
+  void updateLaneBoardingInfo(
       UpdateLaneBoardingInfo event, Emitter<FlightBoardingState> emit) async {
     emit(state.copyWith(laneBoardingInfo: event.laneBoardingInfo));
   }
@@ -75,11 +83,12 @@ void listenCCOK(
     try {
       final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
       Pax? pax = state.pax;
-      if(pax != null){
-       final index = paxResult.data?.indexWhere((element) => pax?.seqNo == element.seqNo);
-       if(index != null && index != -1){
-        pax = paxResult.data?[index];
-       }
+      if (pax != null) {
+        final index = paxResult.data
+            ?.indexWhere((element) => pax?.seqNo == element.seqNo);
+        if (index != null && index != -1) {
+          pax = paxResult.data?[index];
+        }
       }
       emit(state.copyWith(
           paxes: paxResult.data ?? [],
@@ -189,4 +198,67 @@ void listenCCOK(
       emit(state.copyWith(paxes: paxes));
     }
   }
+}
+
+class BoardingStatus {
+  //CCTG, CCWW, CCDF
+  final String command;
+  final Pax? pax;
+  BoardingStatus(this.command, this.pax);
+
+
+String getName(){
+     return pax?.name ?? '';
+  }
+  String getStatusMessage(){
+      if(command == cCOKStatus){
+        return pax?.getBoardingMessage() ?? '';
+      }
+      else if(command == cEOKStatus){
+        return "Invalid boarding pass";
+      }
+
+      return "";
+  }
+  
+  String getStatusTitle(){
+      if(command == cCOKStatus){
+        return 'Boarderd';
+      }
+      else if(command == cEOKStatus){
+        return "Invalid";
+      }
+      return "";
+  }
+
+  Color getColor(AppTheme them){
+    if(command == cCOKStatus){
+        return them.laneBoardingTitleColor;
+      }
+      else if(command == cEOKStatus){
+        return Colors.red;
+      }
+       return them.laneBoardingTitleColor;
+  }
+
+   Color getStatusColor(AppTheme them){
+    if(command == cCOKStatus){
+        return them.laneBoardingValueColor;
+      }
+      else if(command == cEOKStatus){
+        return Colors.red;
+      }
+       return them.laneBoardingValueColor;
+  }
+
+  Color getBorderColor(AppTheme them){
+    if(command == cCOKStatus){
+        return them.laneBorderColor;
+      }
+      else if(command == cEOKStatus){
+        return Colors.red;
+      }
+       return them.laneBoardingTitleColor;
+  }
+
 }

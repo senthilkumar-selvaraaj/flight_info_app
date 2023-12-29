@@ -45,7 +45,7 @@ class ListenCCOKEvent extends FlightBoardingEvent{
 }
 
 class UpdateLaneBoardingInfo extends FlightBoardingEvent{
- final Map<String, Pax> laneBoardingInfo;
+ final Map<String, BoardingStatus> laneBoardingInfo;
   const UpdateLaneBoardingInfo(this.laneBoardingInfo);
 }
 

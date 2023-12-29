@@ -17,7 +17,7 @@ class SocketClient {
   List<Lane> lanes = database.store.box<Lane>().getAll();
   Function(String)? boardingStartCallback;
   Function(String)? boardingEndCallback;
-  Function(String)? boardingCallback;
+  Function(String, String)? boardingCallback;
 
   bool get isConnected => _isConnected;
 
@@ -33,7 +33,8 @@ class SocketClient {
       try {
         //Local IP 192.168.1.11
         // Remote IP  3.111.72.224
-        _socket = await Socket.connect('192.168.1.11', 2100,
+        // 62638e4b0e43012248aab387
+        _socket = await Socket.connect('3.111.72.224', 2100,
             timeout: const Duration(seconds: 10));
         _isConnected = true;
         print(
@@ -85,9 +86,16 @@ class SocketClient {
                     boardingEndCallback!(command);
                     boardingEndCallback = null;
                   }
-                case cCStatus:
+                case cCOKStatus:
+                  String data = serverResponse.split("\u0002CCOK\u0003")[1];
                   if (boardingCallback != null) {
-                    boardingCallback!(serverResponse);
+                    boardingCallback!(command, data);
+                  }
+                  break;
+                  case cEOKStatus:
+                   String data = serverResponse.split("\u0002CEOK\u0003")[1];
+                  if (boardingCallback != null) {
+                    boardingCallback!(command, data);
                   }
                   break;
                 default:
@@ -169,7 +177,7 @@ class SocketClient {
     _socket?.writeln("\u0002BE\u0003\n");
   }
 
-  void listenBoardingEvent(Function(String) onCallback) {
+  void listenBoardingEvent(Function(String, String) onCallback) {
     boardingCallback = onCallback;
   }
 

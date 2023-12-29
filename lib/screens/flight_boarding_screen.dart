@@ -1,4 +1,3 @@
-
 import 'package:aai_chennai/blocs/flight_boarding/flight_boarding_bloc.dart';
 import 'package:aai_chennai/components/app_buttons.dart';
 import 'package:aai_chennai/components/app_text_field.dart';
@@ -207,24 +206,30 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           ),
                                           Expanded(
                                               child: (state.paxListFetchingState
-                                                                  .state !=
-                                                              APIRequestState
-                                                                  .loading &&
-                                                          (state.paxResult?.data
-                                                                  ?.isEmpty ??
-                                                              true))
-                                                      ? const NoDataView()
-                                                      : Stack(
-                                                          children: [
-                                                            getPaxList(
-                                                                state.paxes,
-                                                                theme),
-                                                            Visibility(
-                                                              visible: state.showLoader(),
-                                                              child: Center(
-                                                                child: Container(height: 50, width: 50, child:  CircularProgressIndicator(color: theme.flightBRDTextColor,)))),
-                                                          ],
-                                                        )),
+                                                              .state !=
+                                                          APIRequestState
+                                                              .loading &&
+                                                      (state.paxResult?.data
+                                                              ?.isEmpty ??
+                                                          true))
+                                                  ? const NoDataView()
+                                                  : Stack(
+                                                      children: [
+                                                        getPaxList(
+                                                            state.paxes, theme),
+                                                        Visibility(
+                                                            visible: state
+                                                                .showLoader(),
+                                                            child: Center(
+                                                                child: Container(
+                                                                    height: 50,
+                                                                    width: 50,
+                                                                    child: CircularProgressIndicator(
+                                                                      color: theme
+                                                                          .flightBRDTextColor,
+                                                                    )))),
+                                                      ],
+                                                    )),
                                           Visibility(
                                               visible: BlocProvider.of<
                                                               FlightBoardingBloc>(
@@ -319,7 +324,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                   //         ?.data
                                                                   //         ?.isNotEmpty ??
                                                                   //     false),
-                                                                  visible: false,
+                                                                  visible:
+                                                                      false,
                                                                   child:
                                                                       Padding(
                                                                     padding: const EdgeInsets
@@ -344,7 +350,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                   // visible: state
                                                                   //         .pax !=
                                                                   //     null,
-                                                                  visible: false,
+                                                                  visible:
+                                                                      false,
                                                                   child: BorderedActionButton(
                                                                       title:
                                                                           'Print ATB',
@@ -510,17 +517,16 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
 
                       Dialogs.showAlertDialog(
                           context, DialogType.endBoarding, theme, () {}, () {
-                       
                         SocketClient().endBoardingCommand((p0) async {
                           if (p0 == beOK) {
                           } else {
                             if (context.mounted) {
-                             // AppSnackBar.show(context, "Gate not ready");
+                              // AppSnackBar.show(context, "Gate not ready");
                             }
                           }
                         });
-                         BlocProvider.of<FlightBoardingBloc>(context)
-                                .add(const EndBoardingEvent());
+                        BlocProvider.of<FlightBoardingBloc>(context)
+                            .add(const EndBoardingEvent());
                       });
                     },
                   )
@@ -542,8 +548,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                 child: Container(
                                   height: 120,
                                   decoration: getLaneShadowShape(
-                                       BlocProvider.of<FlightBoardingBloc>(context).state.laneBoardingInfo?[lanes[index].deviceId] != null,
                                       theme,
+                                      BlocProvider.of<FlightBoardingBloc>(
+                                                      context)
+                                                  .state
+                                                  .laneBoardingInfo?[
+                                              lanes[index].deviceId]?.getBorderColor(theme) ?? Colors.transparent,
                                       context),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -557,28 +567,42 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        Text(
-                                          lanes[index].name ?? '',
-                                          style: TextStyle(
-                                            color: theme.laneTitleColor,
-                                            fontSize: 16,
+                                        SizedBox(
+                                          width: 200,
+                                          height: 25,
+                                          child: Text(
+                                            lanes[index].name ?? '',
+                                            style: TextStyle(
+                                              color: theme.laneTitleColor,
+                                              fontSize: 16,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        Expanded(
-                                            child:  BlocProvider.of<FlightBoardingBloc>(context)
-                                .state.laneBoardingInfo?[lanes[index].deviceId] != null
-                                                ? Column(
+                                        Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text("Boarded",
+                                                      Text( BlocProvider.of<
+                                                                FlightBoardingBloc>(
+                                                            context)
+                                                        .state
+                                                        .laneBoardingInfo?[lanes[
+                                                            index]
+                                                        .deviceId]?.getStatusTitle() ?? '',
                                                           style: TextStyle(
-                                                              color: theme
-                                                                  .laneBoardingTitleColor,
+                                                              color:  BlocProvider.of<
+                                                                FlightBoardingBloc>(
+                                                            context)
+                                                        .state
+                                                        .laneBoardingInfo?[lanes[
+                                                            index]
+                                                        .deviceId]?.getColor(theme),
                                                               fontSize: 16,
                                                               fontWeight:
                                                                   FontWeight
@@ -586,19 +610,34 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                       const SizedBox(
                                                         height: 1,
                                                       ),
-                                                      Text(
-                                                           BlocProvider.of<FlightBoardingBloc>(context)
-                                .state.laneBoardingInfo?[lanes[index].deviceId]?.getBoardingMessage() ?? ''
-                                                                  
-                                                              ,
+                                                      Tooltip(
+                                                        preferBelow: false,
+                                                        message: BlocProvider.of<FlightBoardingBloc>(
+                                                                      context)
+                                                                  .state
+                                                                  .laneBoardingInfo?[
+                                                                      lanes[index]
+                                                                          .deviceId]
+                                                                  ?.getName() ??'',
+                                                        child: Text(
+                                                          BlocProvider.of<FlightBoardingBloc>(
+                                                                      context)
+                                                                  .state
+                                                                  .laneBoardingInfo?[
+                                                                      lanes[index]
+                                                                          .deviceId]
+                                                                  ?.getStatusMessage() ??'',
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
                                                           style: TextStyle(
                                                             color: theme
                                                                 .laneBoardingValueColor,
                                                             fontSize: 16,
-                                                          ))
+                                                          )),)
                                                     ],
                                                   )
-                                                : const SizedBox())
+                                               
                                       ],
                                     ),
                                   ),
@@ -713,21 +752,16 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     );
   }
 
-  ShapeDecoration getLaneShadowShape(
-      bool isSelected, AppTheme theme, BuildContext context) {
+  ShapeDecoration getLaneShadowShape(AppTheme theme, Color borderColor, BuildContext context) {
     return ShapeDecoration(
       color: theme.flightInfoCardBgColor,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-            color: (!Provider.of<ThemeNotifier>(context).isDark && isSelected)
-                ? AppColors.primaryBlue
-                : Colors.transparent,
+            color: borderColor,
             width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
-      shadows: Provider.of<ThemeNotifier>(context).isDark
-          ? []
-          : const [
+      shadows:  const [
               BoxShadow(
                 color: Color(0x071A212B),
                 blurRadius: 6,

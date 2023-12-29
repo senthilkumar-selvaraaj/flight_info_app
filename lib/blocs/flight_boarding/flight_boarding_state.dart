@@ -10,7 +10,7 @@ class FlightBoardingState {
   final PaxOnBoardingState paxOnBoardingState;
   final PaxDeBoardingState paxDeBoardingState;
   final EndBoardingState endBoardingState;
-  final Map<String, Pax>? laneBoardingInfo;
+  final Map<String, BoardingStatus>? laneBoardingInfo;
   
   bool showLoader(){
     return paxOnBoardingState.state == APIRequestState.loading || paxDeBoardingState.state == APIRequestState.loading;
@@ -55,7 +55,7 @@ class FlightBoardingState {
 
   FlightBoardingState copyWith(
       {
-      Map<String, Pax>? laneBoardingInfo,
+      Map<String, BoardingStatus>? laneBoardingInfo,
       List<Pax>? paxes,
       Flight? flight,
       Pax? pax,

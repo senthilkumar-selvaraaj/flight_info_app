@@ -1,6 +1,5 @@
 import 'package:aai_chennai/components/status_icon.dart';
 import 'package:aai_chennai/main.dart';
-import 'package:aai_chennai/models/user_model.dart';
 import 'package:aai_chennai/services/socket_notifier.dart';
 import 'package:aai_chennai/utils/global_storage.dart';
 import 'package:aai_chennai/utils/themes.dart';
@@ -17,7 +16,6 @@ class StatusList extends StatefulWidget {
 class _StatusListState extends State<StatusList> {
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;
     return Row(children:  [
         StatusIcon(icon: Icons.contrast, showBadge: false, toolTipMessage: "Switch to ${Provider.of<ThemeNotifier>(context).isDark ? "Light" : "Dark"} Mode"),
         Global.storage.hasUserLogined ?  const StatusIcon(icon: Icons.flight,  toolTipMessage: "Airline DCS", showBadge: true, badgeColor: Colors.green,) : const SizedBox(),
