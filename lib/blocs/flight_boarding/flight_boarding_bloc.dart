@@ -44,7 +44,7 @@ class FlightBoardingBloc
             add(UpdateLaneBoardingInfo(laneBoardingInfo));
           }
         } 
-        else if(p0 == cEOKStatus) {
+        else if(p0 == cEOKStatus || p0 == cCTGStatus || p0 == cCWWStatus || p0 == cCDFStatus) {
            Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
             laneBoardingInfo ??= {};
             laneBoardingInfo[p1.split('\n')[0].split('\n')[0]] = BoardingStatus(p0, null);
@@ -217,6 +217,15 @@ String getName(){
       else if(command == cEOKStatus){
         return "Invalid boarding pass";
       }
+      else if(command == cCTGStatus){
+        return "Tailgating detected";
+      }
+      else if(command == cCWWStatus){
+        return "Wrong way detected";
+      }
+      else if(command == cCDFStatus){
+        return "Forced entry detected";
+      }
 
       return "";
   }
@@ -228,6 +237,15 @@ String getName(){
       else if(command == cEOKStatus){
         return "Invalid";
       }
+      else if(command == cCTGStatus){
+        return "Tailgate";
+      }
+      else if(command == cCWWStatus){
+        return "Wrong Way";
+      }
+      else if(command == cCDFStatus){
+        return "Forced Door";
+      }
       return "";
   }
 
@@ -235,10 +253,9 @@ String getName(){
     if(command == cCOKStatus){
         return them.laneBoardingTitleColor;
       }
-      else if(command == cEOKStatus){
+      else {
         return Colors.red;
       }
-       return them.laneBoardingTitleColor;
   }
 
    Color getStatusColor(AppTheme them){
@@ -253,12 +270,11 @@ String getName(){
 
   Color getBorderColor(AppTheme them){
     if(command == cCOKStatus){
-        return them.laneBorderColor;
+        return  AppColors.primaryBlue;
       }
-      else if(command == cEOKStatus){
+      else {
         return Colors.red;
       }
-       return them.laneBoardingTitleColor;
   }
 
 }

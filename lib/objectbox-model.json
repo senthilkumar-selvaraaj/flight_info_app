@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8816337786540704565",
-      "lastPropertyId": "3:5287844208848066780",
+      "lastPropertyId": "4:2095182193867418058",
       "name": "Lane",
       "properties": [
         {
@@ -22,6 +22,11 @@
         {
           "id": "3:5287844208848066780",
           "name": "deviceId",
+          "type": 9
+        },
+        {
+          "id": "4:2095182193867418058",
+          "name": "terminal",
           "type": 9
         }
       ],

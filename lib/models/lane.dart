@@ -7,5 +7,6 @@ class Lane {
   int id = 0;
   String? name;
   String? deviceId;
+  String? terminal;
 }
 

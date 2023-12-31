@@ -21,6 +21,7 @@ class LaneView extends StatefulWidget {
 class _LaneViewState extends State<LaneView> {
   TextEditingController nameTextController = TextEditingController();
   TextEditingController deviceIDController = TextEditingController();
+  TextEditingController terminalController = TextEditingController();
   bool showErrorView = false;
   String errorMEssage = "";
   @override
@@ -47,7 +48,7 @@ class _LaneViewState extends State<LaneView> {
           height: 30,
         ),
         Container(
-          height: 140,
+          height: 210,
           width: double.infinity,
           decoration:
               BoxDecoration(border: Border.all(color: theme.laneBorderColor)),
@@ -65,6 +66,13 @@ class _LaneViewState extends State<LaneView> {
                 ),
               ),
               Expanded(child: getDeviceIDTextField()),
+              SizedBox(
+                height: 2,
+                child: Divider(
+                  color: theme.laneBorderColor,
+                ),
+              ),
+              Expanded(child: getTerminalTextField()),
             ],
           ),
         ),
@@ -115,6 +123,7 @@ class _LaneViewState extends State<LaneView> {
                   final lane = Lane();
                   lane.name = nameTextController.text;
                   lane.deviceId = deviceIDController.text;
+                  lane.terminal = terminalController.text;
                   laneBox.put(lane);
                   allLanes = LaneService.getLanes();
                   widget.didNewLaneAdded();
@@ -158,7 +167,6 @@ class _LaneViewState extends State<LaneView> {
           const SizedBox(
             height: 15,
           ),
-          // textFieldLabel('Password'),
           AppTextField(
             controller: deviceIDController,
             label: "Device ID",
@@ -174,6 +182,28 @@ class _LaneViewState extends State<LaneView> {
       ),
     );
   }
+
+  Widget getTerminalTextField() {
+    return Container(
+      height: 80,
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          AppTextField(
+            controller: terminalController,
+            label: "Terminal",
+            onChanged: (p0) {
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget textFieldLabel(String text) {
     AppTheme theme = Provider.of<ThemeNotifier>(context).currentTheme;

@@ -21,7 +21,7 @@ class SocketClient {
 
   bool get isConnected => _isConnected;
 
- String startBaordingCommand = "";
+  String startBaordingCommand = "";
 
   factory SocketClient() {
     return _instance;
@@ -30,120 +30,153 @@ class SocketClient {
   SocketClient._internal();
 
   Future<void> connect() async {
-      try {
-        //Local IP 192.168.1.11
-        // Remote IP  3.111.72.224
-        // 62638e4b0e43012248aab387
-        _socket = await Socket.connect('3.111.72.224', 2100,
-            timeout: const Duration(seconds: 10));
-        _isConnected = true;
-        print(
-            'Connected to: ${_socket?.remoteAddress.address}:${_socket?.remotePort}');
-        Provider.of<SocketStatusNotifier>(context!, listen: false)
-            .setConnectionState(SocketStatus.connected);
+    try {
+      //Local IP 192.168.1.11
+      // Remote IP  3.111.72.224
+      // 62638e4b0e43012248aab387
+      /*
+        [5:33 pm, 29/12/2023] Anandh Syzygy: CCTG, CCWW, CCDF
+[5:36 pm, 29/12/2023] Anandh Syzygy: CCTG:  Tailgating
+CCWW:  Wrong Way
+CCDF:  Forced Door
+[9:56 pm, 29/12/2023] Anandh Syzygy: Wrong Way
 
-        sendLaneCommand();
+Wrong way detected
+[9:57 pm, 29/12/2023] Anandh Syzygy: Forced Door
 
-        _socket?.listen(
-          (List<int> data) {
-            String serverResponse = String.fromCharCodes(data);
-            print('LISTEN : $serverResponse');
-            if (serverResponse.contains('\u0002') &&
-                serverResponse.contains('\u0003')) {
-              String command =
-                  serverResponse.split('\u0002')[1].split('\u0003')[0];
+Forced entry detected
+[9:57 pm, 29/12/2023] Anandh Syzygy: Tailgate
 
-              switch (command) {
-                case lnERR:
-                  Provider.of<SocketStatusNotifier>(context!, listen: false)
-                      .setConnectionState(SocketStatus.disconnected);
-                  if (boardingStartCallback != null) {
-                    boardingStartCallback!(command);
-                    boardingStartCallback = null;
-                  }
-                  if (boardingEndCallback != null) {
-                    boardingEndCallback!(command);
-                    boardingEndCallback = null;
-                  }
-                  break;
-                case lnOK:
-                  if(startBaordingCommand != ''){
-                    print("BS COMMAND ==>");
-                    restartBoardingCommand();
-                  }
-                  Provider.of<SocketStatusNotifier>(context!, listen: false)
-                      .setConnectionState(SocketStatus.connected);
-                  break;
-                case bsERR:
-                case bsOK:
-                  if (boardingStartCallback != null) {
-                    boardingStartCallback!(command);
-                    boardingStartCallback = null;
-                  }
-                case beERR:
-                case beOK:
-                  if (boardingEndCallback != null) {
-                    boardingEndCallback!(command);
-                    boardingEndCallback = null;
-                  }
-                case cCOKStatus:
-                  String data = serverResponse.split("\u0002CCOK\u0003")[1];
-                  if (boardingCallback != null) {
-                    boardingCallback!(command, data);
-                  }
-                  break;
-                  case cEOKStatus:
-                   String data = serverResponse.split("\u0002CEOK\u0003")[1];
-                  if (boardingCallback != null) {
-                    boardingCallback!(command, data);
-                  }
-                  break;
-                default:
-              }
+Tailgating detected
+        */
+      _socket = await Socket.connect('3.111.72.224', 2100,
+          timeout: const Duration(seconds: 10));
+      _isConnected = true;
+      print(
+          'Connected to: ${_socket?.remoteAddress.address}:${_socket?.remotePort}');
+      Provider.of<SocketStatusNotifier>(context!, listen: false)
+          .setConnectionState(SocketStatus.connected);
 
-              switch (command) {
-                case lnERR:
-                case bsERR:
-                case beERR:
+      sendLaneCommand();
+
+      _socket?.listen(
+        (List<int> data) {
+          String serverResponse = String.fromCharCodes(data);
+          print('LISTEN : $serverResponse');
+          if (serverResponse.contains('\u0002') &&
+              serverResponse.contains('\u0003')) {
+            String command =
+                serverResponse.split('\u0002')[1].split('\u0003')[0];
+
+            switch (command) {
+              case lnERR:
                 Provider.of<SocketStatusNotifier>(context!, listen: false)
-                      .setConnectionState(SocketStatus.disconnected);
-                      break;
-                default:
+                    .setConnectionState(SocketStatus.disconnected);
+                if (boardingStartCallback != null) {
+                  boardingStartCallback!(command);
+                  boardingStartCallback = null;
+                }
+                if (boardingEndCallback != null) {
+                  boardingEndCallback!(command);
+                  boardingEndCallback = null;
+                }
                 break;
-              }
-
-            } else {
-              print('STX or ETX markers not found in data: $serverResponse');
+              case lnOK:
+                if (startBaordingCommand != '') {
+                  print("BS COMMAND ==>");
+                  restartBoardingCommand();
+                }
+                Provider.of<SocketStatusNotifier>(context!, listen: false)
+                    .setConnectionState(SocketStatus.connected);
+                break;
+              case bsERR:
+              case bsOK:
+                if (boardingStartCallback != null) {
+                  boardingStartCallback!(command);
+                  boardingStartCallback = null;
+                }
+              case beERR:
+              case beOK:
+                if (boardingEndCallback != null) {
+                  boardingEndCallback!(command);
+                  boardingEndCallback = null;
+                }
+              case cCOKStatus:
+                String data = serverResponse.split("\u0002CCOK\u0003")[1];
+                if (boardingCallback != null) {
+                  boardingCallback!(command, data);
+                }
+                break;
+              case cEOKStatus:
+              String data = serverResponse.split("\u0002CEOK\u0003")[1];
+                if (boardingCallback != null) {
+                  boardingCallback!(command, data);
+                }
+                break;
+              case cCTGStatus:
+              String data = serverResponse.split("\u0002CCTG\u0003")[1];
+                if (boardingCallback != null) {
+                  boardingCallback!(command, data);
+                }
+                break;
+              case cCWWStatus:
+              String data = serverResponse.split("\u0002CCWW\u0003")[1];
+                if (boardingCallback != null) {
+                  boardingCallback!(command, data);
+                }
+                break;
+              case cCDFStatus:
+                String data = serverResponse.split("\u0002CCDF\u0003")[1];
+                if (boardingCallback != null) {
+                  boardingCallback!(command, data);
+                }
+                break;
+              default:
+                break;
             }
-          },
-          onDone: () {
-            print('Socket closed');
-            Provider.of<SocketStatusNotifier>(context!, listen: false)
-                .setConnectionState(SocketStatus.disconnected);
-            _socket?.destroy();
-            _isConnected = false; 
-            _retryConnection();// Set the flag for reconnection
-          },
-          onError: (error) {
-            print('Error: $error');
-            Provider.of<SocketStatusNotifier>(context!, listen: false)
-                .setConnectionState(SocketStatus.error);
-            _socket?.destroy();
-            _isConnected = false; 
-            _retryConnection();
-          },
-          cancelOnError: true,
-        );
 
-        // Wait for 5 seconds before attempting reconnection
-        await Future.delayed(const Duration(seconds: 5));
-      } catch (e) {
-        print('Error connecting to the server: $e');
-        Provider.of<SocketStatusNotifier>(context!, listen: false)
-            .setConnectionState(SocketStatus.error);
-        _isConnected = false; 
-        _retryConnection();
-      }
+            switch (command) {
+              case lnERR:
+              case bsERR:
+              case beERR:
+                Provider.of<SocketStatusNotifier>(context!, listen: false)
+                    .setConnectionState(SocketStatus.disconnected);
+                break;
+              default:
+                break;
+            }
+          } else {
+            print('STX or ETX markers not found in data: $serverResponse');
+          }
+        },
+        onDone: () {
+          print('Socket closed');
+          Provider.of<SocketStatusNotifier>(context!, listen: false)
+              .setConnectionState(SocketStatus.disconnected);
+          _socket?.destroy();
+          _isConnected = false;
+          _retryConnection(); // Set the flag for reconnection
+        },
+        onError: (error) {
+          print('Error: $error');
+          Provider.of<SocketStatusNotifier>(context!, listen: false)
+              .setConnectionState(SocketStatus.error);
+          _socket?.destroy();
+          _isConnected = false;
+          _retryConnection();
+        },
+        cancelOnError: true,
+      );
+
+      // Wait for 5 seconds before attempting reconnection
+      await Future.delayed(const Duration(seconds: 5));
+    } catch (e) {
+      print('Error connecting to the server: $e');
+      Provider.of<SocketStatusNotifier>(context!, listen: false)
+          .setConnectionState(SocketStatus.error);
+      _isConnected = false;
+      _retryConnection();
+    }
   }
 
   void _retryConnection() {
@@ -155,25 +188,25 @@ class SocketClient {
     }
   }
 
-
   void sendLaneCommand() {
     String laneCommand = LaneService.getLaneCommand();
     _socket?.writeln("\u0002LN\u0003$laneCommand");
   }
-  
+
   void startBoardingCommand(String command, Function(String) onCallback) {
     boardingStartCallback = onCallback;
     startBaordingCommand = "\u0002BS\u0003$command";
     _socket?.writeln("\u0002BS\u0003$command");
   }
 
-  void restartBoardingCommand(){
+  void restartBoardingCommand() {
     _socket?.writeln(startBaordingCommand);
   }
 
   void endBoardingCommand(Function(String) onCallback) {
     startBaordingCommand = "";
     boardingEndCallback = onCallback;
+    boardingCallback = null;
     _socket?.writeln("\u0002BE\u0003\n");
   }
 
