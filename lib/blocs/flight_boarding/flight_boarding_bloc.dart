@@ -6,6 +6,7 @@ import 'package:aai_chennai/models/flight_list.dart';
 import 'package:aai_chennai/models/pxt_list.dart';
 import 'package:aai_chennai/repos/flight_boarding.dart';
 import 'package:aai_chennai/services/socket_client.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 
 part 'flight_boarding_event.dart';
@@ -25,6 +26,7 @@ class FlightBoardingBloc
     on<SearchtextChangedEvent>(onSearch);
     on<ListenCCOKEvent>(listenCCOK);
     on<UpdateLaneBoardingInfo>(updateLaneBoardingInfo);
+    on<ExportPaxList>(onExportPaxList);
   }
 
   void listenCCOK(
@@ -198,7 +200,38 @@ class FlightBoardingBloc
       emit(state.copyWith(paxes: paxes));
     }
   }
+
+  void onExportPaxList(
+      ExportPaxList event, Emitter<FlightBoardingState> emit) async {
+    emit(state.copyWith(
+        paxListExportState:
+            const PaxListExportState(APIRequestState.loading, null)));
+    try {
+      final r = await repo.paxListExport(state.getPaxListRequestJson());
+       dynamic response = r.bodyBytes;
+      if (response != null) {
+        final String fileName =
+            '${state.flight?.iataCode}${state.flight?.flightNo}-${DateTime.now().microsecondsSinceEpoch.toString()}.pdf';
+        await FileSaver.instance.saveFile(name: fileName, bytes: response,);
+      }
+        emit(state.copyWith(
+        paxListExportState:
+            const PaxListExportState(APIRequestState.success, null)));
+            emit(state.copyWith(
+        paxListExportState:
+            const PaxListExportState(APIRequestState.initial, null)));
+    } catch (e) {
+       emit(state.copyWith(
+        paxListExportState:
+             const PaxListExportState(APIRequestState.failure, null )));
+       emit(state.copyWith(
+        paxListExportState:
+            const PaxListExportState(APIRequestState.initial, null)));
+    }
+  }
 }
+
+
 
 class BoardingStatus {
   //CCTG, CCWW, CCDF

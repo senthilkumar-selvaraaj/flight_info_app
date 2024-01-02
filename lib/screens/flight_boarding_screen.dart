@@ -5,6 +5,7 @@ import 'package:aai_chennai/components/dialogs.dart';
 import 'package:aai_chennai/components/footter.dart';
 import 'package:aai_chennai/components/header.dart';
 import 'package:aai_chennai/components/no_data_placeholder.dart';
+import 'package:aai_chennai/components/snack_bar.dart';
 import 'package:aai_chennai/main.dart';
 import 'package:aai_chennai/models/api_state.dart';
 import 'package:aai_chennai/models/flight_list.dart';
@@ -61,6 +62,9 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
           listener: (context, state) {
             if (state.endBoardingState.state == APIRequestState.success) {
               Navigator.of(context).pop();
+            }
+            if(state.paxListExportState.state == APIRequestState.success){
+              AppSnackBar.show(context, "File downloaded successfully into downloads folder");
             }
           },
           child: Padding(
@@ -319,32 +323,38 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                     },
                                                                   )),
                                                               Visibility(
-                                                                  // visible: (state
-                                                                  //         .paxResult
-                                                                  //         ?.data
-                                                                  //         ?.isNotEmpty ??
-                                                                  //     false),
-                                                                  visible:
-                                                                      false,
+                                                                  visible: (state
+                                                                          .paxResult
+                                                                          ?.data
+                                                                          ?.isNotEmpty ??
+                                                                      true),
                                                                   child:
                                                                       Padding(
                                                                     padding: const EdgeInsets
                                                                         .only(
                                                                         right:
                                                                             15),
-                                                                    child: BorderedActionButton(
-                                                                        title: 'Print Manifest',
-                                                                        height: 42,
-                                                                        width: 150,
-                                                                        didTapped: () {
-                                                                          // doc.addPage(pw.Page(
-                                                                          //     pageFormat: PdfPageFormat.a4,
-                                                                          //     build: (pw.Context context) {
-                                                                          //       return pw.Center(
-                                                                          //         child: pw.Text('Hello World'),
-                                                                          //       ); // Center
-                                                                          //     }));
-                                                                        }),
+                                                                    child: BlocBuilder<
+                                                                        FlightBoardingBloc,
+                                                                        FlightBoardingState>(
+                                                                      builder:
+                                                                          (context,
+                                                                              state) {
+                                                                        return state.paxListExportState.state ==
+                                                                                APIRequestState.loading
+                                                                            ? Center(
+                                                                                child: CircularProgressIndicator(
+                                                                                color: theme.flightBRDTextColor,
+                                                                              ))
+                                                                            : BorderedActionButton(
+                                                                                title: 'Print Manifest',
+                                                                                height: 42,
+                                                                                width: 150,
+                                                                                didTapped: () {
+                                                                                  BlocProvider.of<FlightBoardingBloc>(context).add(const ExportPaxList());
+                                                                                });
+                                                                      },
+                                                                    ),
                                                                   )),
                                                               Visibility(
                                                                   // visible: state
@@ -550,10 +560,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                   decoration: getLaneShadowShape(
                                       theme,
                                       BlocProvider.of<FlightBoardingBloc>(
-                                                      context)
-                                                  .state
-                                                  .laneBoardingInfo?[
-                                              lanes[index].deviceId]?.getBorderColor(theme) ?? Colors.transparent,
+                                                  context)
+                                              .state
+                                              .laneBoardingInfo?[
+                                                  lanes[index].deviceId]
+                                              ?.getBorderColor(theme) ??
+                                          Colors.transparent,
                                       context),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -584,60 +596,63 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           height: 20,
                                         ),
                                         Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text( BlocProvider.of<
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                BlocProvider.of<FlightBoardingBloc>(
+                                                            context)
+                                                        .state
+                                                        .laneBoardingInfo?[
+                                                            lanes[index]
+                                                                .deviceId]
+                                                        ?.getStatusTitle() ??
+                                                    '',
+                                                style: TextStyle(
+                                                    color: BlocProvider.of<
                                                                 FlightBoardingBloc>(
                                                             context)
                                                         .state
-                                                        .laneBoardingInfo?[lanes[
-                                                            index]
-                                                        .deviceId]?.getStatusTitle() ?? '',
-                                                          style: TextStyle(
-                                                              color:  BlocProvider.of<
-                                                                FlightBoardingBloc>(
-                                                            context)
-                                                        .state
-                                                        .laneBoardingInfo?[lanes[
-                                                            index]
-                                                        .deviceId]?.getColor(theme),
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                      const SizedBox(
-                                                        height: 1,
-                                                      ),
-                                                      Tooltip(
-                                                        preferBelow: false,
-                                                        message: BlocProvider.of<FlightBoardingBloc>(
-                                                                      context)
-                                                                  .state
-                                                                  .laneBoardingInfo?[
-                                                                      lanes[index]
-                                                                          .deviceId]
-                                                                  ?.getName() ??'',
-                                                        child: Text(
-                                                          BlocProvider.of<FlightBoardingBloc>(
-                                                                      context)
-                                                                  .state
-                                                                  .laneBoardingInfo?[
-                                                                      lanes[index]
-                                                                          .deviceId]
-                                                                  ?.getStatusMessage() ??'',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                            color: theme
-                                                                .laneBoardingValueColor,
-                                                            fontSize: 16,
-                                                          )),)
-                                                    ],
-                                                  )
-                                               
+                                                        .laneBoardingInfo?[
+                                                            lanes[index]
+                                                                .deviceId]
+                                                        ?.getColor(theme),
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            const SizedBox(
+                                              height: 1,
+                                            ),
+                                            Tooltip(
+                                              preferBelow: false,
+                                              message: BlocProvider.of<
+                                                              FlightBoardingBloc>(
+                                                          context)
+                                                      .state
+                                                      .laneBoardingInfo?[
+                                                          lanes[index].deviceId]
+                                                      ?.getName() ??
+                                                  '',
+                                              child: Text(
+                                                  BlocProvider.of<FlightBoardingBloc>(
+                                                              context)
+                                                          .state
+                                                          .laneBoardingInfo?[
+                                                              lanes[index]
+                                                                  .deviceId]
+                                                          ?.getStatusMessage() ??
+                                                      '',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color: theme
+                                                        .laneBoardingValueColor,
+                                                    fontSize: 16,
+                                                  )),
+                                            )
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -752,29 +767,28 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
     );
   }
 
-  ShapeDecoration getLaneShadowShape(AppTheme theme, Color borderColor, BuildContext context) {
+  ShapeDecoration getLaneShadowShape(
+      AppTheme theme, Color borderColor, BuildContext context) {
     return ShapeDecoration(
       color: theme.flightInfoCardBgColor,
       shape: RoundedRectangleBorder(
-        side: BorderSide(
-            color: borderColor,
-            width: 2.0),
+        side: BorderSide(color: borderColor, width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
-      shadows:  const [
-              BoxShadow(
-                color: Color(0x071A212B),
-                blurRadius: 6,
-                offset: Offset(0, 4),
-                spreadRadius: -2,
-              ),
-              BoxShadow(
-                color: Color(0x141A212B),
-                blurRadius: 16,
-                offset: Offset(0, 12),
-                spreadRadius: -4,
-              )
-            ],
+      shadows: const [
+        BoxShadow(
+          color: Color(0x071A212B),
+          blurRadius: 6,
+          offset: Offset(0, 4),
+          spreadRadius: -2,
+        ),
+        BoxShadow(
+          color: Color(0x141A212B),
+          blurRadius: 16,
+          offset: Offset(0, 12),
+          spreadRadius: -4,
+        )
+      ],
     );
   }
 

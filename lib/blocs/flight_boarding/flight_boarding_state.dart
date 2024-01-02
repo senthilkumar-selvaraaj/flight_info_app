@@ -10,6 +10,7 @@ class FlightBoardingState {
   final PaxOnBoardingState paxOnBoardingState;
   final PaxDeBoardingState paxDeBoardingState;
   final EndBoardingState endBoardingState;
+  final PaxListExportState paxListExportState;
   final Map<String, BoardingStatus>? laneBoardingInfo;
   
   bool showLoader(){
@@ -51,6 +52,7 @@ class FlightBoardingState {
         const PaxDeBoardingState(APIRequestState.initial, null),
     this.endBoardingState =
         const EndBoardingState(APIRequestState.initial, null),
+        this.paxListExportState = const PaxListExportState(APIRequestState.initial, null)
   });
 
   FlightBoardingState copyWith(
@@ -64,18 +66,21 @@ class FlightBoardingState {
       PaxListFetchingState? paxListFetchingState,
       PaxOnBoardingState? paxOnBoardingState,
       PaxDeBoardingState? paxDeBoardingState,
-      EndBoardingState? endBoardingState}) {
+      EndBoardingState? endBoardingState,
+      PaxListExportState? paxListExportState}) {
     return FlightBoardingState(
         laneBoardingInfo: laneBoardingInfo ?? this.laneBoardingInfo,
         paxes: paxes ?? this.paxes,
-        flight: this.flight,
+        flight: flight ?? this.flight,
         pax: pax ?? this.pax,
         paxResult: paxResult ?? this.paxResult,
         sessionId: sessionId ?? this.sessionId,
         paxListFetchingState: paxListFetchingState ?? this.paxListFetchingState,
         paxDeBoardingState: paxDeBoardingState ?? this.paxDeBoardingState,
         paxOnBoardingState: paxOnBoardingState ?? this.paxOnBoardingState,
-        endBoardingState: endBoardingState ?? this.endBoardingState);
+        endBoardingState: endBoardingState ?? this.endBoardingState,
+        paxListExportState: paxListExportState ?? this.paxListExportState
+        );
   }
 
   Map<String, dynamic> getPaxListRequestJson() {
@@ -124,4 +129,8 @@ class PaxDeBoardingState extends RestAPIState {
 
 class EndBoardingState extends RestAPIState {
   const EndBoardingState(super.state, super.exception);
+}
+
+class PaxListExportState extends RestAPIState {
+  const PaxListExportState(super.state, super.exception);
 }

@@ -13,7 +13,8 @@ enum HttpRequest implements HttpBaseRequest {
   paxList,
   paxBoarding,
   paxDeboarding,
-  endBoarding;
+  endBoarding,
+  exportPaxList;
 
   @override
   String get url {
@@ -36,6 +37,8 @@ enum HttpRequest implements HttpBaseRequest {
         return '${APIConfig.basApiUrl}airline/deboard';
         case HttpRequest.endBoarding:
         return '${APIConfig.basApiUrl}airline/boarding/end';
+        case HttpRequest.exportPaxList:
+        return '${APIConfig.basApiUrl}airline/pax/list/export';
       default:
         return '';
     }
@@ -156,7 +159,9 @@ class HttpClient implements HttpService {
   Future<dynamic> send() async {
     try {
       var response = await makeRequest();
-      ;
+      if(response.headers["content-type"] == "application/pdf"){
+        return response;
+      }
       if (response.statusCode == 401){
       try {
           bool status = await renewToken();

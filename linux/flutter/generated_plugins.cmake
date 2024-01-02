@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  file_saver
   objectbox_flutter_libs
   printing
   screen_retriever

@@ -49,4 +49,8 @@ class UpdateLaneBoardingInfo extends FlightBoardingEvent{
   const UpdateLaneBoardingInfo(this.laneBoardingInfo);
 }
 
+class ExportPaxList extends FlightBoardingEvent {
+   const ExportPaxList();
+}
+
 
