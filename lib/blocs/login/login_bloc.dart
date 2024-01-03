@@ -1,5 +1,6 @@
 
 
+import 'package:aai_chennai/main.dart';
 import 'package:bloc/bloc.dart';
 import 'package:aai_chennai/blocs/login/login_submission_state.dart';
 import 'package:aai_chennai/models/api_state.dart';
@@ -39,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> _onLoginSubmitted(LoginSubmitted event, Emitter<LoginState> emit ) async{
       emit(state.copyWith(formStatus: FormSubmitting()));
       try{
+        print(state.loginRequestJson);
         await authRepo.login(state.loginRequestJson);
         emit(state.copyWith(formStatus: FormSubmissionSuccess()));
       }catch(e){

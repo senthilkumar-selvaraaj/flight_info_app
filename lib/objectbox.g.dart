@@ -39,11 +39,6 @@ final _entities = <ModelEntity>[
             id: const IdUid(3, 5287844208848066780),
             name: 'deviceId',
             type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 2095182193867418058),
-            name: 'terminal',
-            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -83,7 +78,7 @@ ModelDefinition getObjectBoxModel() {
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [2095182193867418058],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -104,14 +99,10 @@ ModelDefinition getObjectBoxModel() {
           final deviceIdOffset = object.deviceId == null
               ? null
               : fbb.writeString(object.deviceId!);
-          final terminalOffset = object.terminal == null
-              ? null
-              : fbb.writeString(object.terminal!);
           fbb.startTable(5);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, deviceIdOffset);
-          fbb.addOffset(3, terminalOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -124,9 +115,7 @@ ModelDefinition getObjectBoxModel() {
             ..name = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 6)
             ..deviceId = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 8)
-            ..terminal = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 10);
+                .vTableGetNullable(buffer, rootOffset, 8);
 
           return object;
         })
@@ -145,7 +134,4 @@ class Lane_ {
 
   /// see [Lane.deviceId]
   static final deviceId = QueryStringProperty<Lane>(_entities[0].properties[2]);
-
-  /// see [Lane.terminal]
-  static final terminal = QueryStringProperty<Lane>(_entities[0].properties[3]);
 }

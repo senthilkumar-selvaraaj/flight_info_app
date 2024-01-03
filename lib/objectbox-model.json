@@ -23,11 +23,6 @@
           "id": "3:5287844208848066780",
           "name": "deviceId",
           "type": 9
-        },
-        {
-          "id": "4:2095182193867418058",
-          "name": "terminal",
-          "type": 9
         }
       ],
       "relations": []
@@ -41,7 +36,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    2095182193867418058
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

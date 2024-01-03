@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:aai_chennai/models/pxt_list.dart';
 import 'package:aai_chennai/services/api_service.dart';
-import 'package:file_saver/file_saver.dart';
-import 'package:path_provider/path_provider.dart';
 
 class FlightBoardingRepository {
   Future<PaxList> getPaxList(Map<String, dynamic> body) async {

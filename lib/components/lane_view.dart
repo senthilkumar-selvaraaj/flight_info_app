@@ -48,7 +48,7 @@ class _LaneViewState extends State<LaneView> {
           height: 30,
         ),
         Container(
-          height: 210,
+          height: 140,
           width: double.infinity,
           decoration:
               BoxDecoration(border: Border.all(color: theme.laneBorderColor)),
@@ -66,13 +66,13 @@ class _LaneViewState extends State<LaneView> {
                 ),
               ),
               Expanded(child: getDeviceIDTextField()),
-              SizedBox(
-                height: 2,
-                child: Divider(
-                  color: theme.laneBorderColor,
-                ),
-              ),
-              Expanded(child: getTerminalTextField()),
+              // SizedBox(
+              //   height: 2,
+              //   child: Divider(
+              //     color: theme.laneBorderColor,
+              //   ),
+              // ),
+              // Expanded(child: getTerminalTextField()),
             ],
           ),
         ),
@@ -123,7 +123,7 @@ class _LaneViewState extends State<LaneView> {
                   final lane = Lane();
                   lane.name = nameTextController.text;
                   lane.deviceId = deviceIDController.text;
-                  lane.terminal = terminalController.text;
+                  // lane.terminal = terminalController.text;
                   laneBox.put(lane);
                   allLanes = LaneService.getLanes();
                   widget.didNewLaneAdded();

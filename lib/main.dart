@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Global.storage.load();
   database = await ObjectBox.create();
-  allLanes =  database.store.box<Lane>().getAll();
+  allLanes = database.store.box<Lane>().getAll();
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = const WindowOptions(
       minimumSize: Size(1270, 768),

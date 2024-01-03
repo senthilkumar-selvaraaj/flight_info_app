@@ -4,7 +4,7 @@ import 'package:aai_chennai/services/api_service.dart';
 import 'package:aai_chennai/utils/global_storage.dart';
 
 class AuthRepositary {
-  Future<void> login(Map<String, String> body) async {
+  Future<void> login(Map<String, dynamic> body) async {
     try {
       final response = await HttpClient(
           request: HttpRequest.login,

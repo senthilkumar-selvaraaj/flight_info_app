@@ -39,11 +39,12 @@ part of 'login_bloc.dart';
         );
    }
 
-  Map<String, String> get loginRequestJson{
+  Map<String, dynamic> get loginRequestJson{
     return {
         'agent_name': agentName,
         'username':userName,
-        'password':password
+        'password':password,
+        'gate_ref_id': allLanes.map((e) => e.deviceId).toList(),
     };
   }
 
