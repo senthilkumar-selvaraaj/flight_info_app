@@ -40,7 +40,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> _onLoginSubmitted(LoginSubmitted event, Emitter<LoginState> emit ) async{
       emit(state.copyWith(formStatus: FormSubmitting()));
       try{
-        print(state.loginRequestJson);
         await authRepo.login(state.loginRequestJson);
         emit(state.copyWith(formStatus: FormSubmissionSuccess()));
       }catch(e){
