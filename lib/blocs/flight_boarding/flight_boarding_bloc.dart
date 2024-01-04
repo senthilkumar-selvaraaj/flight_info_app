@@ -33,15 +33,11 @@ class FlightBoardingBloc
       ListenCCOKEvent event, Emitter<FlightBoardingState> emit) async {
     SocketClient().listenBoardingEvent((p0, p1) {
       if (p1.isNotEmpty) {
-        print("C");
         if (p0 == cCOKStatus) {
-          print("Co");
           List<String> fields = p1.split("\n");
           if (fields.length > 4) {
-            print("Com");
             Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
             laneBoardingInfo ??= {};
-            print(fields);
             laneBoardingInfo[fields[0].replaceAll(' ', '')] = BoardingStatus(p0, Pax(
                 seqNo: fields[1].replaceAll(' ', ''),
                 seatNo: fields[2].replaceAll(' ', ''),
