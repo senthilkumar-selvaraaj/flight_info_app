@@ -12,7 +12,7 @@ class ObjectBox {
 
   /// Create an instance of ObjectBox to use throughout the app.
   static Future<ObjectBox> create() async {
-    final docsDir = await getApplicationDocumentsDirectory();
+    final docsDir = await getApplicationSupportDirectory();
     print(p.join(docsDir.path));
     final store = await openStore(macosApplicationGroup: "FGDTDLOBXDJ.cia", directory: p.join(docsDir.path, "aai"));
     return ObjectBox._create(store);
