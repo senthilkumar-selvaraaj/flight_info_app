@@ -33,7 +33,7 @@ class _FilledActionButtonState extends State<FilledActionButton> {
           side:    BorderSide(width: 1.0, color: theme.loginButtonBgColor)
         ),
       ), child: Center(
-        child: widget.showCircularBar ? const CircularProgressIndicator(color: Colors.white,) : Text(
+        child: widget.showCircularBar ? const SizedBox(width: 30, height: 30, child:  CircularProgressIndicator(color: Colors.white, strokeWidth: 3,)) : Text(
               widget.title,
               style: const TextStyle(
                   fontSize: 14,
@@ -81,7 +81,7 @@ class _BorderedActionButtonState extends State<BorderedActionButton> {
         ),
         shadows: const [],
       ), child: Center(
-        child: widget.showCircularBar ?  CircularProgressIndicator(color: widget.theme.flightBRDTextColor,) : Text(
+        child: widget.showCircularBar ?  SizedBox(height: 25, width: 25, child: CircularProgressIndicator(color: widget.theme.flightBRDTextColor, strokeWidth: 3,)) : Text(
               widget.title,
               style: TextStyle(
                   fontSize: 14,

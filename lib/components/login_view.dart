@@ -97,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
                  }
               
               },
-              child: (BlocProvider.of<LoginBloc>(context).state.formStatus is FormSubmitting) ? const CircularProgressIndicator(color: Colors.white,) : const Text(
+              child: (BlocProvider.of<LoginBloc>(context).state.formStatus is FormSubmitting) ? const SizedBox(height: 30, width: 30, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3,)) : const Text(
                 "Login",
                 style: TextStyle(fontSize: 20, color: AppColors.white, fontWeight: FontWeight.w500),
               ))  ,

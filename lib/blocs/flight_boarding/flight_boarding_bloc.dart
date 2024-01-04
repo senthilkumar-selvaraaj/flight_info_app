@@ -260,7 +260,7 @@ String getName(){
   
   String getStatusTitle(){
       if(command == cCOKStatus){
-        return 'Boarderd';
+        return 'Boarded';
       }
       else if(command == cEOKStatus){
         return "Invalid";

@@ -67,7 +67,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
             }
             if (state.endBoardingState.state == APIRequestState.failure) {
               AppSnackBar.show(
-                  context, state.paxListExportState.exception.toString());
+                  context, state.endBoardingState.exception.toString());
             }
             if (state.paxListExportState.state == APIRequestState.success) {
               String? downloadDirectoryPath = await getDownloadDirectoryPath();
@@ -582,7 +582,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Container(
-                                  height: 120,
+                                  height: 110,
                                   decoration: getLaneShadowShape(
                                       theme,
                                       BlocProvider.of<FlightBoardingBloc>(
@@ -619,7 +619,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                           ),
                                         ),
                                         const SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         Column(
                                           crossAxisAlignment:

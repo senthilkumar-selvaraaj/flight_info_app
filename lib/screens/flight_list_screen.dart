@@ -278,17 +278,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                               child: BlocBuilder<FlightListBloc,
                                                   FlightListState>(
                                                 builder: (context, state) {
-                                                  if (state.startBoardingState
-                                                          .state ==
-                                                      APIRequestState.loading) {
-                                                    return Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color: theme
-                                                            .flightBRDTextColor,
-                                                      ),
-                                                    );
-                                                  }
+                                                  
                                                   return Visibility(visible: !(selectedFlightIndex < 0), child:  ElevatedButton(
                                                       style: ElevatedButton.styleFrom(
                                                           side: BorderSide(
@@ -341,7 +331,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                           }
                                                         }
                                                       },
-                                                      child: state.startBoardingState.state == APIRequestState.loading ? const CircularProgressIndicator(color: Colors.white,) : Text(
+                                                      child: state.startBoardingState.state == APIRequestState.loading ? const SizedBox(width: 30, height: 30, child:  CircularProgressIndicator(color: Colors.white, strokeWidth: 3,)) : Text(
                                                         boardingStatus
                                                             .getConfirmButtonTitle(),
                                                         style: const TextStyle(
@@ -656,7 +646,7 @@ enum FlightBoaringStatus {
       case FlightBoaringStatus.none:
         return "Select a flight from the list then choose 'Open Flight' when ready";
       case FlightBoaringStatus.confirm:
-        return "The gate will close automatically after confirmation. Please ensure the gate area is clear of any objects of persons before proceeding";
+        return "The gates will close automatically after confirmation. Please ensure gate area is clear of any object or persons before proceeding";
       case FlightBoaringStatus.boarding:
         return "E-Gate is now ready to board flight ##FLIGHTNO##. Select 'Start Boarding' to begin boarding";
     }

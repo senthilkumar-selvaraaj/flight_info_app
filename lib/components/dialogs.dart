@@ -94,7 +94,7 @@ String getTitle(){
       case DialogType.exit:
       return 'Are you sure you want to exit?\nThis will end the current session';
       case DialogType.endBoarding:
-      return 'This will end flight booarding on E-gate.\nPlease ensure airside exit is secure';
+      return 'This will end flight boarding on E-gate.\nPlease ensure airside exit is secure';
     }
   } 
 
