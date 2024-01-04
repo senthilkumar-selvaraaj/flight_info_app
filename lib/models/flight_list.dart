@@ -30,7 +30,19 @@ class Flight {
     }
 
     String getBoardingTime(){
-      return DateFormat.Hm().format(depDate!);
+
+      String inputTimeString = DateFormat.Hm().format(depDate!);
+
+  // Parse the input time string
+  DateTime inputTime = DateFormat('HH:mm').parse(inputTimeString);
+
+  // Subtract 1 hour
+  DateTime resultTime = inputTime.subtract(const Duration(minutes: 45));
+
+  // Format the result back into the desired string format
+  String resultTimeString = DateFormat('HH:mm').format(resultTime);
+  return resultTimeString;
+      
     }
 
     String getStartBoardCommand(String sessionId){

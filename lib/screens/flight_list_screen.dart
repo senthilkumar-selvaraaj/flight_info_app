@@ -451,7 +451,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                 Expanded(
                     flex: 1,
                     child: getBRD(
-                        DateFormat.Hm().format(flight.depDate!), index, theme)),
+                        flight.getBoardingTime(), index, theme)),
                 Expanded(
                     flex: 1,
                     child: getDEP(
