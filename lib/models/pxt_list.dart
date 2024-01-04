@@ -120,11 +120,11 @@ class Pax {
 
   String paxButtonTitle() {
     if (status == null) return 'Board Pax';
-    return status == 'Board' ? 'Deboard Pax' : 'Board Pax';
+    return status == 'Boarded' ? 'Deboard Pax' : 'Board Pax';
   }
 
   bool showManifest() {
     if (status == null) return true;
-    return status != 'Board';
+    return status != 'Boarded';
   }
 }

@@ -33,24 +33,29 @@ class FlightBoardingBloc
       ListenCCOKEvent event, Emitter<FlightBoardingState> emit) async {
     SocketClient().listenBoardingEvent((p0, p1) {
       if (p1.isNotEmpty) {
+        print("C");
         if (p0 == cCOKStatus) {
+          print("Co");
           List<String> fields = p1.split("\n");
           if (fields.length > 4) {
+            print("Com");
             Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
             laneBoardingInfo ??= {};
-            laneBoardingInfo[fields[4].replaceAll(' ', '')] = BoardingStatus(p0, Pax(
-                seqNo: fields[0].replaceAll(' ', ''),
-                seatNo: fields[1].replaceAll(' ', ''),
-                pnr: fields[2].replaceAll(' ', ''),
-                name: fields[3].replaceAll(' ', '')));
+            print(fields);
+            laneBoardingInfo[fields[0].replaceAll(' ', '')] = BoardingStatus(p0, Pax(
+                seqNo: fields[1].replaceAll(' ', ''),
+                seatNo: fields[2].replaceAll(' ', ''),
+                pnr: fields[3].replaceAll(' ', ''),
+                name: fields[4].replaceAll(' ', '')), "");
             add(UpdateLaneBoardingInfo(laneBoardingInfo));
           }
         } 
         else if(p0 == cEOKStatus || p0 == cCTGStatus || p0 == cCWWStatus || p0 == cCDFStatus) {
            Map<String, BoardingStatus>? laneBoardingInfo = state.laneBoardingInfo;
             laneBoardingInfo ??= {};
-            laneBoardingInfo[p1.split('\n')[0].split('\n')[0]] = BoardingStatus(p0, null);
-            add(UpdateLaneBoardingInfo(laneBoardingInfo));
+            List<String> infos = p1.split('\n');
+            laneBoardingInfo[infos[0]] = BoardingStatus(p0, null, infos[1]);
+            //add(UpdateLaneBoardingInfo(laneBoardingInfo));
         }
       }
       add(const FetchPaxListEvent());
@@ -118,7 +123,7 @@ class FlightBoardingBloc
       final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
 
       Pax? pax = state.pax;
-      pax?.status = 'Board';
+      pax?.status = 'Boarded';
       emit(state.copyWith(
           paxes: paxResult.data ?? [],
           paxResult: paxResult,
@@ -144,7 +149,7 @@ class FlightBoardingBloc
       await repo.deBoardPax(state.getDeBoardRequestJson());
       final paxResult = await repo.getPaxList(state.getPaxListRequestJson());
       Pax? pax = state.pax;
-      pax?.status = 'Deboard';
+      pax?.status = 'Deboarded';
       emit(state.copyWith(
           paxes: paxResult.data ?? [],
           paxResult: paxResult,
@@ -237,7 +242,8 @@ class BoardingStatus {
   //CCTG, CCWW, CCDF
   final String command;
   final Pax? pax;
-  BoardingStatus(this.command, this.pax);
+  final String message;
+  const BoardingStatus(this.command, this.pax, this.message);
 
 
 String getName(){
@@ -247,20 +253,9 @@ String getName(){
       if(command == cCOKStatus){
         return pax?.getBoardingMessage() ?? '';
       }
-      else if(command == cEOKStatus){
-        return "Invalid boarding pass";
+      else{
+        return message;
       }
-      else if(command == cCTGStatus){
-        return "Tailgating detected";
-      }
-      else if(command == cCWWStatus){
-        return "Wrong way detected";
-      }
-      else if(command == cCDFStatus){
-        return "Forced entry detected";
-      }
-
-      return "";
   }
   
   String getStatusTitle(){

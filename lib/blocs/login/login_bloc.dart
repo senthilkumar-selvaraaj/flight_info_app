@@ -22,7 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LogoutSubmittedEvent>(_onLogOutSubmitted);
   }
 
-   void _onAgentNameChanged(LoginAgentNameChanged event, Emitter<LoginState> emit ){
+  void _onAgentNameChanged(LoginAgentNameChanged event, Emitter<LoginState> emit ){
       emit(state.copyWith(agentName: event.agentName));
   }
 

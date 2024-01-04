@@ -3,10 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  downloadsfolder
   file_saver
   objectbox_flutter_libs
+  permission_handler_windows
   printing
   screen_retriever
+  url_launcher_windows
   window_manager
 )
 

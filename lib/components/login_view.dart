@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:aai_chennai/blocs/login/login_bloc.dart';
+import 'package:aai_chennai/blocs/login/login_submission_state.dart';
 import 'package:aai_chennai/components/app_text_field.dart';
 import 'package:aai_chennai/screens/dashboard_screen.dart';
 import 'package:aai_chennai/utils/themes.dart';
@@ -6,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:downloadsfolder/downloadsfolder.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -81,7 +86,6 @@ class _LoginViewState extends State<LoginView> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   backgroundColor: theme.loginButtonBgColor),
               onPressed: () {
-                //navigateToDashBoard();
                 String userName = BlocProvider.of<LoginBloc>(context).state.userName;
                  String password = BlocProvider.of<LoginBloc>(context).state.password;
                  if(userName.isEmpty || password.isEmpty){
@@ -89,14 +93,17 @@ class _LoginViewState extends State<LoginView> {
                       showError = true;
                     });
                  }else{
+                   if(BlocProvider.of<LoginBloc>(context).state.formStatus is FormSubmitting){
+                      return;
+                   }
                    BlocProvider.of<LoginBloc>(context).add(LoginSubmitted());
                  }
               
               },
-              child: const Text(
+              child: (BlocProvider.of<LoginBloc>(context).state.formStatus is FormSubmitting) ? const CircularProgressIndicator(color: Colors.white,) : const Text(
                 "Login",
                 style: TextStyle(fontSize: 20, color: AppColors.white, fontWeight: FontWeight.w500),
-              )),
+              ))  ,
         )
       ],
     );

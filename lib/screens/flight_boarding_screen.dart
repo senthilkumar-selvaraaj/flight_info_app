@@ -63,8 +63,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
             if (state.endBoardingState.state == APIRequestState.success) {
               Navigator.of(context).pop();
             }
-            if(state.paxListExportState.state == APIRequestState.success){
-              AppSnackBar.show(context, "File downloaded successfully into downloads folder");
+            if (state.endBoardingState.state == APIRequestState.failure) {
+              AppSnackBar.show(
+                  context, state.paxListExportState.exception.toString());
+            }
+            if (state.paxListExportState.state == APIRequestState.success) {
+              //AppSnackBar.show(context, "File downloaded successfully into downloads folder");
             }
           },
           child: Padding(
@@ -313,7 +317,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                             height: 42,
                                                                             width: 150,
                                                                             didTapped: () {
-                                                                              if (BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status != null && BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status == 'Board') {
+                                                                              if (BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status != null && BlocProvider.of<FlightBoardingBloc>(context).state.pax?.status == 'Boarded') {
                                                                                 BlocProvider.of<FlightBoardingBloc>(context).add(const DeBoardingPaxEvent());
                                                                               } else {
                                                                                 BlocProvider.of<FlightBoardingBloc>(context).add(const BoardingPaxEvent());
@@ -340,19 +344,18 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                       builder:
                                                                           (context,
                                                                               state) {
-                                                                        return state.paxListExportState.state ==
-                                                                                APIRequestState.loading
-                                                                            ? Center(
-                                                                                child: CircularProgressIndicator(
-                                                                                color: theme.flightBRDTextColor,
-                                                                              ))
-                                                                            : BorderedActionButton(
-                                                                                title: 'Print Manifest',
-                                                                                height: 42,
-                                                                                width: 150,
-                                                                                didTapped: () {
-                                                                                  BlocProvider.of<FlightBoardingBloc>(context).add(const ExportPaxList());
-                                                                                });
+                                                                        return BorderedActionButton(
+                                                                            title:
+                                                                                'Print Manifest',
+                                                                            theme:
+                                                                                theme,
+                                                                            showCircularBar:
+                                                                                BlocProvider.of<FlightBoardingBloc>(context).state.paxListExportState.state == APIRequestState.loading,
+                                                                            height: 42,
+                                                                            width: 150,
+                                                                            didTapped: () {
+                                                                              BlocProvider.of<FlightBoardingBloc>(context).add(const ExportPaxList());
+                                                                            });
                                                                       },
                                                                     ),
                                                                   )),
@@ -363,6 +366,8 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                                                                   visible:
                                                                       false,
                                                                   child: BorderedActionButton(
+                                                                      theme:
+                                                                          theme,
                                                                       title:
                                                                           'Print ATB',
                                                                       height:
@@ -520,6 +525,12 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                   const SizedBox(),
                   FilledActionButton(
                     title: 'End Boarding',
+                    showCircularBar:
+                        BlocProvider.of<FlightBoardingBloc>(context)
+                                .state
+                                .endBoardingState
+                                .state ==
+                            APIRequestState.loading,
                     didTapped: () {
                       /// SOCKET ===> \u0002BE\u0003\n
                       /// BEOK - Back to flight list screen
@@ -527,6 +538,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
 
                       Dialogs.showAlertDialog(
                           context, DialogType.endBoarding, theme, () {}, () {
+                        if (BlocProvider.of<FlightBoardingBloc>(context)
+                                .state
+                                .endBoardingState
+                                .state ==
+                            APIRequestState.loading) {
+                          return;
+                        }
                         SocketClient().endBoardingCommand((p0) async {
                           if (p0 == beOK) {
                           } else {
@@ -797,7 +815,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
         ? Colors.white
         : Colors.green;
     if (pax.status != null) {
-      return pax.status == 'Board'
+      return pax.status == 'Boarded'
           ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

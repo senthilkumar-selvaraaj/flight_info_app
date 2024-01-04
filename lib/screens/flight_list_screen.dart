@@ -289,8 +289,6 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                       ),
                                                     );
                                                   }
-                                                  print(state.startBoardingState
-                                                      .state);
                                                   return Visibility(visible: !(selectedFlightIndex < 0), child:  ElevatedButton(
                                                       style: ElevatedButton.styleFrom(
                                                           side: BorderSide(
@@ -329,6 +327,9 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                               });
                                                             case FlightBoaringStatus
                                                                   .boarding:
+                                                                if(state.startBoardingState.state == APIRequestState.loading){
+                                                                  return;
+                                                                }
                                                               BlocProvider.of<
                                                                           FlightListBloc>(
                                                                       context)
@@ -340,7 +341,7 @@ class _FlightListScreenState extends State<FlightListScreen> {
                                                           }
                                                         }
                                                       },
-                                                      child: Text(
+                                                      child: state.startBoardingState.state == APIRequestState.loading ? const CircularProgressIndicator(color: Colors.white,) : Text(
                                                         boardingStatus
                                                             .getConfirmButtonTitle(),
                                                         style: const TextStyle(
