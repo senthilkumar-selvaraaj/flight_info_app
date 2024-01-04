@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   downloadsfolder
   file_saver
   objectbox_flutter_libs
+  open_dir_windows
   permission_handler_windows
   printing
   screen_retriever

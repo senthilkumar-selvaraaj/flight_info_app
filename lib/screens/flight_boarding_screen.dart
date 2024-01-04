@@ -14,9 +14,11 @@ import 'package:aai_chennai/repos/flight_boarding.dart';
 import 'package:aai_chennai/services/socket_client.dart';
 import 'package:aai_chennai/utils/strings.dart';
 import 'package:aai_chennai/utils/themes.dart';
+import 'package:downloadsfolder/downloadsfolder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_dir/open_dir.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +61,7 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
       child: Scaffold(
         backgroundColor: theme.backgroundColor,
         body: BlocListener<FlightBoardingBloc, FlightBoardingState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state.endBoardingState.state == APIRequestState.success) {
               Navigator.of(context).pop();
             }
@@ -68,7 +70,13 @@ class _FlightBoardingScreenState extends State<FlightBoardingScreen> {
                   context, state.paxListExportState.exception.toString());
             }
             if (state.paxListExportState.state == APIRequestState.success) {
-              //AppSnackBar.show(context, "File downloaded successfully into downloads folder");
+              String? downloadDirectoryPath = await getDownloadDirectoryPath();
+              if (downloadDirectoryPath != null) {
+                final openDir = OpenDir();
+                await openDir.openNativeDir(path: downloadDirectoryPath);
+              } else {
+                print('Failed to retrieve downloads folder path.');
+              }
             }
           },
           child: Padding(

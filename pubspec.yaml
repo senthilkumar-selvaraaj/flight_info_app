@@ -48,6 +48,7 @@ dependencies:
   objectbox_flutter_libs: any
   file_saver: ^0.2.9
   downloadsfolder: ^0.0.5
+  open_dir: ^0.0.1+5
 dev_dependencies:
   flutter_test:
     sdk: flutter
